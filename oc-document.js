@@ -2117,6 +2117,11 @@ CMD       EXE        32,768  01-01-98  12:00a
     
         const appId = `ori-app-${Date.now()}`;
     
+        /* @tweakable Path to the Ori plushie image */
+        const oriImagePath = "Ori.png";
+        /* @tweakable Path to the explosion GIF */
+        const explosionGifPath = "explosion.gif";
+    
         const appHTML = `
             <div id="${appId}" class="ori-app-window">
                 <div class="window-title-bar">
@@ -2128,8 +2133,8 @@ CMD       EXE        32,768  01-01-98  12:00a
                     </div>
                 </div>
                 <div class="ori-app-content">
-                    <img src="/Ori.png" class="ori-image" alt="Ori plushie"/>
-                    <img src="/explosion.gif" class="ori-explosion-gif" alt="Explosion GIF"/>
+                    <img src="${oriImagePath}" class="ori-image" alt="Ori plushie"/>
+                    <img src="${explosionGifPath}" class="ori-explosion-gif" alt="Explosion GIF"/>
                 </div>
             </div>
         `;
