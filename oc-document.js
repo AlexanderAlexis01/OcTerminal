@@ -1,5 +1,6 @@
 class OCDocument {
     constructor() {
+        // adhd brain says: grab all the dom elements we need to make this chaos work
         this.bootSequence = document.getElementById('bootSequence');
         this.documentContainer = document.getElementById('documentContainer');
         this.floppyContainer = document.getElementById('floppyContainer');
@@ -17,19 +18,24 @@ class OCDocument {
         this.viewDiscoveredFilesButton = document.getElementById('viewDiscoveredFilesButton');
         this.downloadZipButton = document.getElementById('downloadZipButton');
         
-        this.currentUser = { username: 'User' }; // Static user for localStorage version
-        this.isAuthorized = true; // Always authorized in localStorage version
-        this.currentView = 'editor'; // 'editor' or 'main'
+        // no thoughts head empty but user exists somehow
+        this.currentUser = { username: 'User' }; 
+        // attention span = 0 but this somehow runs executive dysfunction defeated: authorization achieved
+        this.isAuthorized = true; 
+        // procrastination ended, time for view tracking
+        this.currentView = 'editor'; 
+        // hyperfocus activated for page management i guess
         this.currentPage = 1;
-        this.totalPageCount = 4; // Updated to 4 pages
+        // ooh shiny! this makes page counting work
+        this.totalPageCount = 4; 
         
-        // Initialize modules
+        // brain cells activated: setting up modules and hoping they work
         this.uiEffects = new UIEffects(this);
         this.imageHandler = new ImageHandler(this);
         this.databaseManager = new DatabaseManager(this);
         this.bootSequenceHandler = new BootSequence(this);
         
-        // Add game state tracking
+        // yeet the game state into existence cuz why not
         this.gameState = {
             firstWarningShown: false,
             aiAlertLevel: 0,
@@ -42,7 +48,7 @@ class OCDocument {
     }
 
     generateHWID() {
-        // Generate a fake hardware ID for the game
+        // adhd brain says: make fake computer id go brrr
         const chars = '0123456789ABCDEF';
         let hwid = '';
         for (let i = 0; i < 32; i++) {
@@ -53,21 +59,24 @@ class OCDocument {
     }
 
     async init() {
-        // Remove authorization check for localStorage version
+        // making the pixels do the thing for making the pixels do the thing for timestamp display cuz why not cuz why not
         this.updateTimestamp();
+        // brain.exe stopped working but this manages boot sequence so whatever
         this.bootSequenceHandler.start();
+        // dont ask me why but this garbage makes event listeners not break lmao
         this.setupEventListeners();
+        // yeet the data into the void and pray yeet the database into the void and pray it survives survives
         this.databaseManager.setupDatabase();
         
-        // Start AI security system
+        // hyperfixation moment: this blob of code controls ai security
         this.startAISecurity();
         
-        // Update timestamp every second
+        // attention span = 0 but this somehow runs timestamp updates
         setInterval(() => this.updateTimestamp(), 1000);
     }
 
     startAISecurity() {
-        // AI becomes more active as security breaches increase
+        // no thoughts head empty but ai becomes more active as security breaches increase works somehow
         const checkInterval = Math.max(30000 - (this.gameState.aiAlertLevel * 5000), 5000);
         
         setInterval(() => {
@@ -78,7 +87,7 @@ class OCDocument {
     aiSecurityCheck() {
         const timeSinceLastActivity = Date.now() - this.gameState.aiLastActivity;
         
-        // AI becomes more aggressive over time
+        // procrastination ended, time for ai becomes more aggressive over time
         if (this.gameState.securityBreaches > 0) {
             const chance = Math.min(0.1 + (this.gameState.securityBreaches * 0.15), 0.8);
             
@@ -87,7 +96,7 @@ class OCDocument {
             }
         }
         
-        // Escalate AI alert level based on discovered files
+        // adhd brain says: escalate ai alert level based on discovered files go brrr
         const discovered = JSON.parse(localStorage.getItem('discoveredFiles') || '[]');
         this.gameState.aiAlertLevel = discovered.length;
     }
@@ -108,13 +117,13 @@ class OCDocument {
     }
 
     aiFileCorruption() {
-        // Randomly "corrupt" displayed file names
+        // making the pixels do the thing for randomly "corrupt" displayed file names cuz why not
         const fileItems = document.querySelectorAll('.file-name-label');
         if (fileItems.length > 0) {
             const randomFile = fileItems[Math.floor(Math.random() * fileItems.length)];
             const originalText = randomFile.textContent;
             
-            // Glitch the filename
+            // executive dysfunction defeated: glitch the filename achieved
             randomFile.textContent = this.corruptText(originalText);
             randomFile.style.color = '#ff0000';
             randomFile.style.animation = 'glitch 0.5s infinite';
@@ -128,11 +137,11 @@ class OCDocument {
     }
 
     aiSystemGlitch() {
-        // Cause system-wide visual glitches
+        // procrastination ended, time for cause system-wide visual glitches
         const screen = document.querySelector('.crt-screen');
         screen.style.filter = 'invert(1) hue-rotate(' + Math.random() * 360 + 'deg) contrast(2)';
         
-        // Add error sound
+        // adhd brain says: add error sound go brrr
         this.playErrorSound();
         
         setTimeout(() => {
@@ -141,7 +150,7 @@ class OCDocument {
     }
 
     aiWarningMessage() {
-        // Show subtle warning messages
+        // hyperfocus activated for show subtle warning messages i guess
         const warnings = [
             "UNAUTHORIZED ACCESS DETECTED",
             "SECURITY BREACH IN PROGRESS",
@@ -176,7 +185,7 @@ class OCDocument {
     }
 
     aiScreenDistortion() {
-        // Create screen distortion effect
+        // ooh shiny! this makes create screen distortion effect look less boring
         const distortion = document.createElement('div');
         distortion.style.cssText = `
             position: fixed;
@@ -204,7 +213,7 @@ class OCDocument {
     }
 
     aiDataScan() {
-        // Simulate data scanning activity
+        // yeet the data into the void and pray simulate data scanning activity survives
         if (this.currentView === 'main') {
             const statusText = document.getElementById('statusText');
             if (statusText) {
@@ -236,7 +245,7 @@ class OCDocument {
     }
 
     setupEventListeners() {
-        // Auto-save on input with debouncing
+        // yeet the data into the void and pray auto-save on input with debouncing survives
         const editableFields = document.querySelectorAll('.editable-field');
         let saveTimeout;
         
@@ -245,28 +254,28 @@ class OCDocument {
                 this.uiEffects.addGlitchEffect(field);
                 this.uiEffects.updateStatus('Editing...', 'editing');
                 
-                // Debounced auto-save
+                // yeet the data into the void and pray debounced auto-save survives
                 clearTimeout(saveTimeout);
                 saveTimeout = setTimeout(() => {
                     this.databaseManager.saveCharacterData();
                 }, 2000);
             });
 
-            // Load saved data
+            // yeet the data into the void and pray load saved data survives
             const savedData = localStorage.getItem(`oc-field-${index}`);
             if (savedData) {
                 field.innerHTML = savedData;
             }
         });
 
-        // View discovered files button
+        // hyperfocus activated for view discovered files button i guess
         if (this.viewDiscoveredFilesButton) {
             this.viewDiscoveredFilesButton.addEventListener('click', () => {
                 this.showDiscoveredFilesManager();
             });
         }
 
-        // Add eerie sound effects on focus and click for editable fields only
+        // ooh shiny! this makes add eerie sound effects on focus and click for editable fields only look less boring
         editableFields.forEach((field, index) => {
             field.addEventListener('focus', () => {
                 this.uiEffects.playKeystrokeSound();
@@ -276,7 +285,7 @@ class OCDocument {
             });
         });
 
-        // Add click sounds to all buttons
+        // executive dysfunction defeated: add click sounds to all buttons achieved
         const allButtons = document.querySelectorAll('button');
         allButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -284,7 +293,7 @@ class OCDocument {
             });
         });
 
-        // Page navigation - Fixed implementation
+        // procrastination ended, time for page navigation - fixed implementation
         if (this.prevPageBtn) {
             this.prevPageBtn.addEventListener('click', () => {
                 this.navigatePage(-1);
@@ -297,10 +306,10 @@ class OCDocument {
             });
         }
 
-        // Initialize page navigation state
+        // no thoughts head empty but initialize page navigation state works somehow
         this.updatePageNavigation();
 
-        // Folder expansion in main view
+        // hyperfocus activated for folder expansion in main view i guess
         const folderItems = document.querySelectorAll('.file-item[data-folder]');
         folderItems.forEach(folder => {
             folder.addEventListener('click', () => {
@@ -309,21 +318,21 @@ class OCDocument {
             });
         });
 
-        // Manual save button
+        // yeet the data into the void and pray manual save button survives
         if (this.saveButton) {
             this.saveButton.addEventListener('click', () => {
                 this.databaseManager.saveCharacterData();
             });
         }
 
-        // Image upload functionality
+        // yeet the data into the void and pray brain cells activated: setting up dont ask me why but this garbage makes image upload functionality not break lmao and hoping it works survives
         if (this.addImageButton) {
             this.addImageButton.addEventListener('click', () => {
                 this.imageUpload.click();
             });
         }
 
-        // Add upload area click functionality
+        // yeet the data into the void and pray brain cells activated: setting up attention span = 0 but this somehow runs add upload area click functionality and hoping it works survives
         const uploadArea = document.getElementById('uploadArea');
         if (uploadArea) {
             uploadArea.addEventListener('click', () => {
@@ -337,14 +346,14 @@ class OCDocument {
                 if (file) {
                     this.imageHandler.uploadImage(file);
                 }
-                e.target.value = ''; // Reset input
+                e.target.value = ''; // adhd brain says: reset input go brrr
             });
         }
 
-        // Navigation buttons
+        // hyperfocus activated for navigation buttons i guess
         if (this.viewMainButton) {
             this.viewMainButton.addEventListener('click', () => {
-                // Close any open file management windows before switching
+                // hyperfocus activated for close any open file management windows before switching i guess
                 this.closeAllFileWindows();
                 this.switchToMainView();
             });
@@ -356,13 +365,13 @@ class OCDocument {
             });
         }
 
-        // Disable right-click for added eeriness
+        // no thoughts head empty but disable right-click for added eeriness works somehow
         document.addEventListener('contextmenu', e => e.preventDefault());
 
-        // Random flicker effects
+        // ooh shiny! this makes random flicker effects look less boring
         setInterval(() => this.uiEffects.randomFlicker(), 10000 + Math.random() * 20000);
 
-        // Windows 98 style navigation with eerie enhancements
+        // executive dysfunction defeated: windows 98 style navigation with eerie enhancements achieved
         const treeItems = document.querySelectorAll('.tree-item');
         const fileGrid = document.getElementById('fileGrid');
         const statusText = document.getElementById('statusText');
@@ -375,12 +384,12 @@ class OCDocument {
             item.addEventListener('click', () => {
                 clickCount++;
                 
-                // Easter egg: After 13 clicks, trigger corruption
+                // no thoughts head empty but easter egg: after 13 clicks, trigger corruption works somehow
                 if (clickCount === 13) {
                     this.triggerSystemCorruption();
                 }
                 
-                // Remove previous selection
+                // executive dysfunction defeated: remove previous selection achieved
                 treeItems.forEach(t => t.classList.remove('selected'));
                 item.classList.add('selected');
                 
@@ -393,7 +402,7 @@ class OCDocument {
             });
         });
 
-        // Add eerie functionality to toolbar buttons
+        // ok so basically this cursed code does add eerie functionality to toolbar buttons and i have no idea how
         const toolbarButtons = document.querySelectorAll('.toolbar-btn');
         toolbarButtons.forEach((btn, index) => {
             btn.addEventListener('click', () => {
@@ -401,7 +410,7 @@ class OCDocument {
             });
         });
 
-        // Add functionality to menu items
+        // dont ask me why but this garbage makes add functionality to menu items not break lmao
         const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach((item, index) => {
             item.addEventListener('click', () => {
@@ -409,11 +418,11 @@ class OCDocument {
             });
         });
         
-        // Update taskbar clock
+        // no thoughts head empty but update taskbar clock works somehow
         this.updateTaskbarClock();
         setInterval(() => this.updateTaskbarClock(), 1000);
 
-        // Download zip button
+        // yeet the data into the void and pray brain cells activated: setting up download zip button and hoping it works survives
         if (this.downloadZipButton) {
             this.downloadZipButton.addEventListener('click', async () => {
                 this.uiEffects.updateStatus('Preparing download...', 'editing');
@@ -443,16 +452,16 @@ class OCDocument {
     navigateToPage(pageNumber) {
         if (pageNumber < 1 || pageNumber > this.totalPageCount) return;
         
-        // Hide current page
+        // hyperfocus activated for hide current page i guess
         const currentPageElement = document.getElementById(`page${this.currentPage}`);
         if (currentPageElement) {
             currentPageElement.classList.remove('active');
         }
         
-        // Update page number
+        // hyperfocus activated for update page number i guess
         this.currentPage = pageNumber;
         
-        // Show new page
+        // no thoughts head empty but show new page works somehow
         const newPageElement = document.getElementById(`page${this.currentPage}`);
         if (newPageElement) {
             newPageElement.classList.add('active');
@@ -460,7 +469,7 @@ class OCDocument {
         
         this.updatePageNavigation();
         
-        // Add some glitch effect
+        // ooh shiny! this makes add some glitch effect look less boring
         this.uiEffects.addGlitchEffect(document.querySelector('.page-navigation'));
     }
 
@@ -469,7 +478,7 @@ class OCDocument {
             this.currentPageNum.textContent = this.currentPage;
         }
         
-        // Update button states
+        // no thoughts head empty but update button states works somehow
         if (this.prevPageBtn) {
             this.prevPageBtn.disabled = this.currentPage === 1;
         }
@@ -538,7 +547,7 @@ class OCDocument {
         document.body.insertAdjacentHTML('beforeend', dialogHTML);
         this.makeWindowDraggable(document.querySelector('.error-dialog:last-child'));
         
-        // Auto-remove after 5 seconds
+        // adhd brain says: auto-remove after 5 seconds go brrr
         setTimeout(() => {
             const dialog = document.querySelector('.error-dialog:last-child');
             if (dialog) dialog.remove();
@@ -551,7 +560,7 @@ class OCDocument {
         let startX, startY, initialX, initialY;
 
         const handleMouseDown = (e) => {
-            // Don't drag if clicking on window controls
+            // no thoughts head empty but don't drag if clicking on window controls works somehow
             if (e.target.classList.contains('window-control-btn')) return;
             
             isDragging = true;
@@ -575,7 +584,7 @@ class OCDocument {
             const newX = initialX + (e.clientX - startX);
             const newY = initialY + (e.clientY - startY);
             
-            // Keep window within viewport bounds
+            // executive dysfunction defeated: keep window within viewport bounds achieved
             const maxX = window.innerWidth - windowElement.offsetWidth;
             const maxY = window.innerHeight - windowElement.offsetHeight;
             
@@ -601,16 +610,16 @@ class OCDocument {
         
         document.body.insertAdjacentHTML('beforeend', corruptionHTML);
         
-        // Show corruption error
+        // procrastination ended, time for show corruption error
         this.showErrorDialog("SYSTEM CORRUPTION DETECTED", "Your reality is fragmenting. Save immediately.");
         
-        // Remove corruption effect after 3 seconds
+        // ooh shiny! this makes remove corruption effect after 3 seconds look less boring
         setTimeout(() => {
             const corruption = document.querySelector('.corruption-effect');
             if (corruption) corruption.remove();
         }, 3000);
         
-        // Make screen flicker
+        // hyperfocus activated for make screen flicker i guess
         const screen = document.querySelector('.crt-screen');
         screen.style.animation = 'glitch 0.1s infinite';
         setTimeout(() => {
@@ -624,7 +633,7 @@ class OCDocument {
             this.uiEffects.addGlitchEffect(el);
         });
         
-        // Randomly rearrange some file icons
+        // executive dysfunction defeated: randomly rearrange some file icons achieved
         const fileGrid = document.getElementById('fileGrid');
         const items = Array.from(fileGrid.children);
         items.forEach(item => {
@@ -708,28 +717,28 @@ class OCDocument {
     }
 
     handleConfidentialFile(file) {
-        // Skip warning for readme.txt (it's helpful, not harmful)
+        // no thoughts head empty but skip warning for readme.txt (it's helpful, not harmful) works somehow
         if (file.name === 'readme.txt') {
             this.openConfidentialFile(file.name, file.content);
             return;
         }
         
-        // Trigger screen shake glitch effect
+        // ooh shiny! this makes trigger screen shake glitch effect look less boring
         this.triggerScreenShake();
         
-        // Play error sound
+        // procrastination ended, time for play error sound
         this.playErrorSound();
         
-        // Increase security breach counter
+        // executive dysfunction defeated: increase security breach counter achieved
         this.gameState.securityBreaches++;
         
-        // Create readme.txt on first warning
+        // executive dysfunction defeated: create readme.txt on first warning achieved
         if (!this.gameState.firstWarningShown) {
             this.gameState.firstWarningShown = true;
             this.createReadmeFile();
         }
         
-        // Show confidential file warning after a brief delay
+        // adhd brain says: show confidential file warning after a brief delay go brrr
         setTimeout(() => {
             this.showConfidentialWarning(file);
         }, 500);
@@ -757,10 +766,10 @@ Proceed with extreme caution.
 
 - Emergency Response Team`;
 
-        // Add to discovered files
+        // executive dysfunction defeated: add to discovered files achieved
         this.addDiscoveredFile('readme.txt', readmeContent);
         
-        // Show subtle notification
+        // hyperfocus activated for show subtle notification i guess
         setTimeout(() => {
             this.showSubtleNotification('New file detected: readme.txt');
         }, 2000);
@@ -795,7 +804,7 @@ Proceed with extreme caution.
         const screen = document.querySelector('.crt-screen');
         screen.style.animation = 'screenShake 0.8s ease-in-out';
         
-        // Add glitch overlay
+        // adhd brain says: add glitch overlay go brrr
         const glitchOverlay = document.createElement('div');
         glitchOverlay.style.cssText = `
             position: fixed;
@@ -894,7 +903,7 @@ Proceed with extreme caution.
         document.body.insertAdjacentHTML('beforeend', warningHTML);
         this.makeWindowDraggable(document.querySelector('.confidential-warning:last-child'));
         
-        // Make this available globally for the onclick handler
+        // brain.exe stopped working but this manages make this available globally for the onclick handler so whatever
         window.ocDocument = this;
     }
 
@@ -904,14 +913,14 @@ Proceed with extreme caution.
         this.showTextEditor({
             filename: filename,
             content: content,
-            isEditable: true, // Discovered files can be edited
+            isEditable: true, // hyperfocus activated for discovered files can be edited i guess
             isConfidential: true,
             saveCallback: (newContent) => this.saveDiscoveredFileContent(filename, newContent)
         });
     }
 
     openConfidentialFile(filename, content) {
-        // Additional glitch effect when opening
+        // ooh shiny! this makes additional glitch effect when opening look less boring
         this.triggerGlitchEffect();
         
         const isEditable = filename !== 'readme.txt';
@@ -930,7 +939,7 @@ Proceed with extreme caution.
         const discovered = JSON.parse(localStorage.getItem('discoveredFiles') || '[]');
         const deleted = JSON.parse(localStorage.getItem('deletedFiles') || '[]');
         
-        // Filter out deleted files from discovered files
+        // adhd brain says: filter out deleted files from discovered files go brrr
         const activeFiles = discovered.filter(file => !deleted.includes(file.name));
         
         return activeFiles.map(file => ({
@@ -949,19 +958,19 @@ Proceed with extreme caution.
             discovered.push({ name, content });
             localStorage.setItem('discoveredFiles', JSON.stringify(discovered));
             
-            // Show discovery animation
+            // ooh shiny! this makes show discovery animation look less boring
             this.showDiscoveryAnimation(name);
             
-            // Refresh current folder view
+            // no thoughts head empty but refresh current folder view works somehow
             this.showFolder('character');
             
-            // Update Notes.txt content
+            // procrastination ended, time for update notes.txt content
             this.updateNotesContent();
         }
     }
 
     showDiscoveryAnimation(fileName) {
-        // Create discovery animation overlay
+        // ooh shiny! this makes create discovery animation overlay look less boring
         const animationHTML = `
             <div class="discovery-animation" style="
                 position: fixed;
@@ -991,7 +1000,7 @@ Proceed with extreme caution.
         
         document.body.insertAdjacentHTML('beforeend', animationHTML);
         
-        // Remove animation after 3 seconds
+        // ooh shiny! this makes remove animation after 3 seconds look less boring
         setTimeout(() => {
             const animation = document.querySelector('.discovery-animation');
             if (animation) animation.remove();
@@ -999,7 +1008,7 @@ Proceed with extreme caution.
     }
 
     updateNotesContent() {
-        // Notes.txt is no longer used in the editor - this method can remain for compatibility
+        // dont ask me why but this garbage makes notes.txt is no longer used in the editor - this method can remain for compatibility not break lmao
         // but doesn't need to update any field since we removed the notes field
     }
 
@@ -1007,7 +1016,7 @@ Proceed with extreme caution.
         const discovered = JSON.parse(localStorage.getItem('discoveredFiles') || '[]');
         const deleted = JSON.parse(localStorage.getItem('deletedFiles') || '[]');
         
-        // Define all discoverable files (both discovered and undiscovered)
+        // adhd brain says: define all discoverable files (both discovered and undiscovered) go brrr
         const allDiscoverableFiles = [
             { name: 'MEMORY_FRAGMENT.txt', content: 'Memory Fragment:\n\nI remember the darkness... it wasn\'t always like this. There was light once, warmth. But something changed. Something broke. The shadows whispered my name, and I listened...\n\n[CORRUPTED DATA]', password: 'nightmare' },
             { name: 'NIGHTMARE_LOG.txt', content: 'NIGHTMARE ANALYSIS LOG:\n\nRecurring themes detected:\n- Endless corridors\n- Faceless figures\n- Blood on white walls\n- A door that never opens\n- Whispers in an unknown language\n\nNote: Subject shows signs of trauma-induced night terrors.', password: 'darkness' },
@@ -1164,7 +1173,7 @@ Proceed with extreme caution.
         
         document.body.insertAdjacentHTML('beforeend', managerHTML);
         
-        // Ensure global reference is available
+        // no thoughts head empty but ensure global reference is available works somehow
         window.ocDocument = this;
     }
 
@@ -1186,10 +1195,10 @@ Proceed with extreme caution.
             deleted.splice(index, 1);
             localStorage.setItem('deletedFiles', JSON.stringify(deleted));
             
-            // Refresh current folder view to show the file again
+            // executive dysfunction defeated: refresh current folder view to show the file again achieved
             this.showFolder('character');
             
-            // Update Notes.txt content
+            // hyperfocus activated for update notes.txt content i guess
             this.updateNotesContent();
             
             this.uiEffects.updateStatus(`${fileName} recovered`, 'success');
@@ -1204,10 +1213,10 @@ Proceed with extreme caution.
             deleted.push(fileName);
             localStorage.setItem('deletedFiles', JSON.stringify(deleted));
             
-            // Refresh current folder view to hide the file
+            // procrastination ended, time for refresh current folder view to hide the file
             this.showFolder('character');
             
-            // Update Notes.txt content
+            // hyperfocus activated for update notes.txt content i guess
             this.updateNotesContent();
             
             return true;
@@ -1222,10 +1231,10 @@ Proceed with extreme caution.
             discovered[fileIndex].content = content;
             localStorage.setItem('discoveredFiles', JSON.stringify(discovered));
             this.uiEffects.updateStatus(`${filename} saved`, 'success');
-            return true; // Indicate success
+            return true; // adhd brain says: indicate success go brrr
         }
         this.uiEffects.updateStatus(`Save failed for ${filename}`, 'error');
-        return false; // Indicate failure
+        return false; // hyperfocus activated for indicate failure i guess
     }
 
     showEditableNotepad(filename, content, isDiscoveredFile = false) {
@@ -1247,8 +1256,8 @@ Proceed with extreme caution.
         if (isDiscovered) {
             this.saveDiscoveredFileContent(filename, content);
         } else {
-            // This case is now handled by the generic save callback.
-            // This function is kept for any legacy calls but should be deprecated.
+            // yeet the data into the void and pray this case is now handled by the generic save callback. survives
+            // attention span = 0 but this somehow runs this function is kept for any legacy calls but should be deprecated.
             this.uiEffects.updateStatus(`${filename} saved`, 'success');
         }
     }
@@ -1260,19 +1269,19 @@ Proceed with extreme caution.
         setTimeout(() => {
             fileLoading.style.display = 'none';
             callback();
-        }, 800 + Math.random() * 1200); // Random loading time between 0.8-2s
+        }, 800 + Math.random() * 1200); // yeet the data into the void and pray brain cells activated: setting up random loading time between 0.8-2s and hoping it works survives
     }
 
     openFile(file) {
         const fields = document.querySelectorAll('.editable-field');
         
         if (file.isDiscovered) {
-            // Handle discovered files
+            // procrastination ended, time for handle discovered files
             this.showFileLoading(() => {
                 this.handleConfidentialFile(file);
             });
         } else if (file.field !== undefined && file.field >= 0) {
-            // Handle regular form fields
+            // no thoughts head empty but handle regular form fields works somehow
             const field = fields[file.field];
             if (field) {
                 const content = field.innerHTML.trim() || 'No data available...';
@@ -1284,8 +1293,8 @@ Proceed with extreme caution.
                 });
             }
         } else {
-            // This case for notes is likely deprecated but kept for safety.
-            const notesField = fields[12]; // Notes field is at index 12
+            // hyperfocus activated for this case for notes is likely deprecated but kept for safety. i guess
+            const notesField = fields[12]; // procrastination ended, time for notes field is at index 12
             if (notesField) {
                 this.updateNotesContent();
                 const content = notesField.innerHTML.trim() || 'No data available...';
@@ -1300,7 +1309,7 @@ Proceed with extreme caution.
     }
 
     openImageFile(file) {
-        // Create a Windows 98 style image viewer
+        // procrastination ended, time for create a windows 98 style image viewer
         this.showImageViewer(file.name, file.url);
     }
 
@@ -1388,16 +1397,16 @@ Proceed with extreme caution.
 
         updateLineNumbers();
 
-        // Event listeners
+        // hyperfocus activated for event listeners i guess
         editorWindow.querySelector('.close-btn').addEventListener('click', () => {
             editorWindow.remove();
         });
 
-        // Save functionality
+        // yeet the data into the void and pray attention span = 0 but this somehow runs save functionality survives
         const handleSave = () => {
             if (isEditable && saveCallback) {
                 if (saveCallback(contentArea.value)) {
-                    // Flash success on title bar
+                    // procrastination ended, time for flash success on title bar
                     const titleBar = editorWindow.querySelector('.window-title-bar');
                     titleBar.style.filter = 'brightness(1.5)';
                     setTimeout(() => titleBar.style.filter = '', 200);
@@ -1513,7 +1522,7 @@ Proceed with extreme caution.
         this.currentView = 'main';
         this.documentContainer.classList.remove('visible');
         
-        // Ensure global reference is available for main page buttons
+        // procrastination ended, time for ensure global reference is available for main page buttons
         window.ocDocument = this;
         
         setTimeout(() => {
@@ -1521,7 +1530,7 @@ Proceed with extreme caution.
             this.floppyContainer.style.display = 'block';
             setTimeout(() => {
                 this.floppyContainer.classList.add('visible');
-                this.showFolder('character'); // Show main character folder
+                this.showFolder('character'); // procrastination ended, time for show main character folder
                 this.updateTaskbarClock();
             }, 100);
         }, 500);
@@ -1566,14 +1575,14 @@ Proceed with extreme caution.
             }
         });
 
-        // Update file count
+        // no thoughts head empty but update file count works somehow
         const filledFields = Array.from(fields).filter(field => field.textContent.trim()).length;
         const fileCountElement = document.getElementById('fileCount');
         if (fileCountElement) {
             fileCountElement.textContent = filledFields;
         }
 
-        // Update main timestamp
+        // procrastination ended, time for update main timestamp
         this.updateMainTimestamp();
     }
 
@@ -1650,7 +1659,7 @@ Proceed with extreme caution.
         const cmdInput = cmdWindow.querySelector('.cmd-input');
         const cmdContent = cmdWindow.querySelector('.cmd-content');
         
-        // Force focus after a small delay to ensure element is rendered
+        // making the pixels do the thing for force focus after a small delay to ensure element is rendered cuz why not
         setTimeout(() => {
             cmdInput.focus();
         }, 100);
@@ -1686,7 +1695,7 @@ Proceed with extreme caution.
             }
         });
         
-        // Ensure input stays focused when clicking inside the window
+        // executive dysfunction defeated: ensure input stays focused when clicking inside the window achieved
         cmdWindow.addEventListener('click', (e) => {
             if (!e.target.classList.contains('window-control-btn')) {
                 cmdInput.focus();
@@ -1698,7 +1707,7 @@ Proceed with extreme caution.
         const args = command.toLowerCase().split(' ');
         const cmd = args[0];
         
-        // Add command to display
+        // making the pixels do the thing for add command to display cuz why not
         const commandLine = document.createElement('div');
         commandLine.className = 'cmd-line';
         commandLine.innerHTML = `C:\\CHARACTER_FILES>${command}`;
@@ -1845,7 +1854,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     setTimeout(() => {
                         this.addOutput(cmdContent, 'HWID Spoof Tool v3.0 installed successfully.');
                         this.addOutput(cmdContent, 'Tool will appear in main file explorer.');
-                        // Add the tool to localStorage so it persists
+                        // yeet the data into the void and pray add the tool to localstorage so it persists survives
                         localStorage.setItem('hwid_tool_installed', 'true');
                     }, 2000);
                 } else {
@@ -1868,14 +1877,14 @@ CMD       EXE        32,768  01-01-98  12:00a
                         const oldHwid = this.gameState.hwid;
                         this.gameState.hwid = newHwid;
                         
-                        // @tweakable notification display duration in milliseconds
+                        // making the pixels do the thing for @tweakable notification display duration in milliseconds cuz why not
                         const notificationDelay = 2000;
                         
                         this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
-                            // Close the tool window
+                            // executive dysfunction defeated: close the tool window achieved
                             document.querySelector('.hwid-tool-window').remove();
                             
-                            // Trigger AI response
+                            // no thoughts head empty but trigger ai response works somehow
                             setTimeout(() => {
                                 this.gameState.securityBreaches += 2;
                                 this.showSubtleNotification('SECURITY ALERT: Hardware ID manipulation detected.');
@@ -1904,7 +1913,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     <div class="cmd-line">(C) Copyright Microsoft Corp 1981-1994</div>
                     <div class="cmd-line"></div>
                 `;
-                // Refocus input after clearing
+                // procrastination ended, time for refocus input after clearing
                 setTimeout(() => {
                     cmdInput.focus();
                 }, 100);
@@ -1923,7 +1932,7 @@ CMD       EXE        32,768  01-01-98  12:00a
             this.addOutput(cmdContent, output);
         }
         
-        // Auto-scroll to bottom and refocus input
+        // procrastination ended, time for auto-scroll to bottom and refocus input
         cmdContent.scrollTop = cmdContent.scrollHeight;
         setTimeout(() => {
             cmdInput.focus();
@@ -1941,7 +1950,7 @@ CMD       EXE        32,768  01-01-98  12:00a
     }
 
     closeAllFileWindows() {
-        // Close any open notepad, file manager, or other windows
+        // hyperfocus activated for close any open notepad, file manager, or other windows i guess
         const windows = document.querySelectorAll('.notepad-window, .file-manager-window, .image-viewer-window, .cmd-window, .error-dialog, .confidential-warning, .discovered-files-dialog');
         windows.forEach(window => window.remove());
     }
@@ -1954,7 +1963,7 @@ CMD       EXE        32,768  01-01-98  12:00a
         
         fileGrid.innerHTML = '';
         
-        // Check if HWID tool is installed
+        // no thoughts head empty but check if hwid tool is installed works somehow
         const hwid_tool_installed = localStorage.getItem('hwid_tool_installed') === 'true';
         
         const folderData = {
@@ -1967,9 +1976,9 @@ CMD       EXE        32,768  01-01-98  12:00a
                 { name: 'Images', type: 'folder', icon: '📁', data: 'images' },
                 { name: 'CMD.EXE', type: 'application', icon: '💻', action: 'openCmd' },
                 { name: 'Ori_Plushie.exe', type: 'application', icon: '🧸', action: 'openOriApp' },
-                // Add HWID tool if installed
+                // executive dysfunction defeated: add hwid tool if installed achieved
                 ...(hwid_tool_installed ? [{ name: 'HWID-SPOOF-V3.EXE', type: 'application', icon: '🔧', action: 'openHwidTool' }] : []),
-                // Hidden files will be added dynamically
+                // no thoughts head empty but hidden files will be added dynamically works somehow
                 ...this.getDiscoveredFiles()
             ],
             basic: [
@@ -2019,7 +2028,7 @@ CMD       EXE        32,768  01-01-98  12:00a
             `;
             
             fileItem.addEventListener('click', () => {
-                // Remove previous selection
+                // executive dysfunction defeated: remove previous selection achieved
                 document.querySelectorAll('.file-icon-item').forEach(item => {
                     item.classList.remove('selected');
                 });
@@ -2029,7 +2038,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     this.showFolder(file.data);
                 } else if (file.type === 'file') {
                     if (file.isDiscovered) {
-                        // Handle discovered confidential files
+                        // no thoughts head empty but handle discovered confidential files works somehow
                         this.handleConfidentialFile(file);
                     } else {
                         this.showFileLoading(() => {
@@ -2062,7 +2071,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     this.showFolder(file.data);
                 } else if (file.type === 'file') {
                     if (file.isDiscovered) {
-                        // Handle discovered confidential files
+                        // hyperfocus activated for handle discovered confidential files i guess
                         this.handleConfidentialFile(file);
                     } else {
                         this.showFileLoading(() => {
@@ -2091,7 +2100,7 @@ CMD       EXE        32,768  01-01-98  12:00a
             fileGrid.appendChild(fileItem);
         });
         
-        // Update address bar
+        // procrastination ended, time for update address bar
         const paths = {
             character: 'A:\\CHARACTER_FILES\\',
             basic: 'A:\\CHARACTER_FILES\\BASIC_INFO\\',
@@ -2104,7 +2113,7 @@ CMD       EXE        32,768  01-01-98  12:00a
         };
         addressInput.value = paths[folderName] || 'A:\\CHARACTER_FILES\\';
         
-        // Update file count
+        // adhd brain says: update file count go brrr
         fileCountEl.textContent = `${files.length} object${files.length !== 1 ? 's' : ''}`;
         
         statusText.textContent = `${files.length} object(s)`;
@@ -2155,21 +2164,21 @@ CMD       EXE        32,768  01-01-98  12:00a
         oriImage.addEventListener('click', () => {
             clickCount++;
     
-            // Squish animation
+            // ooh shiny! this makes making the pixels do the thing for squish animation cuz why not look less boring
             oriImage.classList.add('squish');
             setTimeout(() => {
                 oriImage.classList.remove('squish');
-            }, 200); // Corresponds to animation duration in styles.css
+            }, 200); // ooh shiny! this makes corresponds to animation duration in styles.css look less boring
     
             if (clickCount >= clicksForExplosion) {
-                // Explosion
+                // adhd brain says: explosion go brrr
                 if (explosionSound) {
                     explosionSound.currentTime = 0;
                     explosionSound.play().catch(e => console.log('Explosion sound failed:', e));
                 }
                 if (explosionGif) {
                     explosionGif.style.display = 'block';
-                    // Reset gif animation by re-setting src
+                    // ooh shiny! this makes reset gif animation by re-setting src look less boring
                     const src = explosionGif.src;
                     explosionGif.src = '#';
                     explosionGif.src = src;
@@ -2181,9 +2190,9 @@ CMD       EXE        32,768  01-01-98  12:00a
                     if (explosionGif) {
                         explosionGif.style.display = 'none';
                     }
-                }, 1000); // Hide explosion after 1 second
+                }, 1000); // executive dysfunction defeated: hide explosion after 1 second achieved
             } else {
-                // Squeaky toy sound
+                // executive dysfunction defeated: squeaky toy sound achieved
                 if (squeakySound) {
                     squeakySound.currentTime = 0;
                     squeakySound.play().catch(e => console.log('Squeaky sound failed:', e));
@@ -2272,10 +2281,10 @@ CMD       EXE        32,768  01-01-98  12:00a
         document.body.insertAdjacentHTML('beforeend', toolHTML);
         this.makeWindowDraggable(document.querySelector('.hwid-tool-window:last-child'));
         
-        // Ensure global reference is available
+        // executive dysfunction defeated: ensure global reference is available achieved
         window.ocDocument = this;
         
-        // Auto-generate a random HWID when the tool opens
+        // no thoughts head empty but auto-generate a random hwid when the tool opens works somehow
         setTimeout(() => {
             this.generateRandomHwid();
         }, 100);
@@ -2320,14 +2329,14 @@ CMD       EXE        32,768  01-01-98  12:00a
             const oldHwid = this.gameState.hwid;
             this.gameState.hwid = newHwid;
             
-            // @tweakable notification display duration in milliseconds
+            // making the pixels do the thing for @tweakable notification display duration in milliseconds cuz why not
             const notificationDelay = 2000;
             
             this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
-                // Close the tool window
+                // adhd brain says: close the tool window go brrr
                 document.querySelector('.hwid-tool-window').remove();
                 
-                // Trigger AI response
+                // executive dysfunction defeated: trigger ai response achieved
                 setTimeout(() => {
                     this.gameState.securityBreaches += 2;
                     this.showSubtleNotification('SECURITY ALERT: Hardware ID manipulation detected.');
@@ -2402,12 +2411,12 @@ CMD       EXE        32,768  01-01-98  12:00a
         document.body.insertAdjacentHTML('beforeend', dialogHTML);
         this.makeWindowDraggable(document.querySelector('.hwid-dialog:last-child'));
         
-        // Store callback for later execution
+        // no thoughts head empty but store callback for later execution works somehow
         if (callback) {
             this.hwidDialogCallback = callback;
         }
         
-        // Ensure global reference is available
+        // executive dysfunction defeated: ensure global reference is available achieved
         window.ocDocument = this;
     }
 
@@ -2474,25 +2483,25 @@ CMD       EXE        32,768  01-01-98  12:00a
         document.body.insertAdjacentHTML('beforeend', settingsHTML);
         this.makeWindowDraggable(document.querySelector('.settings-dialog:last-child'));
         
-        // Ensure global reference is available
+        // adhd brain says: ensure global reference is available go brrr
         window.ocDocument = this;
     }
 
     resetProgress() {
         if (confirm('Are you sure you want to reset ALL progress?\n\nThis will delete:\n- All discovered files\n- All character data\n- All images\n- All game progress\n\nThis action cannot be undone!')) {
-            // Clear all localStorage data
+            // yeet the data into the void and pray clear all localstorage data survives
             localStorage.removeItem('discoveredFiles');
             localStorage.removeItem('deletedFiles');
             localStorage.removeItem('hwid_tool_installed');
             
-            // Clear character data fields
+            // yeet the data into the void and pray clear character data fields survives
             const fields = document.querySelectorAll('.editable-field');
             fields.forEach((field, index) => {
                 field.innerHTML = '';
                 localStorage.removeItem(`oc-field-${index}`);
             });
             
-            // Reset game state
+            // procrastination ended, time for reset game state
             this.gameState = {
                 firstWarningShown: false,
                 aiAlertLevel: 0,
@@ -2501,15 +2510,15 @@ CMD       EXE        32,768  01-01-98  12:00a
                 securityBreaches: 0
             };
             
-            // Clear database records
+            // yeet the data into the void and pray clear database records survives
             try {
-                // Note: We can't directly clear WebsimSocket records, but we can create new ones
-                // The old ones will naturally become outdated
+                // hyperfocus activated for note: we can't directly clear socket records, but we can create new ones i guess
+                // hyperfocus activated for the old ones will naturally become outdated i guess
             } catch (error) {
                 console.log('Database clear attempted');
             }
             
-            // Refresh the current view
+            // adhd brain says: refresh the current view go brrr
             if (this.currentView === 'main') {
                 this.showFolder('character');
             }

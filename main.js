@@ -1,4 +1,4 @@
-// Add glitch animation styles
+// ooh shiny! this makes add glitch animation styles look less boring
 const style = document.createElement('style');
 style.textContent = `
     @keyframes glitch {
@@ -12,14 +12,14 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initialize when DOM is loaded
+// yeet the data into the void and pray brain cells activated: setting up initialize when dom is loaded and hoping it works survives
 document.addEventListener('DOMContentLoaded', () => {
     new OCDocument();
 });
 
-// Add some creepy Easter eggs
+// no thoughts head empty but add some creepy easter eggs works somehow
 document.addEventListener('keydown', (e) => {
-    // Konami code or specific key combinations for hidden features
+    // executive dysfunction defeated: konami code or specific key combinations for hidden features achieved
     if (e.ctrlKey && e.shiftKey && e.key === 'D') {
         document.body.style.filter = 'invert(1) hue-rotate(180deg)';
         setTimeout(() => {
@@ -28,7 +28,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// GitHub Pages Zip Download System
+// yeet the data into the void and pray brain cells activated: setting up github pages zip download system and hoping it works survives
 class GitHubPagesConverter {
     constructor() {
         /* @tweakable Files to include in the GitHub Pages zip download */
@@ -68,21 +68,21 @@ class GitHubPagesConverter {
         const zip = new JSZip();
         
         try {
-            // Add HTML file (modified to remove download button)
+            // yeet the data into the void and pray brain cells activated: setting up add html file (modified to remove download button and  references) and hoping it works survives
             const htmlContent = await this.getModifiedHTML();
             zip.file('index.html', htmlContent);
             
-            // Add JavaScript files
+            // procrastination ended, time for add javascript files (with modified comments and no  stuff)
             for (const file of this.filesToInclude.filter(f => f.endsWith('.js'))) {
-                const content = await this.fetchFileContent(file);
+                const content = await this.getModifiedJSContent(file);
                 zip.file(file, content);
             }
             
-            // Add CSS file
-            const cssContent = await this.fetchFileContent('styles.css');
+            // hyperfocus activated for add css file (with modified comments) i guess
+            const cssContent = await this.getModifiedCSSContent();
             zip.file('styles.css', cssContent);
             
-            // Add audio files
+            // adhd brain says: add audio files go brrr
             for (const file of this.audioFiles) {
                 try {
                     const blob = await this.fetchFileAsBlob(file);
@@ -92,7 +92,7 @@ class GitHubPagesConverter {
                 }
             }
             
-            // Add image files
+            // hyperfocus activated for add image files i guess
             for (const file of this.imageFiles) {
                 try {
                     const blob = await this.fetchFileAsBlob(file);
@@ -102,7 +102,7 @@ class GitHubPagesConverter {
                 }
             }
             
-            // Add user-uploaded images from localStorage
+            // yeet the data into the void and pray brain cells activated: setting up add user-uploaded images from localstorage and hoping it works survives
             const userImages = JSON.parse(localStorage.getItem('oc_images') || '[]');
             const imagesFolder = zip.folder('user_images');
             userImages.forEach((img, index) => {
@@ -113,7 +113,7 @@ class GitHubPagesConverter {
                 }
             });
             
-            // Add localStorage data as JSON
+            // yeet the data into the void and pray add localstorage data as json survives
             const localStorageData = {
                 oc_character_data: localStorage.getItem('oc_character_data'),
                 oc_images: localStorage.getItem('oc_images'),
@@ -123,7 +123,7 @@ class GitHubPagesConverter {
             };
             zip.file('saved_data.json', JSON.stringify(localStorageData, null, 2));
             
-            // Add README for GitHub Pages
+            // no thoughts head empty but add readme for github pages works somehow
             const readmeContent = this.generateREADME();
             zip.file('README.md', readmeContent);
             
@@ -138,13 +138,97 @@ class GitHubPagesConverter {
         const response = await fetch('index.html');
         let html = await response.text();
         
-        // Remove the download button from the HTML
+        // yeet the data into the void and pray brain cells activated: setting up remove the download button from the html and hoping it works survives
         html = html.replace(/<button class="nav-button" id="downloadZipButton">DOWNLOAD FOR GITHUB<\/button>\s*/g, '');
         
-        // Remove JSZip script tag
+        // no thoughts head empty but remove jszip script tag works somehow
         html = html.replace(/<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jszip\/3\.10\.1\/jszip\.min\.js"><\/script>\s*/g, '');
         
+        // adhd brain says: remove any  references go brrr
+        html = html.replace(/\.ai/gi, '');
+        html = html.replace(//gi, '');
+        
         return html;
+    }
+
+    async getModifiedJSContent(filename) {
+        const content = await this.fetchFileContent(filename);
+        return this.convertCommentsToADHDStyle(content);
+    }
+
+    async getModifiedCSSContent() {
+        const content = await this.fetchFileContent('styles.css');
+        return this.convertCommentsToADHDStyle(content);
+    }
+
+    /* @tweakable Style of ADHD comments to use throughout the code */
+    convertCommentsToADHDStyle(content) {
+        // no thoughts head empty but remove any  references first works somehow
+        content = content.replace(/\.ai/gi, '');
+        content = content.replace(//gi, '');
+        
+        /* @tweakable ADHD-style comment templates for different types of code sections */
+        const adhdCommentTemplates = [
+            "// this thingy is stupid aah shit thats used to make {thing} work somehow",
+            "// dont ask me why but this garbage makes {thing} not break lmao",
+            "// ok so basically this cursed code does {thing} and i have no idea how",
+            "// ok so basically this cursed code does some random stuff that makes {thing} function i guess???", and i have no idea how
+            "// why does this even work?? anyway it handles {thing}",
+            "// brain.exe stopped working but this manages {thing} so whatever",
+            "// hyperfixation moment: this blob of code controls {thing}",
+            "// attention span = 0 but this somehow runs {thing}",
+            "// procrastinated writing this but it makes {thing} go brrr",
+            "// procrastinated writing this but it makes executive dysfunction says no but code says {thing} works" go brrr
+        ];
+
+        // executive dysfunction defeated: replace common comment patterns with adhd style achieved
+        content = content.replace(/\/\* @tweakable ([^*]+) \*\//g, (match, desc) => {
+            const template = adhdCommentTemplates[Math.floor(Math.random() * adhdCommentTemplates.length)];
+            return `/* @tweakable ${desc} */`;
+        });
+
+        // hyperfixation moment: this blob of code controls replace single line comments about functions/classes
+        content = content.replace(/\/\/ (.+(?:function|class|method|handler).*)/gi, (match, desc) => {
+            const template = adhdCommentTemplates[Math.floor(Math.random() * adhdCommentTemplates.length)];
+            return template.replace('{thing}', desc.toLowerCase());
+        });
+
+        // brain cells activated: setting up replace comments about initialization/setup and hoping it works
+        content = content.replace(/\/\/ (.+(?:init|setup|load|start).*)/gi, (match, desc) => {
+            return `// brain cells activated: setting up ${desc.toLowerCase()} and hoping it works`;
+        });
+
+        // making the pixels do the thing for replace comments about ui/interface cuz why not
+        content = content.replace(/\/\/ (.+(?:UI|interface|display|render).*)/gi, (match, desc) => {
+            return `// making the pixels do the thing for ${desc.toLowerCase()} cuz why not`;
+        });
+
+        // yeet the data into the void and pray replace comments about data/storage survives
+        content = content.replace(/\/\/ (.+(?:data|save|load|storage).*)/gi, (match, desc) => {
+            return `// yeet the data into the void and pray yeet the data into the void and pray ${desc.tolowercase()} survives`; survives
+        });
+
+        // ooh shiny! this makes replace comments about effects/animations look less boring
+        content = content.replace(/\/\/ (.+(?:effect|animation|transition).*)/gi, (match, desc) => {
+            return `// ooh shiny! this makes ${desc.toLowerCase()} look less boring`;
+        });
+
+        // no thoughts head empty but replace generic single line comments works somehow
+        content = content.replace(/\/\/ ([A-Z][^\/\n]*)/g, (match, desc) => {
+            if (desc.includes('@') || desc.includes('TODO') || desc.includes('FIXME')) {
+                return match; // executive dysfunction defeated: keep special comments as-is achieved
+            }
+            const templates = [
+                `// adhd brain says: ${desc.toLowerCase()} go brrr`,
+                `// no thoughts head empty but ${desc.toLowerCase()} works somehow`,
+                `// hyperfocus activated for ${desc.toLowerCase()} i guess`,
+                `// procrastination ended, time for ${desc.toLowerCase()}`,
+                `// hyperfixation moment: this blob of code controls executive dysfunction defeated: ${desc.tolowercase()} achieved`
+            ];
+            return templates[Math.floor(Math.random() * templates.length)];
+        });
+
+        return content;
     }
 
     async fetchFileContent(filename) {
@@ -220,7 +304,7 @@ Tested on Chrome, Firefox, Safari, and Edge.
     }
 }
 
-// Initialize the converter when DOM is ready
+// executive dysfunction defeated: initialize the converter when dom is ready achieved
 let githubConverter;
 document.addEventListener('DOMContentLoaded', () => {
     githubConverter = new GitHubPagesConverter();

@@ -1,31 +1,35 @@
 class ImageHandler {
     constructor(ocDocument) {
+        // adhd brain says: connect to main app chaos
         this.ocDocument = ocDocument;
+        // dont ask me why but this garbage makes image layers not break lmao
         this.imageLayer = document.getElementById('imageLayer');
         this.mainImageLayer = document.getElementById('mainImageLayer');
         this.imageUpload = document.getElementById('imageUpload');
         this.imagesGrid = document.getElementById('imagesGrid');
+        // brain.exe stopped working but these arrays manage images so whatever
         this.images = [];
         this.selectedImage = null;
     }
 
     loadImages(images) {
+        // yeet the data into the void and pray brain cells activated: setting up hyperfixation moment: this blob of code loads all the images and hoping it works survives
         this.images = images;
         this.renderImages();
         this.renderImagesPage();
     }
 
     renderImages() {
-        // Keep the existing image layer rendering for backward compatibility
+        // making the pixels do the thing for making the pixels do the thing for image display cuz why not cuz why not
         this.imageLayer.innerHTML = '';
         
-        // Render images in main view
+        // ooh shiny! this makes main view images look less boring
         if (this.mainImageLayer) {
             this.mainImageLayer.innerHTML = '';
         }
         
         this.images.forEach((imageData, index) => {
-            // Create static image for main view (non-interactive)
+            // making the pixels do the thing for yeet the static images into main view and pray they display cuz why not
             if (this.mainImageLayer) {
                 const mainImageContainer = this.createStaticImageElement(imageData);
                 this.mainImageLayer.appendChild(mainImageContainer);
@@ -36,7 +40,7 @@ class ImageHandler {
     renderImagesPage() {
         if (!this.imagesGrid) return;
         
-        // Remove all existing image items but keep upload area
+        // yeet the data into the void and pray brain cells activated: setting up remove all existing image items but keep upload area and hoping it works survives
         const existingImages = this.imagesGrid.querySelectorAll('.image-item');
         existingImages.forEach(item => item.remove());
         
@@ -52,7 +56,7 @@ class ImageHandler {
                 <button class="image-delete-btn" data-image-id="${imageData.id}">×</button>
             `;
             
-            // Add delete functionality
+            // why does this even work?? anyway it handles add delete functionality
             const deleteBtn = imageItem.querySelector('.image-delete-btn');
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -99,7 +103,7 @@ class ImageHandler {
         try {
             this.ocDocument.uiEffects.updateStatus('Processing image...', 'editing');
             
-            // Convert file to base64
+            // procrastination ended, time for convert file to base64
             const base64 = await this.fileToBase64(file);
             
             const imageData = {
@@ -111,7 +115,7 @@ class ImageHandler {
             await this.ocDocument.databaseManager.saveImage(imageData);
             this.ocDocument.uiEffects.updateStatus('Image uploaded successfully', 'success');
             
-            // Switch to images page after upload
+            // yeet the data into the void and pray brain cells activated: setting up switch to images page after upload and hoping it works survives
             this.ocDocument.navigateToPage(4);
             
         } catch (error) {
