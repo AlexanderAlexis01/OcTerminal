@@ -1,4 +1,4 @@
-// ooh shiny! this makes add glitch animation styles look less boring
+// Add glitch animation styles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes glitch {
@@ -12,14 +12,14 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// yeet the data into the void and pray brain cells activated: setting up initialize when dom is loaded and hoping it works survives
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new OCDocument();
 });
 
-// no thoughts head empty but add some creepy easter eggs works somehow
+// Add some creepy Easter eggs
 document.addEventListener('keydown', (e) => {
-    // executive dysfunction defeated: konami code or specific key combinations for hidden features achieved
+    // Konami code or specific key combinations for hidden features
     if (e.ctrlKey && e.shiftKey && e.key === 'D') {
         document.body.style.filter = 'invert(1) hue-rotate(180deg)';
         setTimeout(() => {
@@ -28,7 +28,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// yeet the data into the void and pray brain cells activated: setting up github pages zip download system and hoping it works survives
+// GitHub Pages Zip Download System
 class GitHubPagesConverter {
     constructor() {
         /* @tweakable Files to include in the GitHub Pages zip download */
@@ -56,64 +56,90 @@ class GitHubPagesConverter {
             'Roblox Explosion Sound Effect.mp3'
         ];
         
-        /* @tweakable Image files to include in the zip */
+        /* @tweakable Image files to include in the zip (these are the key assets that need to be included) */
         this.imageFiles = [
             'dust.png',
-            'Ori.png',
+            'Ori.png', 
             'explosion.gif'
         ];
+        
+        /* @tweakable Whether to create subdirectories for assets in the zip */
+        this.createAssetSubdirs = false;
     }
 
     async generateZip() {
         const zip = new JSZip();
         
         try {
-            // yeet the data into the void and pray brain cells activated: setting up add html file (modified to remove download button and  references) and hoping it works survives
+            // Add HTML file (modified to remove download button)
             const htmlContent = await this.getModifiedHTML();
             zip.file('index.html', htmlContent);
             
-            // procrastination ended, time for add javascript files (with modified comments and no  stuff)
+            // Add JavaScript files
             for (const file of this.filesToInclude.filter(f => f.endsWith('.js'))) {
-                const content = await this.getModifiedJSContent(file);
+                const content = await this.fetchFileContent(file);
                 zip.file(file, content);
             }
             
-            // hyperfocus activated for add css file (with modified comments) i guess
-            const cssContent = await this.getModifiedCSSContent();
+            // Add CSS file
+            const cssContent = await this.fetchFileContent('styles.css');
             zip.file('styles.css', cssContent);
             
-            // adhd brain says: add audio files go brrr
+            // Add audio files with better error handling
             for (const file of this.audioFiles) {
                 try {
                     const blob = await this.fetchFileAsBlob(file);
-                    zip.file(file, blob);
+                    if (this.createAssetSubdirs) {
+                        zip.file(`audio/${file}`, blob);
+                    } else {
+                        zip.file(file, blob);
+                    }
+                    console.log(`Successfully added audio file: ${file}`);
                 } catch (error) {
-                    console.warn(`Could not include ${file}:`, error);
+                    console.warn(`Could not include audio file ${file}:`, error);
                 }
             }
             
-            // hyperfocus activated for add image files i guess
+            // Add image files with better error handling and verification
             for (const file of this.imageFiles) {
                 try {
                     const blob = await this.fetchFileAsBlob(file);
-                    zip.file(file, blob);
+                    if (blob.size === 0) {
+                        throw new Error(`File ${file} is empty or corrupted`);
+                    }
+                    if (this.createAssetSubdirs) {
+                        zip.file(`images/${file}`, blob);
+                    } else {
+                        zip.file(file, blob);
+                    }
+                    console.log(`Successfully added image file: ${file} (${blob.size} bytes)`);
                 } catch (error) {
-                    console.warn(`Could not include ${file}:`, error);
+                    console.warn(`Could not include image file ${file}:`, error);
+                    // Try to create a placeholder or fallback
+                    try {
+                        const fallbackContent = `<!-- Missing file: ${file} -->`;
+                        zip.file(`MISSING_${file}.txt`, fallbackContent);
+                    } catch (fallbackError) {
+                        console.error(`Could not create fallback for ${file}:`, fallbackError);
+                    }
                 }
             }
             
-            // yeet the data into the void and pray brain cells activated: setting up add user-uploaded images from localstorage and hoping it works survives
+            // Add user-uploaded images from localStorage
             const userImages = JSON.parse(localStorage.getItem('oc_images') || '[]');
-            const imagesFolder = zip.folder('user_images');
-            userImages.forEach((img, index) => {
-                if (img.url && img.url.startsWith('data:')) {
-                    const base64Data = img.url.split(',')[1];
-                    const filename = img.filename || `image_${index}.jpg`;
-                    imagesFolder.file(filename, base64Data, {base64: true});
-                }
-            });
+            if (userImages.length > 0) {
+                const imagesFolder = zip.folder('user_images');
+                userImages.forEach((img, index) => {
+                    if (img.url && img.url.startsWith('data:')) {
+                        const base64Data = img.url.split(',')[1];
+                        const filename = img.filename || `image_${index}.jpg`;
+                        imagesFolder.file(filename, base64Data, {base64: true});
+                        console.log(`Added user image: ${filename}`);
+                    }
+                });
+            }
             
-            // yeet the data into the void and pray add localstorage data as json survives
+            // Add localStorage data as JSON
             const localStorageData = {
                 oc_character_data: localStorage.getItem('oc_character_data'),
                 oc_images: localStorage.getItem('oc_images'),
@@ -123,9 +149,13 @@ class GitHubPagesConverter {
             };
             zip.file('saved_data.json', JSON.stringify(localStorageData, null, 2));
             
-            // no thoughts head empty but add readme for github pages works somehow
+            // Add improved README for GitHub Pages
             const readmeContent = this.generateREADME();
             zip.file('README.md', readmeContent);
+            
+            // Add troubleshooting guide
+            const troubleshootingContent = this.generateTroubleshootingGuide();
+            zip.file('TROUBLESHOOTING.md', troubleshootingContent);
             
             return zip;
         } catch (error) {
@@ -138,97 +168,13 @@ class GitHubPagesConverter {
         const response = await fetch('index.html');
         let html = await response.text();
         
-        // yeet the data into the void and pray brain cells activated: setting up remove the download button from the html and hoping it works survives
+        // Remove the download button from the HTML
         html = html.replace(/<button class="nav-button" id="downloadZipButton">DOWNLOAD FOR GITHUB<\/button>\s*/g, '');
         
-        // no thoughts head empty but remove jszip script tag works somehow
+        // Remove JSZip script tag
         html = html.replace(/<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jszip\/3\.10\.1\/jszip\.min\.js"><\/script>\s*/g, '');
         
-        // adhd brain says: remove any  references go brrr
-        html = html.replace(/\.ai/gi, '');
-        html = html.replace(//gi, '');
-        
         return html;
-    }
-
-    async getModifiedJSContent(filename) {
-        const content = await this.fetchFileContent(filename);
-        return this.convertCommentsToADHDStyle(content);
-    }
-
-    async getModifiedCSSContent() {
-        const content = await this.fetchFileContent('styles.css');
-        return this.convertCommentsToADHDStyle(content);
-    }
-
-    /* @tweakable Style of ADHD comments to use throughout the code */
-    convertCommentsToADHDStyle(content) {
-        // no thoughts head empty but remove any  references first works somehow
-        content = content.replace(/\.ai/gi, '');
-        content = content.replace(//gi, '');
-        
-        /* @tweakable ADHD-style comment templates for different types of code sections */
-        const adhdCommentTemplates = [
-            "// this thingy is stupid aah shit thats used to make {thing} work somehow",
-            "// dont ask me why but this garbage makes {thing} not break lmao",
-            "// ok so basically this cursed code does {thing} and i have no idea how",
-            "// ok so basically this cursed code does some random stuff that makes {thing} function i guess???", and i have no idea how
-            "// why does this even work?? anyway it handles {thing}",
-            "// brain.exe stopped working but this manages {thing} so whatever",
-            "// hyperfixation moment: this blob of code controls {thing}",
-            "// attention span = 0 but this somehow runs {thing}",
-            "// procrastinated writing this but it makes {thing} go brrr",
-            "// procrastinated writing this but it makes executive dysfunction says no but code says {thing} works" go brrr
-        ];
-
-        // executive dysfunction defeated: replace common comment patterns with adhd style achieved
-        content = content.replace(/\/\* @tweakable ([^*]+) \*\//g, (match, desc) => {
-            const template = adhdCommentTemplates[Math.floor(Math.random() * adhdCommentTemplates.length)];
-            return `/* @tweakable ${desc} */`;
-        });
-
-        // hyperfixation moment: this blob of code controls replace single line comments about functions/classes
-        content = content.replace(/\/\/ (.+(?:function|class|method|handler).*)/gi, (match, desc) => {
-            const template = adhdCommentTemplates[Math.floor(Math.random() * adhdCommentTemplates.length)];
-            return template.replace('{thing}', desc.toLowerCase());
-        });
-
-        // brain cells activated: setting up replace comments about initialization/setup and hoping it works
-        content = content.replace(/\/\/ (.+(?:init|setup|load|start).*)/gi, (match, desc) => {
-            return `// brain cells activated: setting up ${desc.toLowerCase()} and hoping it works`;
-        });
-
-        // making the pixels do the thing for replace comments about ui/interface cuz why not
-        content = content.replace(/\/\/ (.+(?:UI|interface|display|render).*)/gi, (match, desc) => {
-            return `// making the pixels do the thing for ${desc.toLowerCase()} cuz why not`;
-        });
-
-        // yeet the data into the void and pray replace comments about data/storage survives
-        content = content.replace(/\/\/ (.+(?:data|save|load|storage).*)/gi, (match, desc) => {
-            return `// yeet the data into the void and pray yeet the data into the void and pray ${desc.tolowercase()} survives`; survives
-        });
-
-        // ooh shiny! this makes replace comments about effects/animations look less boring
-        content = content.replace(/\/\/ (.+(?:effect|animation|transition).*)/gi, (match, desc) => {
-            return `// ooh shiny! this makes ${desc.toLowerCase()} look less boring`;
-        });
-
-        // no thoughts head empty but replace generic single line comments works somehow
-        content = content.replace(/\/\/ ([A-Z][^\/\n]*)/g, (match, desc) => {
-            if (desc.includes('@') || desc.includes('TODO') || desc.includes('FIXME')) {
-                return match; // executive dysfunction defeated: keep special comments as-is achieved
-            }
-            const templates = [
-                `// adhd brain says: ${desc.toLowerCase()} go brrr`,
-                `// no thoughts head empty but ${desc.toLowerCase()} works somehow`,
-                `// hyperfocus activated for ${desc.toLowerCase()} i guess`,
-                `// procrastination ended, time for ${desc.toLowerCase()}`,
-                `// hyperfixation moment: this blob of code controls executive dysfunction defeated: ${desc.tolowercase()} achieved`
-            ];
-            return templates[Math.floor(Math.random() * templates.length)];
-        });
-
-        return content;
     }
 
     async fetchFileContent(filename) {
@@ -237,8 +183,29 @@ class GitHubPagesConverter {
     }
 
     async fetchFileAsBlob(filename) {
-        const response = await fetch(filename);
-        return await response.blob();
+        /* @tweakable Timeout for fetching asset files in milliseconds */
+        const fetchTimeout = 10000;
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
+        
+        try {
+            const response = await fetch(filename, {
+                signal: controller.signal,
+                cache: 'no-cache'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const blob = await response.blob();
+            clearTimeout(timeoutId);
+            return blob;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            throw error;
+        }
     }
 
     generateREADME() {
@@ -262,6 +229,41 @@ A retro terminal-style character database application with a Windows 98 aestheti
 2. Enable GitHub Pages in repository settings
 3. Your site will be available at \`https://yourusername.github.io/repository-name\`
 
+**Important:** Make sure all asset files are uploaded:
+- dust.png (dust particle effect)
+- Ori.png (plushie character image)
+- explosion.gif (explosion animation)
+- All audio files (.mp3, .opus)
+
+## File Structure
+
+Your repository should look like this:
+\`\`\`
+/
+├── index.html
+├── styles.css
+├── main.js
+├── database-manager.js
+├── image-handler.js
+├── oc-document.js
+├── boot-sequence.js
+├── ui-effects.js
+├── dust.png
+├── Ori.png
+├── explosion.gif
+├── ambient.mp3
+├── boot.mp3
+├── old-computer-click-152513.mp3
+├── errors-llargs-77182.mp3
+├── old-desktop-pc-booting-24280.mp3
+├── computer-startup-sound-effect-312870.mp3
+├── computer-idle-ambient-loop-001-8420.mp3
+├── SqueakyToy.opus
+├── Roblox Explosion Sound Effect.mp3
+├── user_images/ (if any)
+└── saved_data.json
+\`\`\`
+
 ## Usage
 
 - Fill out character information in the editor
@@ -279,6 +281,98 @@ User data is included in the \`saved_data.json\` file for backup purposes.
 
 Works best in modern browsers with JavaScript enabled.
 Tested on Chrome, Firefox, Safari, and Edge.
+
+## Troubleshooting
+
+If assets are not loading:
+1. Check that all files were uploaded to the correct directory
+2. Verify file names match exactly (case-sensitive)
+3. Check browser console for 404 errors
+4. Ensure GitHub Pages is properly configured
+
+See TROUBLESHOOTING.md for more detailed help.
+`;
+    }
+
+    generateTroubleshootingGuide() {
+        return `# Troubleshooting Guide
+
+## Common Issues and Solutions
+
+### Assets Not Loading (dust.png, Ori.png, explosion.gif)
+
+**Problem:** Images or sounds not displaying/playing on GitHub Pages.
+
+**Solutions:**
+1. **Check file upload:** Ensure all asset files are uploaded to the root directory of your repository
+2. **Verify file names:** File names are case-sensitive. Make sure they match exactly:
+   - \`dust.png\` (not \`Dust.png\` or \`dust.PNG\`)
+   - \`Ori.png\` (not \`ori.png\` or \`ORI.png\`)
+   - \`explosion.gif\` (not \`Explosion.gif\`)
+3. **Check file formats:** 
+   - Images should be PNG/GIF format
+   - Audio should be MP3/OPUS format
+4. **Repository structure:** All files should be in the root directory, not in subfolders
+
+### GitHub Pages Not Working
+
+**Problem:** Site not accessible at GitHub Pages URL.
+
+**Solutions:**
+1. Go to repository Settings > Pages
+2. Set Source to "Deploy from a branch"
+3. Select "main" branch and "/ (root)" folder
+4. Wait 5-10 minutes for deployment
+5. Check that index.html is in the root directory
+
+### Console Errors
+
+**Problem:** JavaScript errors in browser console.
+
+**Solutions:**
+1. Check that all .js files are uploaded
+2. Verify no syntax errors in uploaded files
+3. Clear browser cache and reload
+4. Check Network tab for failed file requests
+
+### Audio Not Playing
+
+**Problem:** Sound effects not working.
+
+**Solutions:**
+1. Check browser autoplay policies
+2. User interaction required before audio can play
+3. Verify audio files are properly uploaded
+4. Check file formats (MP3 recommended for compatibility)
+
+### localStorage Data
+
+**Problem:** Character data not persisting.
+
+**Solutions:**
+1. localStorage works per domain/subdomain
+2. Data saved on local version won't transfer to GitHub Pages
+3. Use saved_data.json to restore data manually if needed
+
+## File Verification Checklist
+
+- [ ] index.html in root directory
+- [ ] All .js files uploaded
+- [ ] styles.css uploaded  
+- [ ] dust.png uploaded (check file size > 0)
+- [ ] Ori.png uploaded (check file size > 0)
+- [ ] explosion.gif uploaded (check file size > 0)
+- [ ] All audio files uploaded
+- [ ] GitHub Pages enabled in settings
+- [ ] No 404 errors in browser Network tab
+
+## Getting Help
+
+If issues persist:
+1. Check browser console for error messages
+2. Verify all files are in the repository
+3. Test locally first before uploading
+4. Check GitHub Pages deployment status
 `;
     }
 
@@ -304,7 +398,7 @@ Tested on Chrome, Firefox, Safari, and Edge.
     }
 }
 
-// executive dysfunction defeated: initialize the converter when dom is ready achieved
+// Initialize the converter when DOM is ready
 let githubConverter;
 document.addEventListener('DOMContentLoaded', () => {
     githubConverter = new GitHubPagesConverter();

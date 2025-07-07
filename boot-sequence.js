@@ -1,8 +1,6 @@
 class BootSequence {
     constructor(ocDocument) {
-        // adhd brain says: connect to main app thingy
         this.ocDocument = ocDocument;
-        // no thoughts head empty but dom elements work somehow
         this.bootSequence = document.getElementById('bootSequence');
         this.ambientSound = document.getElementById('ambientSound');
         this.bootSound = document.getElementById('bootSound');
@@ -11,16 +9,16 @@ class BootSequence {
     }
 
     async start() {
-        // this thingy is stupid aah shit thats used to make executive dysfunction defeated: power on sound achieved work somehow
+        // Play power on sound
         this.powerOnSound.play().catch(e => console.log('Power on sound failed:', e));
         
-        /* @tweakable Delay before boot text because ADHD brain needs time to process */
+        /* @tweakable Delay in milliseconds before the boot text starts appearing after power on. */
         const bootStartDelay = 2500;
         
-        // ooh shiny! this makes procrastination ended, time for boot text animation look less boring
+        // Wait for power-on animation to finish before starting boot text
         await new Promise(resolve => setTimeout(resolve, bootStartDelay));
 
-        // executive dysfunction defeated: set up the container achieved
+        // Set up the container
         this.bootSequence.innerHTML = `
             <div class="boot-text">
                 <!-- Lines will be typed here -->
@@ -33,16 +31,16 @@ class BootSequence {
             'BIOS Version 1.0.1 - OC Database Terminal',
             'Memory Test: 640K OK',
             'Detecting IDE Drives... Found: CHARACTER_DATA.FLP',
-            'Loading Operating System... ', // no thoughts head empty but special handling for spinner works somehow
+            'Loading Operating System... ', // Special handling for spinner
             'Initializing Character Database Terminal...',
             'Loading Security Protocols...',
             'BOOT COMPLETE',
         ];
 
-        // executive dysfunction defeated: play pc boot sound achieved
+        // Play PC boot sound
         this.bootSound.play().catch(e => console.log('Boot sound failed:', e));
 
-        // no thoughts head empty but type out all lines works somehow
+        // Type out all lines
         let totalDelay = 500;
         for (let i = 0; i < bootLines.length; i++) {
             const line = bootLines[i];
@@ -51,19 +49,19 @@ class BootSequence {
             bootTextContainer.appendChild(lineElement);
             
             await this.typeLine(lineElement, line, totalDelay);
-            totalDelay += 500; // hyperfocus activated for add a pause between lines i guess
+            totalDelay += 500; // Add a pause between lines
 
-            if (i === 4) { // yeet the data into the void and pray brain cells activated: setting up after "loading operating system..." and hoping it works survives
+            if (i === 4) { // After "Loading Operating System..."
                 const spinnerSpan = document.createElement('span');
                 spinnerSpan.className = 'loading-spinner';
                 lineElement.appendChild(spinnerSpan);
-                this.startLoadingSpinner(spinnerSpan, 3000); // executive dysfunction defeated: let spinner run for 3s achieved
+                this.startLoadingSpinner(spinnerSpan, 3000); // Let spinner run for 3s
                 await new Promise(resolve => setTimeout(resolve, 3000));
                 totalDelay += 2500;
             }
         }
 
-        // no thoughts head empty but show smiley face works somehow
+        // Show smiley face
         const smileyFace = document.createElement('div');
         smileyFace.className = 'smiley-face';
         smileyFace.textContent = ':)';
@@ -72,12 +70,12 @@ class BootSequence {
         
         this.successSound.play().catch(e => console.log('Success sound failed:', e));
         
-        // brain cells activated: setting up stop boot sound and start ambient sound and hoping it works
+        // Stop boot sound and start ambient sound
         this.bootSound.pause();
         this.bootSound.currentTime = 0;
         this.ambientSound.play().catch(e => console.log('Ambient sound failed:', e));
 
-        // adhd brain says: hide boot sequence and show document go brrr
+        // Hide boot sequence and show document
         setTimeout(() => {
             this.bootSequence.classList.add('hidden');
             setTimeout(() => {
@@ -90,7 +88,7 @@ class BootSequence {
         return new Promise(resolve => {
             setTimeout(() => {
                 let i = 0;
-                /* @tweakable Typing speed for that authentic ADHD typing experience */
+                /* @tweakable The delay between each character appearing on screen in milliseconds. */
                 const typingSpeed = 30;
                 const typingInterval = setInterval(() => {
                     if (i < text.length) {
@@ -116,7 +114,7 @@ class BootSequence {
             frameIndex = (frameIndex + 1) % frames.length;
         }, 200);
         
-        // no thoughts head empty but stop spinner after the specified duration works somehow
+        // Stop spinner after the specified duration
         setTimeout(() => {
             clearInterval(spinInterval);
             spinner.textContent = 'OK';
