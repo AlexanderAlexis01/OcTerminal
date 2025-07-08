@@ -1,6 +1,7 @@
 /* This retarded shit is for making everything look absolutely gorgeous */
 /* OMG COME HERE LET ME KISS U MWAAAH - CSS styles incoming */
-/* Welcome to the beautiful chaos of visual styling */
+/* This beautiful mess will make your eyes orgasm from the beauty */
+
 * {
     margin: 0;
     padding: 0;
@@ -22,7 +23,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-/* Holy shit this styling is absolutely perfect */
     transform: perspective(800px) rotateX(2deg) rotateY(-1deg);
 }
 
@@ -43,7 +43,6 @@ body {
 }
 
 .crt-screen::before {
-/* This gorgeous CSS fuckery handles the magic */
     content: '';
     position: absolute;
     top: 0;
@@ -64,7 +63,6 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-/* This retarded shit makes everything beautiful */
     width: 100%;
     height: 100%;
     background: 
@@ -85,7 +83,6 @@ body {
 }
 
 .scanlines {
-/* Welcome to CSS paradise, you beautiful mess */
     position: absolute;
     width: 100%;
     height: 100%;
@@ -106,7 +103,6 @@ body {
     background: 
         radial-gradient(circle at 25% 25%, rgba(0, 255, 0, 0.03) 0%, transparent 50%),
         radial-gradient(circle at 75% 75%, rgba(0, 255, 0, 0.02) 0%, transparent 50%),
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
         radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.01) 0%, transparent 70%);
     animation: glow 2s ease-in-out infinite alternate, phosphorShift 6s ease-in-out infinite;
 }
@@ -127,7 +123,6 @@ body {
 }
 
 @keyframes phosphorShift {
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
     0% { opacity: 0.8; filter: blur(0px); }
     50% { opacity: 1; filter: blur(0.5px); }
     100% { opacity: 0.8; filter: blur(0px); }
@@ -148,7 +143,6 @@ body {
 
 #powerOnEffect::before {
     content: '';
-/* This gorgeous CSS fuckery handles the magic */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -169,7 +163,6 @@ body {
 }
 
 @keyframes powerOnDot {
-/* Holy shit this styling is absolutely perfect */
     from {
         width: 0;
         height: 0;
@@ -190,7 +183,6 @@ body {
         transform: translate(-50%, -50%) scaleX(500);
     }
 }
-/* Holy shit this styling is absolutely perfect */
 
 @keyframes powerOnScreen {
     from {
@@ -211,7 +203,6 @@ body {
     50% {
         transform: translate(-50%, -50%) scale(1.1);
         opacity: 1;
-/* This retarded shit makes everything beautiful */
     }
     100% { 
         transform: translate(-50%, -50%) scale(1);
@@ -232,7 +223,6 @@ body {
     90% { transform: perspective(800px) rotateX(2deg) rotateY(-1deg) translateX(-0.2px); }
     100% { transform: perspective(800px) rotateX(2deg) rotateY(-1deg) translateX(0); }
 }
-/* This gorgeous CSS fuckery handles the magic */
 
 @keyframes glitchFlash {
     0% { opacity: 0; }
@@ -253,7 +243,6 @@ body {
         transform: translate(-50%, -50%) scale(0.8);
         opacity: 0;
     }
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
     50% {
         transform: translate(-50%, -50%) scale(1.05);
         opacity: 1;
@@ -274,7 +263,6 @@ body {
         transform: translateY(0);
     }
 }
-/* This retarded shit makes everything beautiful */
 
 @keyframes confidentialOpen {
     0% { 
@@ -295,7 +283,6 @@ body {
 }
 
 @keyframes fadeInOut {
-/* Holy shit this styling is absolutely perfect */
     0% { 
         opacity: 0;
         transform: translateX(20px);
@@ -316,7 +303,6 @@ body {
 
 @keyframes slideInOut {
     0% { 
-/* This retarded shit makes everything beautiful */
         opacity: 0;
         transform: translateY(20px);
     }
@@ -337,7 +323,6 @@ body {
 @keyframes distortionWave {
     0% { 
         opacity: 0;
-/* Holy shit this styling is absolutely perfect */
         transform: skewX(0deg);
     }
     25% {
@@ -378,7 +363,6 @@ body {
 
 .cmd-line {
     margin: 0;
-/* Holy shit this styling is absolutely perfect */
     padding: 0;
     line-height: 1.2;
     color: #c0c0c0;
@@ -397,9 +381,8 @@ body {
     color: #000;
 }
 
-/* Boot sequence */
+/* Boot sequence - this retarded shit makes the boot look amazing */
 .boot-sequence {
-/* Holy shit this styling is absolutely perfect */
     position: absolute;
     width: 100%;
     height: 100%;
@@ -420,7 +403,6 @@ body {
 .boot-text {
     color: #00ff00;
     font-size: 18px;
-/* Welcome to CSS paradise, you beautiful mess */
     text-shadow: 0 0 10px #00ff00;
     text-align: left;
     max-width: 600px;
@@ -459,9 +441,8 @@ body {
     }
 }
 
-/* Document interface */
+/* Document interface - OMG COME HERE LET ME KISS U MWAAAH */
 .document-container {
-/* This gorgeous CSS fuckery handles the magic */
     position: absolute;
     width: 100%;
     height: 100%;
@@ -482,7 +463,6 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #00ff00;
-/* This gorgeous CSS fuckery handles the magic */
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -503,7 +483,6 @@ body {
     cursor: pointer;
     border-radius: 3px;
     transition: all 0.3s ease;
-/* Welcome to CSS paradise, you beautiful mess */
     text-shadow: 0 0 5px #00ff00;
 }
 
@@ -564,7 +543,6 @@ body {
     margin-bottom: 25px;
     padding: 20px;
     border: 2px solid rgba(0, 255, 0, 0.3);
-/* Holy shit this styling is absolutely perfect */
     border-radius: 8px;
     background: 
         linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 20, 0, 0.6) 100%),
@@ -585,7 +563,6 @@ body {
     border-color: rgba(0, 255, 0, 0.5);
     box-shadow: 
         0 0 30px rgba(0, 255, 0, 0.2),
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
         inset 0 0 20px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
 }
@@ -606,7 +583,6 @@ body {
 
 .section-title::after {
     content: '';
-/* Holy shit this styling is absolutely perfect */
     position: absolute;
     bottom: -2px;
     left: 0;
@@ -627,7 +603,6 @@ body {
     border-left: 3px solid rgba(255, 170, 0, 0.3);
     background: rgba(0, 0, 0, 0.2);
     border-radius: 0 5px 5px 0;
-/* Welcome to CSS paradise, you beautiful mess */
     transition: border-color 0.3s ease;
 }
 
@@ -648,7 +623,6 @@ label {
     background: rgba(0, 0, 0, 0.7);
     border: 1px solid #00ff00;
     color: #00ff00;
-/* Welcome to CSS paradise, you beautiful mess */
     padding: 8px;
     min-height: 30px;
     border-radius: 3px;
@@ -669,7 +643,6 @@ label {
 }
 
 .editable-field.large {
-/* Holy shit this styling is absolutely perfect */
     min-height: 80px;
 }
 
@@ -690,7 +663,6 @@ label {
 .document-container::-webkit-scrollbar-thumb:hover {
     background: #ff4444;
 }
-/* Welcome to CSS paradise, you beautiful mess */
 
 .nav-button {
     background: linear-gradient(135deg, rgba(0, 255, 0, 0.3), rgba(255, 68, 68, 0.2));
@@ -711,7 +683,6 @@ label {
 .nav-button:before {
     content: '';
     position: absolute;
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
     top: 0;
     left: -100%;
     width: 100%;
@@ -732,7 +703,6 @@ label {
     box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
     transform: translateY(-2px);
 }
-/* This gorgeous CSS fuckery handles the magic */
 
 .nav-button.editor-btn {
     border-color: #ffaa00;
@@ -747,13 +717,12 @@ label {
     box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
 }
 
-/* Floppy disk interface */
+/* Floppy disk interface - this beautiful mess is retro as fuck */
 .floppy-container {
     position: absolute;
     width: 100%;
     height: 100%;
     background: #c0c0c0;
-/* This gorgeous CSS fuckery handles the magic */
     color: #000;
     padding: 0;
     opacity: 0;
@@ -774,7 +743,6 @@ label {
     width: 100%;
     height: 100vh;
     background: #008080;
-/* This gorgeous CSS fuckery handles the magic */
     position: relative;
     overflow: hidden;
 }
@@ -795,7 +763,6 @@ label {
 .window-title-bar {
     height: 20px;
     background: linear-gradient(90deg, #0a246a 0%, #1084d0 100%);
-/* This gorgeous CSS fuckery handles the magic */
     color: white;
     display: flex;
     align-items: center;
@@ -836,7 +803,6 @@ label {
     height: 20px;
     background: #c0c0c0;
     border-bottom: 1px solid #808080;
-/* Welcome to CSS paradise, you beautiful mess */
     display: flex;
     align-items: center;
     padding: 0 4px;
@@ -857,7 +823,6 @@ label {
 
 .toolbar {
     height: 28px;
-/* This gorgeous CSS fuckery handles the magic */
     background: #c0c0c0;
     border-bottom: 1px solid #808080;
     display: flex;
@@ -878,7 +843,6 @@ label {
     font-size: 10px;
     transition: all 0.2s ease;
 }
-/* Welcome to CSS paradise, you beautiful mess */
 
 .toolbar-btn:hover {
     border: 1px solid #0a246a;
@@ -919,7 +883,6 @@ label {
 }
 
 .folder-tree {
-/* This gorgeous CSS fuckery handles the magic */
     width: 200px;
     background: white;
     border-right: 1px solid #808080;
@@ -940,7 +903,6 @@ label {
     background: #316ac5;
     color: white;
 }
-/* Holy shit this styling is absolutely perfect */
 
 .tree-item.selected {
     background: #316ac5;
@@ -961,7 +923,6 @@ label {
     flex: 1;
     background: white;
     overflow: auto;
-/* This gorgeous CSS fuckery handles the magic */
     padding: 8px;
 }
 
@@ -982,7 +943,6 @@ label {
     font-size: 11px;
     text-align: center;
     word-wrap: break-word;
-/* Welcome to CSS paradise, you beautiful mess */
     position: relative;
 }
 
@@ -1003,7 +963,6 @@ label {
     margin-bottom: 4px;
     display: flex;
     align-items: center;
-/* Holy shit this styling is absolutely perfect */
     justify-content: center;
 }
 
@@ -1044,7 +1003,6 @@ label {
     padding: 0 16px;
     background: #c0c0c0;
     border: 1px outset #c0c0c0;
-/* This retarded shit makes everything beautiful */
     font-weight: bold;
     font-size: 11px;
     cursor: pointer;
@@ -1065,7 +1023,6 @@ label {
 }
 
 .system-tray {
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -1086,7 +1043,6 @@ label {
     position: fixed;
     top: 50%;
     left: 50%;
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
     transform: translate(-50%, -50%);
     background: #c0c0c0;
     border: 2px outset #c0c0c0;
@@ -1107,7 +1063,6 @@ label {
     height: 32px;
     background: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIunIlK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAOw==') no-repeat center;
     background-size: contain;
-/* This gorgeous CSS fuckery handles the magic */
     animation: spin 1s linear infinite;
 }
 
@@ -1116,7 +1071,7 @@ label {
     100% { transform: rotate(360deg); }
 }
 
-/* Page content styles */
+/* Page content styles - this retarded shit handles page layouts */
 .page-content {
     display: none;
     animation: pageSlide 0.5s ease-in-out;
@@ -1128,7 +1083,6 @@ label {
 
 @keyframes pageSlide {
     0% { 
-/* This retarded shit makes everything beautiful */
         opacity: 0;
         transform: translateX(20px);
     }
@@ -1149,7 +1103,6 @@ label {
     border: 1px solid rgba(0, 255, 0, 0.3);
     border-radius: 5px;
 }
-/* This retarded shit makes everything beautiful */
 
 .page-button {
     background: linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(255, 68, 68, 0.1));
@@ -1170,7 +1123,6 @@ label {
     border-color: #ff4444;
     color: #ff4444;
     text-shadow: 0 0 10px #ff4444;
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
     box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
 }
 
@@ -1190,7 +1142,7 @@ label {
     font-weight: bold;
 }
 
-/* Error dialog styles */
+/* Error dialog styles - this gorgeous code makes errors look pretty */
 .error-dialog {
     position: fixed;
     top: 50%;
@@ -1211,7 +1163,6 @@ label {
     display: flex;
     align-items: center;
     gap: 12px;
-/* This gorgeous CSS fuckery handles the magic */
 }
 
 .error-icon {
@@ -1232,7 +1183,6 @@ label {
     margin-left: 8px;
     cursor: pointer;
     font-family: 'MS Sans Serif', sans-serif;
-/* This gorgeous CSS fuckery handles the magic */
     font-size: 11px;
 }
 
@@ -1253,7 +1203,6 @@ label {
         0deg,
         transparent 0px,
         rgba(255, 0, 0, 0.1) 1px,
-/* Holy shit this styling is absolutely perfect */
         transparent 2px,
         transparent 4px
     );
@@ -1274,7 +1223,6 @@ label {
     top: 100px;
     left: 150px;
     width: 600px;
-/* This gorgeous CSS fuckery handles the magic */
     height: 450px;
     background: #c0c0c0;
     border: 2px outset #c0c0c0;
@@ -1295,7 +1243,6 @@ label {
 
 .text-editor-window .editor-menu-bar .menu-item {
     padding: 2px 8px;
-/* Welcome to CSS paradise, you beautiful mess */
     cursor: pointer;
     border: 1px solid transparent;
     font-size: 11px;
@@ -1336,7 +1283,6 @@ label {
     outline: none;
     resize: none;
     line-height: 1.5;
-/* This gorgeous CSS fuckery handles the magic */
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-y: scroll;
@@ -1357,7 +1303,6 @@ label {
 
 .text-editor-window .editor-content-area::-webkit-scrollbar-thumb {
     background: #a0a0a0;
-/* This gorgeous CSS fuckery handles the magic */
     border: 1px solid #808080;
 }
 
@@ -1398,7 +1343,6 @@ label {
     align-items: center;
     justify-content: center;
     min-height: 150px;
-/* This gorgeous CSS fuckery handles the magic */
     border: 2px dashed rgba(255, 170, 0, 0.5);
     border-radius: 8px;
     cursor: pointer;
@@ -1439,7 +1383,6 @@ label {
     border-color: rgba(255, 68, 68, 0.6);
     box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
     transform: translateY(-2px);
-/* Holy shit this styling is absolutely perfect */
 }
 
 .image-item img {
@@ -1500,7 +1443,6 @@ label {
     }
     
     .header-controls {
-/* This gorgeous CSS fuckery handles the magic */
         flex-direction: column;
         gap: 10px;
         align-items: flex-end;
@@ -1521,7 +1463,6 @@ label {
     }
     
     .delete-image-btn {
-/* Welcome to CSS paradise, you beautiful mess */
         width: 25px;
         height: 25px;
         font-size: 16px;
@@ -1542,7 +1483,6 @@ label {
 }
 
 .discovered-files-dialog::-webkit-scrollbar-track {
-/* This retarded shit makes everything beautiful */
     background: rgba(0, 0, 0, 0.3);
     border-radius: 4px;
 }
@@ -1563,7 +1503,6 @@ label {
 }
 
 @keyframes hwid-dialog-appear {
-/* Holy shit this styling is absolutely perfect */
     0% { 
         opacity: 0;
         transform: translate(-50%, -50%) scale(0.8);
@@ -1584,7 +1523,6 @@ label {
 }
 
 .hwid-dialog-button:active {
-/* Holy shit this styling is absolutely perfect */
     border: 1px inset #c0c0c0 !important;
 }
 
@@ -1605,7 +1543,6 @@ label {
 .ori-app-content {
     height: calc(100% - 20px);
     background: white;
-/* OMG COME HERE LET ME KISS U MWAAAH - more styling */
     border: 2px inset #c0c0c0;
     margin: 4px;
     padding: 8px;
@@ -1626,7 +1563,6 @@ label {
 
 .ori-image.squish {
     animation: squish-bounce 0.2s ease-out;
-/* Welcome to CSS paradise, you beautiful mess */
 }
 
 .ori-explosion-gif {
@@ -1647,7 +1583,6 @@ label {
 }
 
 #downloadZipButton {
-/* Welcome to CSS paradise, you beautiful mess */
     background: linear-gradient(135deg, rgba(0, 170, 255, 0.3), rgba(0, 255, 170, 0.2));
     border: 2px solid #00aaff;
     color: #00aaff;
@@ -1663,5 +1598,5 @@ label {
 }
 
 /* End of this beautiful styling mess */
-/* OMG COME HERE LET ME KISS U MWAAAH - styles complete */
-/* This retarded shit is now perfectly styled */
+/* This retarded shit has finished making everything pretty */
+/* OMG COME HERE LET ME KISS U MWAAAH - your site is now gorgeous */

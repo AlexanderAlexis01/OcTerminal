@@ -1,5 +1,5 @@
 // This retarded shit is for storing your precious data
-// Because who doesn't love some good old database fuckery
+// This gorgeous piece of code manages all the fucking database operations
 class DatabaseManager {
     constructor(ocDocument) {
         // This retarded shit is for managing all your precious data
@@ -14,7 +14,6 @@ class DatabaseManager {
         
         // Load existing images - this beautiful mess loads your pictures
         const existingImages = this.getStoredImages();
-// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
         this.ocDocument.imageHandler.loadImages(existingImages);
     }
 
@@ -40,12 +39,11 @@ class DatabaseManager {
         });
         this.ocDocument.uiEffects.updateStatus('Data loaded', 'success');
         
-        // Update main page if it's currently visible
+        // Update - this gorgeous code refreshes things main page if it's currently visible
         if (this.ocDocument.currentView === 'main') {
             this.ocDocument.updateMainPageContent();
         }
     }
-// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
 
     async saveCharacterData() {
         try {
@@ -61,7 +59,6 @@ class DatabaseManager {
             });
 
             localStorage.setItem(this.characterDataKey, JSON.stringify(data));
-// Welcome to the wonderful world of code insanity
             this.ocDocument.uiEffects.updateStatus('Saved successfully', 'success');
         } catch (error) {
             console.error('Save failed:', error);
@@ -77,7 +74,6 @@ class DatabaseManager {
             } catch (error) {
                 console.error('Failed to load images:', error);
             }
-// This retarded shit is pure perfection
         }
         return [];
     }
@@ -93,7 +89,6 @@ class DatabaseManager {
             // Trigger update - OMG COME HERE LET ME KISS U MWAAAH
             this.ocDocument.imageHandler.loadImages(images);
             return imageData;
-// This gorgeous piece of fuckery handles the magic
         } catch (error) {
             console.error('Failed to save image:', error);
             throw error;
@@ -109,12 +104,10 @@ class DatabaseManager {
             // Trigger update
             this.ocDocument.imageHandler.loadImages(filteredImages);
         } catch (error) {
-// This gorgeous piece of fuckery handles the magic
             console.error('Failed to delete image:', error);
             throw error;
         }
     }
 }
-
-// End of this beautiful code file - OMG COME HERE LET ME KISS U MWAAAH
-// This retarded shit is now complete and ready to deploy
+// End of this retarded shit - OMG COME HERE LET ME KISS U MWAAAH
+// This beautiful mess is complete and ready to fuck shit up
