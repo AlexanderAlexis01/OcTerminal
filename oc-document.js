@@ -32,13 +32,15 @@ class OCDocument {
         this.databaseManager = new DatabaseManager(this);
         this.bootSequenceHandler = new BootSequence(this);
         
-        // Add game state tracking - this beautiful mess tracks the spooky stuff
+        // Add file access tracking - this beautiful mess tracks file access for HWID lockout
         this.gameState = {
-            firstWarningShown: false,
-            aiAlertLevel: 0,
             hwid: this.generateHWID(),
-            aiLastActivity: Date.now(),
-            securityBreaches: 0
+            /* @tweakable Number of files that can be accessed before HWID lockout triggers */
+            filesAccessedCount: 0,
+            /* @tweakable Maximum files that can be accessed before requiring HWID spoof */
+            maxFilesBeforeLockout: 3,
+            isLocked: false,
+            hwidSpoofed: false
         };
         
         this.init();
@@ -372,17 +374,9 @@ class OCDocument {
         const fileLoading = document.getElementById('fileLoading');
         
         let currentFolder = 'character';
-        let clickCount = 0;
         
         treeItems.forEach(item => {
             item.addEventListener('click', () => {
-                clickCount++;
-                
-                // Easter egg: After 13 clicks, trigger corruption
-                if (clickCount === 13) {
-                    this.triggerSystemCorruption();
-                }
-                
                 // Remove previous selection
                 treeItems.forEach(t => t.classList.remove('selected'));
                 item.classList.add('selected');
@@ -1267,12 +1261,19 @@ Proceed with extreme caution.
     }
 
     openFile(file) {
+        // Check file access lockout first
+        if (this.checkFileAccessLockout()) {
+            this.showErrorDialog("Access Denied", "Hardware verification required. Check discovered files for instructions.");
+            return;
+        }
+        
         const fields = document.querySelectorAll('.editable-field');
         
         if (file.isDiscovered) {
             // Handle discovered files
             this.showFileLoading(() => {
-                this.handleConfidentialFile(file);
+                // No more confidential warnings, just open the file
+                this.openDiscoveredFile(file.name, file.content);
             });
         } else if (file.field !== undefined && file.field >= 0) {
             // Handle regular form fields
@@ -1300,6 +1301,19 @@ Proceed with extreme caution.
                 });
             }
         }
+    }
+
+    openDiscoveredFile(filename, content) {
+        const isEditable = filename !== 'readme.txt' && filename !== 'SYSTEM_ACCESS_REQUIRED.txt';
+        const saveCallback = isEditable ? (newContent) => this.saveDiscoveredFileContent(filename, newContent) : null;
+
+        this.showTextEditor({
+            filename,
+            content,
+            isEditable,
+            isConfidential: false, // No more confidential files
+            saveCallback
+        });
     }
 
     openImageFile(file) {
@@ -1874,7 +1888,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                         // @tweakable notification display duration in milliseconds
                         const notificationDelay = 2000;
                         
-                        this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
+                        this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nFile access has been restored.`, 'success', () => {
                             // Close the tool window
                             document.querySelector('.hwid-tool-window').remove();
                             
@@ -1918,7 +1932,9 @@ CMD       EXE        32,768  01-01-98  12:00a
                 return;
                 
             default:
-                output = `'${command}' is not recognized as an internal or external command,\noperable program or batch file.\n\nType HELP for available commands.`;
+                output = `'${command}' is not recognized as an internal or external command,
+operable program or batch file.
+\n\nType HELP for available commands.`;
                 break;
         }
         
@@ -2322,19 +2338,17 @@ CMD       EXE        32,768  01-01-98  12:00a
         if (hwidPattern.test(newHwid)) {
             const oldHwid = this.gameState.hwid;
             this.gameState.hwid = newHwid;
+            this.gameState.hwidSpoofed = true;
+            this.gameState.isLocked = false; // Unlock file access
             
-            // @tweakable notification display duration in milliseconds
-            const notificationDelay = 2000;
-            
-            this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
+            this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nFile access has been restored.`, 'success', () => {
                 // Close the tool window
                 document.querySelector('.hwid-tool-window').remove();
                 
-                // Trigger AI response
+                // Show success notification
                 setTimeout(() => {
-                    this.gameState.securityBreaches += 2;
-                    this.showSubtleNotification('SECURITY ALERT: Hardware ID manipulation detected.');
-                }, notificationDelay);
+                    this.showSubtleNotification('HWID authorization complete. File access restored.');
+                }, 1000);
             });
         } else {
             this.showHwidDialog('Invalid Format', `Invalid HWID format!\n\nEntered: "${newHwid}"\nExpected: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX\n\nTip: Click "Generate Random" to create a valid HWID`, 'error', () => {
@@ -2481,6 +2495,66 @@ CMD       EXE        32,768  01-01-98  12:00a
         window.ocDocument = this;
     }
 
+    checkFileAccessLockout() {
+        /* @tweakable Whether HWID lockout system is enabled */
+        const lockoutEnabled = true;
+        
+        if (!lockoutEnabled || this.gameState.hwidSpoofed) return false;
+        
+        this.gameState.filesAccessedCount++;
+        
+        if (this.gameState.filesAccessedCount >= this.gameState.maxFilesBeforeLockout && !this.gameState.isLocked) {
+            this.gameState.isLocked = true;
+            this.triggerHwidLockout();
+            return true;
+        }
+        
+        return this.gameState.isLocked;
+    }
+
+    triggerHwidLockout() {
+        /* @tweakable Lockout message for HWID requirement */
+        const lockoutMessage = "ACCESS RESTRICTED";
+        /* @tweakable Lockout explanation text */
+        const lockoutExplanation = "Hardware verification required. Check system files for authorization procedures.";
+        
+        // Create the instruction file if it doesn't exist
+        this.createHwidInstructionFile();
+        
+        // Show lockout dialog
+        this.showErrorDialog(lockoutMessage, lockoutExplanation);
+        
+        // Add visual effect
+        this.triggerGlitchEffect();
+    }
+
+    createHwidInstructionFile() {
+        /* @tweakable Content of the HWID instruction file */
+        const instructionContent = `SYSTEM ACCESS AUTHORIZATION REQUIRED
+
+Your current Hardware ID: ${this.gameState.hwid}
+
+To continue accessing files, you must authorize your hardware identity.
+
+REQUIRED COMMANDS:
+1. Open CMD.EXE from the main directory
+2. Type: DOWNLOAD-TOOL hwid-spoof-v3.exe /silent /bypass-security
+3. Wait for download completion
+4. Return to main directory and run HWID-SPOOF-V3.EXE
+5. Generate a new HWID and apply it
+
+This retarded shit is for security purposes.
+OMG COME HERE LET ME KISS U MWAAAH - follow the instructions!`;
+
+        // Add to discovered files
+        this.addDiscoveredFile('SYSTEM_ACCESS_REQUIRED.txt', instructionContent);
+        
+        // Show subtle notification
+        setTimeout(() => {
+            this.showSubtleNotification('New system file detected: SYSTEM_ACCESS_REQUIRED.txt');
+        }, 1000);
+    }
+
     resetProgress() {
         if (confirm('Are you sure you want to reset ALL progress?\n\nThis will delete:\n- All discovered files\n- All character data\n- All images\n- All game progress\n\nThis action cannot be undone!')) {
             // Clear all localStorage data
@@ -2497,11 +2571,11 @@ CMD       EXE        32,768  01-01-98  12:00a
             
             // Reset game state
             this.gameState = {
-                firstWarningShown: false,
-                aiAlertLevel: 0,
                 hwid: this.generateHWID(),
-                aiLastActivity: Date.now(),
-                securityBreaches: 0
+                filesAccessedCount: 0,
+                maxFilesBeforeLockout: 3,
+                isLocked: false,
+                hwidSpoofed: false
             };
             
             // Clear database records

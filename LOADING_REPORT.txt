@@ -3,7 +3,7 @@ OC TERMINAL GITHUB PAGES CONVERSION REPORT
 
 This retarded shit is for tracking what files made it into your zip:
 
-SUCCESSFUL FILES (22):
+SUCCESSFUL FILES (20):
 ✓ index.html
 ✓ main.js
 ✓ database-manager.js
@@ -11,8 +11,6 @@ SUCCESSFUL FILES (22):
 ✓ oc-document.js
 ✓ boot-sequence.js
 ✓ ui-effects.js
-✓ github-auth.js
-✓ github-storage.js
 ✓ styles.css
 ✓ ambient.mp3
 ✓ boot.mp3
