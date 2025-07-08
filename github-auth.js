@@ -7,9 +7,9 @@ class GitHubAuth {
         /* @tweakable GitHub OAuth scopes for repository access and user information - determines what permissions the app requests */
         this.scopes = 'user repo';
         /* @tweakable Key for storing authentication token in localStorage for session persistence */
-        this.tokenKey = 'github_auth_token';
+        this.tokenKey = 'bc9b3e5a5e0d4e211b032556247fb250824d9c95';
         /* @tweakable Key for storing user data in localStorage for quick access */
-        this.userKey = 'github_user_data';
+        this.userKey = 'bc9b3e5a5e0d4e211b032556247fb250824d9c95';
         /* @tweakable GitHub OAuth state parameter for security - prevents CSRF attacks */
         this.stateParameter = true;
         /* @tweakable Token refresh interval in hours - how often to verify token validity */
