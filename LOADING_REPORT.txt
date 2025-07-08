@@ -1,0 +1,33 @@
+OC TERMINAL GITHUB PAGES CONVERSION REPORT
+=========================================
+
+This retarded shit is for tracking what files made it into your zip:
+
+SUCCESSFUL FILES (22):
+✓ index.html
+✓ main.js
+✓ database-manager.js
+✓ image-handler.js
+✓ oc-document.js
+✓ boot-sequence.js
+✓ ui-effects.js
+✓ github-auth.js
+✓ github-storage.js
+✓ styles.css
+✓ ambient.mp3
+✓ boot.mp3
+✓ old-computer-click-152513.mp3
+✓ errors-llargs-77182.mp3
+✓ old-desktop-pc-booting-24280.mp3
+✓ computer-startup-sound-effect-312870.mp3
+✓ computer-idle-ambient-loop-001-8420.mp3
+✓ SqueakyToy.opus
+✓ Roblox Explosion Sound Effect.mp3
+✓ dust.png
+✓ Ori.png
+✓ explosion.gif
+
+FAILED FILES (0):
+
+
+All files loaded successfully! OMG COME HERE LET ME KISS U MWAAAH

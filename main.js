@@ -13,10 +13,80 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+/* @tweakable Enable GitHub authentication and per-user storage with real-time synchronization */
+const ENABLE_GITHUB_AUTH = true;
+
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new OCDocument();
+document.addEventListener('DOMContentLoaded', async () => {
+    if (ENABLE_GITHUB_AUTH) {
+        // Authentication and OC Document initialization is now handled in database-manager.js
+        // This retarded shit ensures proper GitHub-first initialization order
+        console.log('GitHub authentication system active with real-time sync...');
+        
+        // @tweakable Setup download project button for source code access on live version only
+        setupDownloadProjectButton();
+    } else {
+        throw new Error('GitHub authentication is required - local mode disabled');
+    }
 });
+
+/* @tweakable Download project functionality - only available on live hosted version for developers */
+function setupDownloadProjectButton() {
+    const downloadBtn = document.getElementById('downloadProjectBtn');
+    const downloadSection = document.getElementById('downloadProjectSection');
+    
+    // @tweakable Detection method for determining if running on live hosted version vs downloaded copy
+    const isLiveHostedVersion = window.location.hostname !== 'localhost' && 
+                               window.location.hostname !== '127.0.0.1' && 
+                               !window.location.hostname.includes('file://') &&
+                               !document.querySelector('meta[name="downloaded-version"]');
+    
+    if (!isLiveHostedVersion && downloadSection) {
+        // @tweakable Hide download button on downloaded/local versions to prevent recursion
+        downloadSection.style.display = 'none';
+        return;
+    }
+    
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', async () => {
+            try {
+                downloadBtn.disabled = true;
+                downloadBtn.textContent = 'Generating Download...';
+                
+                // @tweakable Use existing zip generation system for project download
+                if (!githubConverter) {
+                    githubConverter = new GitHubPagesConverter();
+                }
+                
+                const success = await githubConverter.downloadZip();
+                
+                if (success) {
+                    downloadBtn.textContent = 'Download Complete!';
+                    setTimeout(() => {
+                        downloadBtn.disabled = false;
+                        downloadBtn.innerHTML = `
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                            Download Project (GitHub Ready)
+                        `;
+                    }, 3000);
+                } else {
+                    downloadBtn.textContent = 'Download Failed - Try Again';
+                    downloadBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Download project failed:', error);
+                downloadBtn.textContent = 'Download Failed - Try Again';
+                downloadBtn.disabled = false;
+            }
+        });
+    }
+}
 
 // Add some creepy Easter eggs
 document.addEventListener('keydown', (e) => {
@@ -29,7 +99,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// GitHub Pages Zip Download System
+// GitHub Pages Zip Download System - updated for GitHub auth
 class GitHubPagesConverter {
     constructor() {
         /* @tweakable Files to include in the GitHub Pages zip download */
@@ -41,7 +111,9 @@ class GitHubPagesConverter {
             'image-handler.js',
             'oc-document.js',
             'boot-sequence.js',
-            'ui-effects.js'
+            'ui-effects.js',
+            'github-auth.js',
+            'github-storage.js'
         ];
         
         /* @tweakable Audio files to include in the zip - this retarded shit is for making noise */
@@ -220,7 +292,7 @@ class GitHubPagesConverter {
         }
     }
 
-    /* @tweakable HTML content modifications for GitHub Pages deployment */
+    /* @tweakable HTML content modifications for GitHub Pages deployment with download button removal */
     async getModifiedHTML() {
         try {
             // Get the current HTML content
@@ -230,6 +302,18 @@ class GitHubPagesConverter {
             }
             
             let htmlContent = await response.text();
+            
+            // @tweakable Remove download project section from downloaded version to prevent recursion
+            htmlContent = htmlContent.replace(
+                /<div class="download-project-section"[^>]*>.*?<\/div>\s*<\/div>\s*<\/div>/gs,
+                '</div>\n                </div>'
+            );
+            
+            // @tweakable Add meta tag to identify downloaded version and prevent download button display
+            htmlContent = htmlContent.replace(
+                '<meta name="viewport"',
+                '<meta name="downloaded-version" content="true">\n    <meta name="viewport"'
+            );
             
             // Remove the download zip button from the HTML - this retarded shit prevents recursion
             htmlContent = htmlContent.replace(
@@ -241,46 +325,42 @@ class GitHubPagesConverter {
             htmlContent = htmlContent.replace(/src="\/([^"]+)"/g, 'src="$1"');
             htmlContent = htmlContent.replace(/href="\/([^"]+)"/g, 'href="$1"');
             
-            // Add a comment indicating this is the GitHub Pages version
+            // Add GitHub auth setup instructions with tweakable configurations
             htmlContent = htmlContent.replace(
                 '<title>',
-                '<!-- This retarded shit is the GitHub Pages version - OMG COME HERE LET ME KISS U MWAAAH -->\n    <title>'
+                `<!-- GitHub OAuth Setup Required for Full Functionality -->\n    <!-- 1. Create a GitHub OAuth App at https://github.com/settings/applications/new -->\n    <!-- 2. Set the client ID in github-auth.js (marked with @tweakable) -->\n    <!-- 3. Set up a backend service for secure token exchange (see README) -->\n    <!-- 4. Configure redirect URI to match your deployment URL -->\n    <!-- This retarded shit needs proper OAuth setup to work with real-time GitHub integration -->\n    <title>`
             );
             
             return htmlContent;
         } catch (error) {
             console.error('Failed to get modified HTML:', error);
-            // Return a basic fallback HTML
-            return `<!DOCTYPE html>
+            // Return a basic fallback HTML with auth setup instructions
+            return this.getFallbackHTML();
+        }
+    }
+
+    getFallbackHTML() {
+        return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OC Document Terminal</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- GitHub OAuth Setup Required -->
+    <!-- This retarded shit needs proper GitHub OAuth configuration -->
 </head>
 <body>
-    <div class="crt-container">
-        <div class="crt-screen" id="crtScreen">
-            <div id="powerOnEffect"></div>
-            <div class="boot-sequence" id="bootSequence">
-                <div class="boot-text">
-                    <div class="boot-line">INITIALIZING TERMINAL...</div>
-                    <div class="boot-line">LOADING CHARACTER DATABASE...</div>
-                    <div class="boot-line">ESTABLISHING CONNECTION...</div>
-                    <div class="boot-line">READY.</div>
-                </div>
-            </div>
-            <div class="document-container" id="documentContainer">
-                <h1>OC Terminal - Basic Version</h1>
-                <p>This is a fallback version. Some features may not work properly.</p>
-            </div>
+    <div class="login-overlay">
+        <div class="login-container">
+            <h2>Setup Required</h2>
+            <p>This deployment requires GitHub OAuth configuration.</p>
+            <p>See README.md for setup instructions.</p>
         </div>
     </div>
-    <script>console.log('This retarded shit is the fallback version');</script>
+    <script>console.log('This beautiful mess needs GitHub OAuth setup');</script>
 </body>
 </html>`;
-        }
     }
 
     /* @tweakable Timeout duration for file fetching operations in milliseconds */
@@ -441,62 +521,169 @@ OMG COME HERE LET ME KISS U MWAAAH - your conversion is complete!
 ` : 'All files loaded successfully! OMG COME HERE LET ME KISS U MWAAAH'}`;
     }
 
+    /* @tweakable Enhanced README generation with download project instructions */
     generateREADME() {
         return `# OC Character Database Terminal
 
-A retro terminal-style character database application with a Windows 98 aesthetic.
-This retarded shit is absolutely gorgeous and you'll love it!
+A retro terminal-style character database application with GitHub OAuth authentication and real-time GitHub synchronization.
+This retarded shit is absolutely gorgeous and integrates fully with GitHub!
+
+## Quick Start
+
+This project was downloaded from the live OC Terminal system. To deploy your own version:
+
+1. **Extract this zip** to your desired directory
+2. **Set up GitHub OAuth** (see instructions below)
+3. **Deploy to GitHub Pages** or your preferred hosting service
+4. **Configure authentication** with your GitHub app credentials
 
 ## Features
 
-- Character profile creation and editing
-- Image gallery with upload functionality  
+- GitHub OAuth authentication for secure user access
+- Real-time GitHub repository synchronization for all user data
+- Per-user private GitHub repositories for data storage
+- Character profile creation and editing with live commits
+- Image gallery with GitHub-hosted file storage
 - Discovered files system with encrypted content
 - Command prompt with investigation tools
 - HWID spoofing game mechanics
-- Ori plushie mini-game (OMG COME HERE LET ME KISS U MWAAAH)
 - Retro CRT monitor effects
+- Admin panel for user management (AlexanderAlexis01 only)
+- **Download project functionality** (only on live hosted versions)
 
-## Setup for GitHub Pages
+## GitHub OAuth Setup (REQUIRED)
 
-1. Upload all files to your GitHub repository
+This application requires GitHub OAuth for user authentication and real-time data storage.
+
+### 1. Create GitHub OAuth App
+
+1. Go to https://github.com/settings/applications/new
+2. Fill in the application details:
+   - Application name: "OC Terminal Database"
+   - Homepage URL: Your deployed site URL
+   - Authorization callback URL: Your deployed site URL
+3. Note down the Client ID and Client Secret
+
+### 2. Configure Authentication (@tweakable settings)
+
+Update \`github-auth.js\` with your OAuth app details:
+\`\`\`javascript
+// @tweakable GitHub OAuth application client ID
+this.clientId = 'your_actual_github_client_id_here';
+// @tweakable GitHub OAuth redirect URI
+this.redirectUri = 'https://yourusername.github.io/your-repo-name/';
+// @tweakable GitHub OAuth scopes for repository access
+this.scopes = 'user repo';
+\`\`\`
+
+### 3. Set Up Token Exchange Backend
+
+GitHub OAuth requires a backend service for secure token exchange.
+You can use:
+- Netlify Functions
+- Vercel API Routes  
+- A simple Express.js server
+- GitHub's own OAuth App flow
+
+Example backend endpoint (\`/api/auth/github/token\`):
+\`\`\`javascript
+// This retarded shit exchanges auth codes for tokens securely
+app.post('/api/auth/github/token', async (req, res) => {
+  const { code, client_id, redirect_uri } = req.body;
+  
+  const response = await fetch('https://github.com/login/oauth/access_token', {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: new URLSearchParams({
+      client_id,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code,
+      redirect_uri
+    })
+  });
+  
+  const data = await response.json();
+  res.json(data);
+});
+\`\`\`
+
+## Download Project Feature
+
+The live hosted version includes a "Download Project (GitHub Ready)" button on the login screen that allows developers to:
+
+- **Access complete source code** for local development
+- **Deploy custom instances** with their own GitHub OAuth setup
+- **Contribute to the project** with modifications and improvements
+- **Study the codebase** for educational purposes
+
+**Note:** The download button is automatically removed from downloaded copies to prevent recursive downloads and maintain clean deployments.
+
+## Real-Time GitHub Integration
+
+All user data is stored and synchronized in real-time with GitHub:
+
+### Data Storage Structure
+- Repository name: \`oc-terminal-data-{user-id}\`  
+- Contains character data, images, and game progress
+- Each edit creates a new Git commit for full version history
+- Private repositories ensure data security
+
+### Real-Time Features (@tweakable configurations)
+- Auto-save with GitHub commits every few seconds
+- Live synchronization across multiple sessions
+- Git history for all changes and edits
+- Admin action logging with commit tracking
+
+## Privacy & Security
+
+- All user data is stored in private GitHub repositories
+- Users can only access their own data (except admin)
+- No cross-user data access possible
+- GitHub OAuth provides secure authentication
+- Admin privileges restricted to: AlexanderAlexis01
+- This retarded shit is properly isolated per user with GitHub's security!
+
+## Admin Features
+
+The designated admin account (AlexanderAlexis01) has special privileges:
+- View and edit any user's page
+- Ban/unban users from the system
+- Access comprehensive admin logs
+- Emergency system controls
+- All admin actions are logged with GitHub commits
+
+## Deployment Options
+
+### GitHub Pages (Recommended)
+1. Push this code to a GitHub repository
 2. Enable GitHub Pages in repository settings
-3. Your site will be available at \`https://yourusername.github.io/repository-name\`
-4. This retarded shit should just work™
+3. Configure your GitHub OAuth app with the Pages URL
+4. Deploy and access via your GitHub Pages URL
 
-## Missing Files
-
-If some files failed to load during conversion, check the LOADING_REPORT.txt file.
-You may need to manually add missing assets to your repository.
-
-## Usage
-
-- Fill out character information in the editor
-- Switch between editor and main views using navigation buttons
-- Upload images to the character gallery
-- Use the command prompt to discover hidden files
-- Interact with various easter eggs and mini-games
-- This beautiful mess will entertain you for hours
-
-## Data Persistence
-
-Character data and images are saved to localStorage and will persist between sessions.
-User data is included in the \`saved_data.json\` file for backup purposes.
-This retarded shit makes sure your data doesn't disappear!
+### Other Hosting Services
+- Netlify: Drag and drop the extracted folder
+- Vercel: Import the GitHub repository
+- Traditional web hosting: Upload files via FTP
 
 ## Browser Compatibility
 
 Works best in modern browsers with JavaScript enabled.
 Tested on Chrome, Firefox, Safari, and Edge.
-OMG COME HERE LET ME KISS U MWAAAH - it's compatible!
+OMG COME HERE LET ME KISS U MWAAAH - it's compatible with real-time GitHub sync!
 
 ## Troubleshooting
 
-If something doesn't work:
-1. Check the browser console for errors
-2. Make sure all files are in the correct locations
-3. Clear your browser cache
-4. This retarded shit usually fixes most problems
+If authentication fails:
+1. Check your GitHub OAuth app configuration
+2. Verify the client ID in github-auth.js (@tweakable section)
+3. Ensure your backend token exchange is working
+4. Check browser console for errors
+5. Verify all @tweakable settings are correctly configured
+6. This retarded shit usually fixes most auth problems with GitHub integration
+
+## Contributing
+
+Feel free to fork this project and submit pull requests! The download feature makes it easy to get started with development.
 `;
     }
 
