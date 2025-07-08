@@ -3,7 +3,7 @@ class GitHubAuth {
         /* @tweakable GitHub OAuth application client ID - replace with your actual GitHub App client ID for production */
         this.clientId = 'Ov23li3JXOAwOednzRVA';
         /* @tweakable GitHub OAuth redirect URI - must match your GitHub App settings exactly */
-        this.redirectUri = window.location.origin + window.location.pathname;
+        this.redirectUri = 'https://alexanderalexis01.github.io/OcTerminal/'
         /* @tweakable GitHub OAuth scopes for repository access and user information - determines what permissions the app requests */
         this.scopes = 'user repo';
         /* @tweakable Key for storing authentication token in localStorage for session persistence */
