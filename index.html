@@ -2,195 +2,156 @@
 <html lang="en" w-tid="1">
 <head w-tid="3">
     
-<!-- GitHub OAuth Setup Required for Full Functionality -->
-    <!-- 1. Create a GitHub OAuth App at https://github.com/settings/applications/new -->
-    <!-- 2. Set the client ID in github-auth.js (marked with @tweakable) -->
-    <!-- 3. Set up a backend service for secure token exchange (see README) -->
-    <!-- 4. Configure redirect URI to match your deployment URL -->
-    <!-- This retarded shit needs proper OAuth setup to work with real-time GitHub integration -->
+<!-- This retarded shit is the GitHub Pages version - OMG COME HERE LET ME KISS U MWAAAH -->
     <title>OC Document Terminal</title>
 <meta property="og:title" content="OC Document Terminal"/>
-<meta property="og:url" content="https://24pj12mph026xb200loc.c.websim.com?v=165"/>
+<meta property="og:url" content="https://24pj12mph026xb200loc.c.websim.com?v=152"/>
 <meta property="og:type" content="website"/>
 <meta property="twitter:card" content="summary_large_image"/>
-<meta property="og:image" content="https://images.websim.com/v1/project/24pj12mph026xb200loc/revision/165/1200.jpeg"/>
-<meta property="twitter:image" content="https://images.websim.com/v1/project/24pj12mph026xb200loc/revision/165/1200.jpeg"/>
+<meta property="og:image" content="https://images.websim.com/v1/project/24pj12mph026xb200loc/revision/152/1200.jpeg"/>
+<meta property="twitter:image" content="https://images.websim.com/v1/project/24pj12mph026xb200loc/revision/152/1200.jpeg"/>
 <link  rel="canonical" href="https://websim.com/@Alexander/oc-document-terminal">
 <link rel="stylesheet" href="https://api.websim.com/fonts.css?v=67372d2c166342b53034f87bcd32dfed00877e49">
 <link rel="stylesheet" href="https://api.websim.com/ctxmenu.css?v=67372d2c166342b53034f87bcd32dfed00877e49">
-<script class="websim-injected">__WEBSIM_DATA__={"home":false,"hostOrigin":"https://websim.com","apiOrigin":"https://api.websim.com","isTopLevelFrame":false,"project_id":"24pj12mph026xb200loc","project_version":165,"route":{"type":"slug","username":"Alexander","slug":"oc-document-terminal"},"baseUrl":"https://websim.com/@Alexander/oc-document-terminal"}</script>
+<script class="websim-injected">__WEBSIM_DATA__={"home":false,"hostOrigin":"https://websim.com","apiOrigin":"https://api.websim.com","isTopLevelFrame":false,"project_id":"24pj12mph026xb200loc","project_version":152,"route":{"type":"slug","username":"Alexander","slug":"oc-document-terminal"},"baseUrl":"https://websim.com/@Alexander/oc-document-terminal"}</script>
 <script class="websim-injected" src="https://api.websim.com/dist/index.js?v=67372d2c166342b53034f87bcd32dfed00877e49"></script>
 <meta charset="UTF-8" w-tid="5"/>
-    <meta name="downloaded-version" content="true">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" w-tid="7"/>
     <!--title>OC Document Terminal</title-->
     <link rel="stylesheet" href="styles.css" w-tid="11"/>
-    <script src="github-auth.js" w-tid="13"></script>
-    <script src="github-storage.js" w-tid="15"></script>
 </head>
-<body w-tid="17">
-    <!-- Add login overlay -->
-    <div class="login-overlay" id="loginOverlay" w-tid="19">
-        <div class="login-container" w-tid="21">
-            <div class="login-header" w-tid="23">
-                <h2 w-tid="25">OC Terminal Access</h2>
-                <p w-tid="27">Sign in with GitHub to access your personal character database</p>
-            </div>
-            <div class="login-content" w-tid="29">
-                <button class="github-login-btn" id="githubLoginBtn" w-tid="31">
-                    <svg width="20" height="20" viewbox="0 0 24 24" fill="currentColor" w-tid="33">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" w-tid="35"/>
-                    </svg>
-                    Sign in with GitHub
-                </button>
-                <div class="login-info" w-tid="37">
-                    <p w-tid="39">• Your data will be stored securely in your GitHub account</p>
-                    <p w-tid="41">• Each user gets a private, persistent character database</p>
-                    <p w-tid="43">• No one else can access or modify your data</p>
-                </div>
-                
-                <!-- @tweakable Download button for accessing project source code - only visible on live hosted version -->
-                </div>
-                </div>
-    </div>
-
-    <div class="crt-container" w-tid="67">
-        <div class="crt-screen" id="crtScreen" w-tid="69">
-            <div id="powerOnEffect" w-tid="71"></div>
+<body w-tid="13">
+    <div class="crt-container" w-tid="15">
+        <div class="crt-screen" id="crtScreen" w-tid="17">
+            <div id="powerOnEffect" w-tid="19"></div>
             <!-- Boot sequence -->
-            <div class="boot-sequence" id="bootSequence" w-tid="73">
-                <div class="boot-text" w-tid="75">
-                    <div class="boot-line" w-tid="77">INITIALIZING TERMINAL...</div>
-                    <div class="boot-line" w-tid="79">LOADING CHARACTER DATABASE...</div>
-                    <div class="boot-line" w-tid="81">ESTABLISHING CONNECTION...</div>
-                    <div class="boot-line" w-tid="83">READY.</div>
+            <div class="boot-sequence" id="bootSequence" w-tid="21">
+                <div class="boot-text" w-tid="23">
+                    <div class="boot-line" w-tid="25">INITIALIZING TERMINAL...</div>
+                    <div class="boot-line" w-tid="27">LOADING CHARACTER DATABASE...</div>
+                    <div class="boot-line" w-tid="29">ESTABLISHING CONNECTION...</div>
+                    <div class="boot-line" w-tid="31">READY.</div>
                 </div>
             </div>
 
             <!-- Main document interface -->
-            <div class="document-container" id="documentContainer" w-tid="85">
-                <div class="document-header" w-tid="87">
-                    <div class="terminal-prompt" w-tid="89">OC_DATABASE > CHARACTER_PROFILE</div>
-                    <div class="header-controls" w-tid="91">
-                        <button class="nav-button" id="addImageButton" w-tid="93">ADD IMAGE</button>
-                        <button class="nav-button" id="viewMainButton" w-tid="95">VIEW MAIN PAGE</button>
-                        <button class="nav-button" id="viewExplorerButton" w-tid="97">VIEW EXPLORER</button>
-                        <button class="nav-button" id="publishButton" w-tid="99">PUBLISH PAGE</button>
-                        <button class="save-button" id="saveButton" w-tid="101">SAVE DATA</button>
+            <div class="document-container" id="documentContainer" w-tid="33">
+                <div class="document-header" w-tid="35">
+                    <div class="terminal-prompt" w-tid="37">OC_DATABASE > CHARACTER_PROFILE</div>
+                    <div class="header-controls" w-tid="39">
+                        <button class="nav-button" id="addImageButton" w-tid="41">ADD IMAGE</button>
+                        <button class="nav-button" id="viewMainButton" w-tid="43">VIEW MAIN PAGE</button>
+                        <button class="save-button" id="saveButton" w-tid="45">SAVE DATA</button>
                         <!-- Download button removed for GitHub Pages deployment -->
-                        <div class="status-indicator" id="statusIndicator" w-tid="105">Ready</div>
-                        <div class="timestamp" id="timestamp" w-tid="107"></div>
-                        <div class="user-info" id="userInfo" style="display: none;" w-tid="109">
-                            <span class="username" id="currentUsername" w-tid="111"></span>
-                            <button class="nav-button" id="logoutBtn" w-tid="113">LOGOUT</button>
-                        </div>
+                        <div class="status-indicator" id="statusIndicator" w-tid="49">Ready</div>
+                        <div class="timestamp" id="timestamp" w-tid="51"></div>
                     </div>
                 </div>
 
-                <div class="document-content" w-tid="115">
-                    <div class="page-navigation" w-tid="117">
-                        <button class="page-button" id="prevPageBtn" disabled w-tid="119">◄ PREV</button>
-                        <span class="page-indicator" w-tid="121">PAGE <span id="currentPageNum" w-tid="123">1</span> OF <span id="totalPages" w-tid="125">4</span></span>
-                        <button class="page-button" id="nextPageBtn" w-tid="127">NEXT ►</button>
+                <div class="document-content" w-tid="53">
+                    <div class="page-navigation" w-tid="55">
+                        <button class="page-button" id="prevPageBtn" disabled w-tid="57">◄ PREV</button>
+                        <span class="page-indicator" w-tid="59">PAGE <span id="currentPageNum" w-tid="61">1</span> OF <span id="totalPages" w-tid="63">4</span></span>
+                        <button class="page-button" id="nextPageBtn" w-tid="65">NEXT ►</button>
                     </div>
 
-                    <div class="image-layer" id="imageLayer" w-tid="129"></div>
+                    <div class="image-layer" id="imageLayer" w-tid="67"></div>
                     
                     <!-- Page 1: Basic Info & Physical -->
-                    <div class="page-content active" id="page1" w-tid="131">
-                        <section class="profile-section" w-tid="133">
-                            <h2 class="section-title" w-tid="135">BASIC INFORMATION</h2>
-                            <div class="field-group" w-tid="137">
-                                <label w-tid="139">NAME:</label>
-                                <div class="editable-field" contenteditable="true" data-placeholder="Enter character name..." w-tid="141"></div>
+                    <div class="page-content active" id="page1" w-tid="69">
+                        <section class="profile-section" w-tid="71">
+                            <h2 class="section-title" w-tid="73">BASIC INFORMATION</h2>
+                            <div class="field-group" w-tid="75">
+                                <label w-tid="77">NAME:</label>
+                                <div class="editable-field" contenteditable="true" data-placeholder="Enter character name..." w-tid="79"></div>
                             </div>
-                            <div class="field-group" w-tid="143">
-                                <label w-tid="145">AGE:</label>
-                                <div class="editable-field" contenteditable="true" data-placeholder="Enter age..." w-tid="147"></div>
+                            <div class="field-group" w-tid="81">
+                                <label w-tid="83">AGE:</label>
+                                <div class="editable-field" contenteditable="true" data-placeholder="Enter age..." w-tid="85"></div>
                             </div>
-                            <div class="field-group" w-tid="149">
-                                <label w-tid="151">SPECIES:</label>
-                                <div class="editable-field" contenteditable="true" data-placeholder="Enter species..." w-tid="153"></div>
+                            <div class="field-group" w-tid="87">
+                                <label w-tid="89">SPECIES:</label>
+                                <div class="editable-field" contenteditable="true" data-placeholder="Enter species..." w-tid="91"></div>
                             </div>
                         </section>
 
-                        <section class="profile-section" w-tid="155">
-                            <h2 class="section-title" w-tid="157">PHYSICAL DESCRIPTION</h2>
-                            <div class="field-group" w-tid="159">
-                                <label w-tid="161">APPEARANCE:</label>
-                                <div class="editable-field large" contenteditable="true" data-placeholder="Describe physical appearance..." w-tid="163"></div>
+                        <section class="profile-section" w-tid="93">
+                            <h2 class="section-title" w-tid="95">PHYSICAL DESCRIPTION</h2>
+                            <div class="field-group" w-tid="97">
+                                <label w-tid="99">APPEARANCE:</label>
+                                <div class="editable-field large" contenteditable="true" data-placeholder="Describe physical appearance..." w-tid="101"></div>
                             </div>
-                            <div class="field-group" w-tid="165">
-                                <label w-tid="167">DISTINGUISHING FEATURES:</label>
-                                <div class="editable-field large" contenteditable="true" data-placeholder="Notable features, scars, markings..." w-tid="169"></div>
+                            <div class="field-group" w-tid="103">
+                                <label w-tid="105">DISTINGUISHING FEATURES:</label>
+                                <div class="editable-field large" contenteditable="true" data-placeholder="Notable features, scars, markings..." w-tid="107"></div>
                             </div>
                         </section>
                     </div>
 
                     <!-- Page 2: Psychology & Background -->
-                    <div class="page-content" id="page2" w-tid="171">
-                        <section class="profile-section" w-tid="173">
-                            <h2 class="section-title" w-tid="175">PSYCHOLOGICAL PROFILE</h2>
-                            <div class="field-group" w-tid="177">
-                                <label w-tid="179">PERSONALITY:</label>
-                                <div class="editable-field large" contenteditable="true" data-placeholder="Describe personality traits..." w-tid="181"></div>
+                    <div class="page-content" id="page2" w-tid="109">
+                        <section class="profile-section" w-tid="111">
+                            <h2 class="section-title" w-tid="113">PSYCHOLOGICAL PROFILE</h2>
+                            <div class="field-group" w-tid="115">
+                                <label w-tid="117">PERSONALITY:</label>
+                                <div class="editable-field large" contenteditable="true" data-placeholder="Describe personality traits..." w-tid="119"></div>
                             </div>
-                            <div class="field-group" w-tid="183">
-                                <label w-tid="185">FEARS/PHOBIAS:</label>
-                                <div class="editable-field" contenteditable="true" data-placeholder="What terrifies them..." w-tid="187"></div>
+                            <div class="field-group" w-tid="121">
+                                <label w-tid="123">FEARS/PHOBIAS:</label>
+                                <div class="editable-field" contenteditable="true" data-placeholder="What terrifies them..." w-tid="125"></div>
                             </div>
-                            <div class="field-group" w-tid="189">
-                                <label w-tid="191">OBSESSIONS:</label>
-                                <div class="editable-field" contenteditable="true" data-placeholder="Unhealthy fixations..." w-tid="193"></div>
+                            <div class="field-group" w-tid="127">
+                                <label w-tid="129">OBSESSIONS:</label>
+                                <div class="editable-field" contenteditable="true" data-placeholder="Unhealthy fixations..." w-tid="131"></div>
                             </div>
                         </section>
 
-                        <section class="profile-section" w-tid="195">
-                            <h2 class="section-title" w-tid="197">BACKGROUND</h2>
-                            <div class="field-group" w-tid="199">
-                                <label w-tid="201">ORIGIN STORY:</label>
-                                <div class="editable-field large" contenteditable="true" data-placeholder="How did they come to be..." w-tid="203"></div>
+                        <section class="profile-section" w-tid="133">
+                            <h2 class="section-title" w-tid="135">BACKGROUND</h2>
+                            <div class="field-group" w-tid="137">
+                                <label w-tid="139">ORIGIN STORY:</label>
+                                <div class="editable-field large" contenteditable="true" data-placeholder="How did they come to be..." w-tid="141"></div>
                             </div>
-                            <div class="field-group" w-tid="205">
-                                <label w-tid="207">TRAUMATIC EVENTS:</label>
-                                <div class="editable-field large" contenteditable="true" data-placeholder="What broke them..." w-tid="209"></div>
+                            <div class="field-group" w-tid="143">
+                                <label w-tid="145">TRAUMATIC EVENTS:</label>
+                                <div class="editable-field large" contenteditable="true" data-placeholder="What broke them..." w-tid="147"></div>
                             </div>
                         </section>
                     </div>
 
                     <!-- Page 3: Abilities & Notes -->
-                    <div class="page-content" id="page3" w-tid="211">
-                        <section class="profile-section" w-tid="213">
-                            <h2 class="section-title" w-tid="215">ABILITIES & POWERS</h2>
-                            <div class="field-group" w-tid="217">
-                                <label w-tid="219">SUPERNATURAL ABILITIES:</label>
-                                <div class="editable-field large" contenteditable="true" data-placeholder="Otherworldly powers..." w-tid="221"></div>
+                    <div class="page-content" id="page3" w-tid="149">
+                        <section class="profile-section" w-tid="151">
+                            <h2 class="section-title" w-tid="153">ABILITIES & POWERS</h2>
+                            <div class="field-group" w-tid="155">
+                                <label w-tid="157">SUPERNATURAL ABILITIES:</label>
+                                <div class="editable-field large" contenteditable="true" data-placeholder="Otherworldly powers..." w-tid="159"></div>
                             </div>
-                            <div class="field-group" w-tid="223">
-                                <label w-tid="225">WEAKNESSES:</label>
-                                <div class="editable-field" contenteditable="true" data-placeholder="What can destroy them..." w-tid="227"></div>
+                            <div class="field-group" w-tid="161">
+                                <label w-tid="163">WEAKNESSES:</label>
+                                <div class="editable-field" contenteditable="true" data-placeholder="What can destroy them..." w-tid="165"></div>
                             </div>
                         </section>
 
-                        <section class="profile-section" w-tid="229">
-                            <h2 class="section-title" w-tid="231">DISCOVERED FILES</h2>
-                            <div class="field-group" w-tid="233">
-                                <label w-tid="235">FILE MANAGEMENT:</label>
-                                <button class="nav-button" id="viewDiscoveredFilesButton" w-tid="237">VIEW DISCOVERED FILES</button>
+                        <section class="profile-section" w-tid="167">
+                            <h2 class="section-title" w-tid="169">DISCOVERED FILES</h2>
+                            <div class="field-group" w-tid="171">
+                                <label w-tid="173">FILE MANAGEMENT:</label>
+                                <button class="nav-button" id="viewDiscoveredFilesButton" w-tid="175">VIEW DISCOVERED FILES</button>
                             </div>
                         </section>
                     </div>
 
                     <!-- Page 4: Images -->
-                    <div class="page-content" id="page4" w-tid="239">
-                        <section class="profile-section" w-tid="241">
-                            <h2 class="section-title" w-tid="243">CHARACTER IMAGES</h2>
-                            <div class="field-group" w-tid="245">
-                                <label w-tid="247">IMAGE GALLERY:</label>
-                                <div class="images-grid" id="imagesGrid" w-tid="249">
-                                    <div class="upload-area" id="uploadArea" w-tid="251">
-                                        <div class="upload-icon" w-tid="253">📁</div>
-                                        <div class="upload-text" w-tid="255">Click to upload images...</div>
+                    <div class="page-content" id="page4" w-tid="177">
+                        <section class="profile-section" w-tid="179">
+                            <h2 class="section-title" w-tid="181">CHARACTER IMAGES</h2>
+                            <div class="field-group" w-tid="183">
+                                <label w-tid="185">IMAGE GALLERY:</label>
+                                <div class="images-grid" id="imagesGrid" w-tid="187">
+                                    <div class="upload-area" id="uploadArea" w-tid="189">
+                                        <div class="upload-icon" w-tid="191">📁</div>
+                                        <div class="upload-text" w-tid="193">Click to upload images...</div>
                                     </div>
                                 </div>
                             </div>
@@ -200,353 +161,156 @@
             </div>
 
             <!-- Main floppy disk interface -->
-            <div class="floppy-container" id="floppyContainer" w-tid="257">
-                <div class="windows-desktop" w-tid="259">
-                    <div class="file-explorer-window" w-tid="261">
-                        <div class="window-title-bar" w-tid="263">
-                            <span w-tid="265">📁 Character Database - My Computer</span>
-                            <div class="window-controls" w-tid="267">
-                                <div class="window-control-btn" w-tid="269">_</div>
-                                <div class="window-control-btn" w-tid="271">□</div>
-                                <div class="window-control-btn" w-tid="273">×</div>
+            <div class="floppy-container" id="floppyContainer" w-tid="195">
+                <div class="windows-desktop" w-tid="197">
+                    <div class="file-explorer-window" w-tid="199">
+                        <div class="window-title-bar" w-tid="201">
+                            <span w-tid="203">📁 Character Database - My Computer</span>
+                            <div class="window-controls" w-tid="205">
+                                <div class="window-control-btn" w-tid="207">_</div>
+                                <div class="window-control-btn" w-tid="209">□</div>
+                                <div class="window-control-btn" w-tid="211">×</div>
                             </div>
                         </div>
                         
-                        <div class="menu-bar" w-tid="275">
-                            <span class="menu-item" w-tid="277">File</span>
-                            <span class="menu-item" w-tid="279">Edit</span>
-                            <span class="menu-item" w-tid="281">View</span>
-                            <span class="menu-item" w-tid="283">Tools</span>
-                            <span class="menu-item" w-tid="285">Help</span>
+                        <div class="menu-bar" w-tid="213">
+                            <span class="menu-item" w-tid="215">File</span>
+                            <span class="menu-item" w-tid="217">Edit</span>
+                            <span class="menu-item" w-tid="219">View</span>
+                            <span class="menu-item" w-tid="221">Tools</span>
+                            <span class="menu-item" w-tid="223">Help</span>
                         </div>
                         
-                        <div class="toolbar" w-tid="287">
-                            <div class="toolbar-btn" title="Back" w-tid="289">◀</div>
-                            <div class="toolbar-btn" title="Forward" w-tid="291">▶</div>
-                            <div class="toolbar-btn" title="Up" w-tid="293">⬆</div>
-                            <div class="toolbar-btn" title="Cut" w-tid="295">✂</div>
-                            <div class="toolbar-btn" title="Copy" w-tid="297">📋</div>
-                            <div class="toolbar-btn" title="Paste" w-tid="299">📌</div>
-                            <div class="toolbar-btn" title="Delete" w-tid="301">🗑</div>
-                            <div class="toolbar-btn" title="System Properties" w-tid="303">⚙</div>
-                            <div class="toolbar-btn" title="Reset Progress" w-tid="305">🔄</div>
-                            <div class="toolbar-btn nav-button editor-btn" id="backToEditorButton" title="Return to Editor" w-tid="307">🔙</div>
+                        <div class="toolbar" w-tid="225">
+                            <div class="toolbar-btn" title="Back" w-tid="227">◀</div>
+                            <div class="toolbar-btn" title="Forward" w-tid="229">▶</div>
+                            <div class="toolbar-btn" title="Up" w-tid="231">⬆</div>
+                            <div class="toolbar-btn" title="Cut" w-tid="233">✂</div>
+                            <div class="toolbar-btn" title="Copy" w-tid="235">📋</div>
+                            <div class="toolbar-btn" title="Paste" w-tid="237">📌</div>
+                            <div class="toolbar-btn" title="Delete" w-tid="239">🗑</div>
+                            <div class="toolbar-btn" title="System Properties" w-tid="241">⚙</div>
+                            <div class="toolbar-btn" title="Reset Progress" w-tid="243">🔄</div>
+                            <div class="toolbar-btn nav-button editor-btn" id="backToEditorButton" title="Return to Editor" w-tid="245">🔙</div>
                         </div>
                         
-                        <div class="address-bar" w-tid="309">
-                            <span class="address-label" w-tid="311">Address:</span>
-                            <input type="text" class="address-input" value="A:\CHARACTER_FILES\" readonly w-tid="313"/>
+                        <div class="address-bar" w-tid="247">
+                            <span class="address-label" w-tid="249">Address:</span>
+                            <input type="text" class="address-input" value="A:\CHARACTER_FILES\" readonly w-tid="251"/>
                         </div>
                         
-                        <div class="explorer-content" w-tid="315">
-                            <div class="folder-tree" w-tid="317">
-                                <div class="tree-item" data-folder="computer" w-tid="319">
-                                    <span class="tree-icon" w-tid="321">🖥</span>
+                        <div class="explorer-content" w-tid="253">
+                            <div class="folder-tree" w-tid="255">
+                                <div class="tree-item" data-folder="computer" w-tid="257">
+                                    <span class="tree-icon" w-tid="259">🖥</span>
                                     My Computer
                                 </div>
-                                <div class="tree-item" data-folder="character" style="margin-left: 16px;" w-tid="323">
-                                    <span class="tree-icon" w-tid="325">📁</span>
+                                <div class="tree-item" data-folder="character" style="margin-left: 16px;" w-tid="261">
+                                    <span class="tree-icon" w-tid="263">📁</span>
                                     Character_Files
                                 </div>
-                                <div class="tree-item" data-folder="basic" style="margin-left: 32px;" w-tid="327">
-                                    <span class="tree-icon" w-tid="329">📁</span>
+                                <div class="tree-item" data-folder="basic" style="margin-left: 32px;" w-tid="265">
+                                    <span class="tree-icon" w-tid="267">📁</span>
                                     Basic_Info
                                 </div>
-                                <div class="tree-item" data-folder="appearance" style="margin-left: 32px;" w-tid="331">
-                                    <span class="tree-icon" w-tid="333">📁</span>
+                                <div class="tree-item" data-folder="appearance" style="margin-left: 32px;" w-tid="269">
+                                    <span class="tree-icon" w-tid="271">📁</span>
                                     Appearance
                                 </div>
-                                <div class="tree-item" data-folder="psychological" style="margin-left: 32px;" w-tid="335">
-                                    <span class="tree-icon" w-tid="337">📁</span>
+                                <div class="tree-item" data-folder="psychological" style="margin-left: 32px;" w-tid="273">
+                                    <span class="tree-icon" w-tid="275">📁</span>
                                     Psychological
                                 </div>
-                                <div class="tree-item" data-folder="background" style="margin-left: 32px;" w-tid="339">
-                                    <span class="tree-icon" w-tid="341">📁</span>
+                                <div class="tree-item" data-folder="background" style="margin-left: 32px;" w-tid="277">
+                                    <span class="tree-icon" w-tid="279">📁</span>
                                     Background
                                 </div>
-                                <div class="tree-item" data-folder="abilities" style="margin-left: 32px;" w-tid="343">
-                                    <span class="tree-icon" w-tid="345">📁</span>
+                                <div class="tree-item" data-folder="abilities" style="margin-left: 32px;" w-tid="281">
+                                    <span class="tree-icon" w-tid="283">📁</span>
                                     Abilities
                                 </div>
-                                <div class="tree-item" data-folder="notes" style="margin-left: 32px;" w-tid="347">
-                                    <span class="tree-icon" w-tid="349">📄</span>
+                                <div class="tree-item" data-folder="notes" style="margin-left: 32px;" w-tid="285">
+                                    <span class="tree-icon" w-tid="287">📄</span>
                                     Notes.txt
                                 </div>
-                                <div class="tree-item" data-folder="images" style="margin-left: 32px;" w-tid="351">
-                                    <span class="tree-icon" w-tid="353">📁</span>
+                                <div class="tree-item" data-folder="images" style="margin-left: 32px;" w-tid="289">
+                                    <span class="tree-icon" w-tid="291">📁</span>
                                     Images
                                 </div>
                             </div>
                             
-                            <div class="file-view" w-tid="355">
-                                <div class="file-grid" id="fileGrid" w-tid="357">
+                            <div class="file-view" w-tid="293">
+                                <div class="file-grid" id="fileGrid" w-tid="295">
                                     <!-- Files will be populated here -->
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="status-bar" w-tid="359">
-                            <span id="statusText" w-tid="361">Ready</span>
-                            <span style="margin-left: auto;" id="fileCount" w-tid="363">0 objects</span>
+                        <div class="status-bar" w-tid="297">
+                            <span id="statusText" w-tid="299">Ready</span>
+                            <span style="margin-left: auto;" id="fileCount" w-tid="301">0 objects</span>
                         </div>
                     </div>
                     
-                    <div class="taskbar" w-tid="365">
-                        <div class="start-button" w-tid="367">
-                            <div class="start-icon" w-tid="369"></div>
+                    <div class="taskbar" w-tid="303">
+                        <div class="start-button" w-tid="305">
+                            <div class="start-icon" w-tid="307"></div>
                             Start
                         </div>
-                        <div class="system-tray" w-tid="371">
-                            <div class="clock" id="taskbarClock" w-tid="373">12:00 PM</div>
+                        <div class="system-tray" w-tid="309">
+                            <div class="clock" id="taskbarClock" w-tid="311">12:00 PM</div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Loading dialog -->
-                <div class="file-loading" id="fileLoading" style="display: none;" w-tid="375">
-                    <div class="loading-content" w-tid="377">
-                        <div class="loading-icon" w-tid="379"></div>
-                        <span w-tid="381">Opening file...</span>
+                <div class="file-loading" id="fileLoading" style="display: none;" w-tid="313">
+                    <div class="loading-content" w-tid="315">
+                        <div class="loading-icon" w-tid="317"></div>
+                        <span w-tid="319">Opening file...</span>
                     </div>
                 </div>
             </div>
-
-            <!-- Explorer view for published pages -->
-            <div class="explorer-container" id="explorerContainer" w-tid="383">
-                <div class="explorer-desktop" w-tid="385">
-                    <div class="explorer-window" w-tid="387">
-                        <div class="window-title-bar" w-tid="389">
-                            <span w-tid="391">🌐 OC Terminal Explorer - Published Pages</span>
-                            <div class="window-controls" w-tid="393">
-                                <div class="window-control-btn" w-tid="395">_</div>
-                                <div class="window-control-btn" w-tid="397">□</div>
-                                <div class="window-control-btn" w-tid="399">×</div>
-                            </div>
-                        </div>
-                        
-                        <div class="explorer-toolbar" w-tid="401">
-                            <div class="toolbar-btn nav-button" id="backFromExplorerButton" title="Return to Editor" w-tid="403">🔙</div>
-                            <div class="toolbar-btn" title="Refresh" w-tid="405">🔄</div>
-                            <div class="toolbar-btn" title="Search" w-tid="407">🔍</div>
-                            <div class="address-bar" w-tid="409">
-                                <span class="address-label" w-tid="411">Explorer:</span>
-                                <input type="text" class="address-input" value="oc://published-pages/" readonly w-tid="413"/>
-                            </div>
-                        </div>
-                        
-                        <div class="explorer-content" w-tid="415">
-                            <div class="explorer-header" w-tid="417">
-                                <h2 w-tid="419">Published Character Pages</h2>
-                                <p w-tid="421">Discover character pages shared by the community</p>
-                            </div>
-                            
-                            <div class="explorer-grid" id="explorerGrid" w-tid="423">
-                                <!-- Published pages will be populated here -->
-                            </div>
-                        </div>
-                        
-                        <div class="status-bar" w-tid="425">
-                            <span id="explorerStatus" w-tid="427">Loading published pages...</span>
-                            <span style="margin-left: auto;" id="explorerCount" w-tid="429">0 pages</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- OC Editor window -->
-            <div class="oc-editor-container" id="ocEditorContainer" w-tid="431">
-                <div class="oc-editor-window" w-tid="433">
-                    <div class="window-title-bar" w-tid="435">
-                        <span w-tid="437">🎨 OC Page Editor - Advanced Configuration</span>
-                        <div class="window-controls" w-tid="439">
-                            <div class="window-control-btn" w-tid="441">_</div>
-                            <div class="window-control-btn" w-tid="443">□</div>
-                            <div class="window-control-btn close-btn" id="closeOcEditorBtn" w-tid="445">×</div>
-                        </div>
-                    </div>
-                    
-                    <div class="oc-editor-tabs" w-tid="447">
-                        <button class="oc-tab active" data-tab="ui" w-tid="449">UI Theme</button>
-                        <button class="oc-tab" data-tab="files" w-tid="451">Text Files</button>
-                        <button class="oc-tab" data-tab="hints" w-tid="453">Hints</button>
-                        <button class="oc-tab" data-tab="metadata" w-tid="455">Metadata</button>
-                        <button class="oc-tab" data-tab="cli" w-tid="457">CLI Access</button>
-                    </div>
-                    
-                    <div class="oc-editor-content" w-tid="459">
-                        <!-- UI Theme Tab -->
-                        <div class="oc-tab-content active" id="ui-tab" w-tid="461">
-                            <h3 w-tid="463">Color Scheme Editor</h3>
-                            <div class="color-scheme-editor" w-tid="465">
-                                <div class="preset-themes" w-tid="467">
-                                    <label w-tid="469">Preset Themes:</label>
-                                    <select id="themePresets" w-tid="471">
-                                        <option value="classic" w-tid="473">Classic Green</option>
-                                        <option value="amber" w-tid="475">Amber Terminal</option>
-                                        <option value="blue" w-tid="477">Blue Matrix</option>
-                                        <option value="red" w-tid="479">Red Alert</option>
-                                        <option value="purple" w-tid="481">Purple Haze</option>
-                                        <option value="custom" w-tid="483">Custom</option>
-                                    </select>
-                                </div>
-                                <div class="color-controls" w-tid="485">
-                                    <div class="color-control" w-tid="487">
-                                        <label w-tid="489">Primary Color:</label>
-                                        <input type="color" id="primaryColor" value="#00ff00" w-tid="491"/>
-                                    </div>
-                                    <div class="color-control" w-tid="493">
-                                        <label w-tid="495">Secondary Color:</label>
-                                        <input type="color" id="secondaryColor" value="#ff4444" w-tid="497"/>
-                                    </div>
-                                    <div class="color-control" w-tid="499">
-                                        <label w-tid="501">Accent Color:</label>
-                                        <input type="color" id="accentColor" value="#ffaa00" w-tid="503"/>
-                                    </div>
-                                    <div class="color-control" w-tid="505">
-                                        <label w-tid="507">Background Color:</label>
-                                        <input type="color" id="backgroundColor" value="#000000" w-tid="509"/>
-                                    </div>
-                                </div>
-                                <button class="oc-editor-btn" id="applyThemeBtn" w-tid="511">Apply Theme</button>
-                                <button class="oc-editor-btn" id="resetThemeBtn" w-tid="513">Reset to Default</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Text Files Tab -->
-                        <div class="oc-tab-content" id="files-tab" w-tid="515">
-                            <h3 w-tid="517">Custom Text Files</h3>
-                            <div class="file-manager" w-tid="519">
-                                <div class="file-list" id="customFilesList" w-tid="521">
-                                    <!-- Custom files will be listed here -->
-                                </div>
-                                <div class="file-controls" w-tid="523">
-                                    <button class="oc-editor-btn" id="addFileBtn" w-tid="525">Add New File</button>
-                                    <button class="oc-editor-btn" id="importFileBtn" w-tid="527">Import File</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Hints Tab -->
-                        <div class="oc-tab-content" id="hints-tab" w-tid="529">
-                            <h3 w-tid="531">Password-Protected Hints</h3>
-                            <div class="hints-editor" w-tid="533">
-                                <div class="hint-item" w-tid="535">
-                                    <label w-tid="537">Discovery Hint 1:</label>
-                                    <input type="password" class="hint-password" placeholder="Password for hint 1" w-tid="539"/>
-                                    <textarea class="hint-content" placeholder="Enter hint content..." w-tid="541"></textarea>
-                                </div>
-                                <div class="hint-item" w-tid="543">
-                                    <label w-tid="545">Discovery Hint 2:</label>
-                                    <input type="password" class="hint-password" placeholder="Password for hint 2" w-tid="547"/>
-                                    <textarea class="hint-content" placeholder="Enter hint content..." w-tid="549"></textarea>
-                                </div>
-                                <div class="hint-item" w-tid="551">
-                                    <label w-tid="553">Discovery Hint 3:</label>
-                                    <input type="password" class="hint-password" placeholder="Password for hint 3" w-tid="555"/>
-                                    <textarea class="hint-content" placeholder="Enter hint content..." w-tid="557"></textarea>
-                                </div>
-                                <button class="oc-editor-btn" id="saveHintsBtn" w-tid="559">Save Hints</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Metadata Tab -->
-                        <div class="oc-tab-content" id="metadata-tab" w-tid="561">
-                            <h3 w-tid="563">Page Metadata</h3>
-                            <div class="metadata-editor" w-tid="565">
-                                <div class="metadata-field" w-tid="567">
-                                    <label w-tid="569">Page Title:</label>
-                                    <input type="text" id="pageTitle" placeholder="Enter page title..." w-tid="571"/>
-                                </div>
-                                <div class="metadata-field" w-tid="573">
-                                    <label w-tid="575">Page Description:</label>
-                                    <textarea id="pageDescription" placeholder="Enter page description..." w-tid="577"></textarea>
-                                </div>
-                                <div class="metadata-field" w-tid="579">
-                                    <label w-tid="581">Unique ID (Read-only):</label>
-                                    <input type="text" id="pageUniqueId" readonly w-tid="583"/>
-                                </div>
-                                <div class="metadata-field" w-tid="585">
-                                    <label w-tid="587">Creation Date (Read-only):</label>
-                                    <input type="text" id="pageCreatedAt" readonly w-tid="589"/>
-                                </div>
-                                <button class="oc-editor-btn" id="saveMetadataBtn" w-tid="591">Save Metadata</button>
-                            </div>
-                        </div>
-                        
-                        <!-- CLI Access Tab -->
-                        <div class="oc-tab-content" id="cli-tab" w-tid="593">
-                            <h3 w-tid="595">Command Line Interface</h3>
-                            <div class="cli-interface" w-tid="597">
-                                <div class="cli-output" id="cliOutput" w-tid="599">
-                                    <div class="cli-line" w-tid="601">OC Terminal CLI v2.0 - SSH Access Interface</div>
-                                    <div class="cli-line" w-tid="603">Type 'help' for available commands</div>
-                                    <div class="cli-line" w-tid="605">Type 'list' to see available public pages</div>
-                                </div>
-                                <div class="cli-input-container" w-tid="607">
-                                    <span class="cli-prompt" w-tid="609">$></span>
-                                    <input type="text" class="cli-input" id="cliInput" placeholder="Enter command..." w-tid="611"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SSH Connection Dialog -->
-            <div class="ssh-connection-dialog" id="sshConnectionDialog" style="display: none;" w-tid="613">
-                <div class="ssh-window" w-tid="615">
-                    <div class="window-title-bar" w-tid="617">
-                        <span id="sshWindowTitle" w-tid="619">🔗 SSH Connection</span>
-                        <div class="window-controls" w-tid="621">
-                            <div class="window-control-btn" id="closeSshBtn" w-tid="623">×</div>
-                        </div>
-                    </div>
-                    <div class="ssh-content" id="sshContent" w-tid="625">
-                        <!-- Remote page content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <!-- CRT effects overlay -->
-        <div class="crt-overlay" w-tid="627">
-            <div class="scanlines" w-tid="629"></div>
-            <div class="phosphor-glow" w-tid="631"></div>
-            <div class="dust-overlay" w-tid="633"></div>
+        <div class="crt-overlay" w-tid="321">
+            <div class="scanlines" w-tid="323"></div>
+            <div class="phosphor-glow" w-tid="325"></div>
+            <div class="dust-overlay" w-tid="327"></div>
         </div>
     </div>
 
-    <input type="file" id="imageUpload" accept="image/*" style="display: none;" w-tid="635"/>
+    <input type="file" id="imageUpload" accept="image/*" style="display: none;" w-tid="329"/>
 
-    <audio id="powerOnSound" w-tid="637">
-        <source src="power-on.mp3" type="audio/mpeg" w-tid="639"/>
+    <audio id="powerOnSound" w-tid="331">
+        <source src="power-on.mp3" type="audio/mpeg" w-tid="333"/>
     </audio>
-    <audio id="clickSound" w-tid="641">
-        <source src="old-computer-click-152513.mp3" type="audio/mpeg" w-tid="643"/>
+    <audio id="clickSound" w-tid="335">
+        <source src="old-computer-click-152513.mp3" type="audio/mpeg" w-tid="337"/>
     </audio>
-    <audio id="ambientSound" loop w-tid="645">
-        <source src="computer-idle-ambient-loop-001-8420.mp3" type="audio/mpeg" w-tid="647"/>
+    <audio id="ambientSound" loop w-tid="339">
+        <source src="computer-idle-ambient-loop-001-8420.mp3" type="audio/mpeg" w-tid="341"/>
     </audio>
-    <audio id="bootSound" w-tid="649">
-        <source src="old-desktop-pc-booting-24280.mp3" type="audio/mpeg" w-tid="651"/>
+    <audio id="bootSound" w-tid="343">
+        <source src="old-desktop-pc-booting-24280.mp3" type="audio/mpeg" w-tid="345"/>
     </audio>
-    <audio id="successSound" w-tid="653">
-        <source src="computer-startup-sound-effect-312870.mp3" type="audio/mpeg" w-tid="655"/>
+    <audio id="successSound" w-tid="347">
+        <source src="computer-startup-sound-effect-312870.mp3" type="audio/mpeg" w-tid="349"/>
     </audio>
-    <audio id="squeakyToySound" w-tid="657">
-        <source src="SqueakyToy.opus" type="audio/ogg" w-tid="659"/>
+    <audio id="squeakyToySound" w-tid="351">
+        <source src="SqueakyToy.opus" type="audio/ogg" w-tid="353"/>
     </audio>
-    <audio id="explosionSound" w-tid="661">
-        <source src="Roblox Explosion Sound Effect.mp3" type="audio/mpeg" w-tid="663"/>
+    <audio id="explosionSound" w-tid="355">
+        <source src="Roblox Explosion Sound Effect.mp3" type="audio/mpeg" w-tid="357"/>
     </audio>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" w-tid="665"></script>
-    <script src="database-manager.js" w-tid="667"></script>
-    <script src="ui-effects.js" w-tid="669"></script>
-    <script src="image-handler.js" w-tid="671"></script>
-    <script src="boot-sequence.js" w-tid="673"></script>
-    <script src="oc-document.js" w-tid="675"></script>
-    <script src="main.js" w-tid="677"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" w-tid="359"></script>
+    <script src="database-manager.js" w-tid="361"></script>
+    <script src="ui-effects.js" w-tid="363"></script>
+    <script src="image-handler.js" w-tid="365"></script>
+    <script src="boot-sequence.js" w-tid="367"></script>
+    <script src="oc-document.js" w-tid="369"></script>
+    <script src="main.js" w-tid="371"></script>
 </body>
 </html>

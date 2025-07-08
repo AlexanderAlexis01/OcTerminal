@@ -1,7 +1,7 @@
 {
   "oc_character_data": null,
   "oc_images": null,
-  "discoveredFiles": "[{\"name\":\"MEMORY_FRAGMENT.txt\",\"content\":\"Memory Fragment:\\n\\nI remember the darkness... it wasn't always like this. There was light once, warmth. But something changed. Something broke. The shadows whispered my name, and I listened...\\n\\n[CORRUPTED DATA]\"},{\"name\":\"readme.txt\",\"content\":\"EMERGENCY PROTOCOL - README.txt\\n\\nWARNING: Security system breach detected.\\nIf you are reading this, you have triggered automated security protocols.\\n\\nThe following command was not included in standard documentation for security reasons:\\n\\nDOWNLOAD-TOOL hwid-spoof-v3.exe /silent /bypass-security\\nPURPOSE: Downloads emergency HWID spoofing utility\\nUSAGE: Execute the above command exactly as shown\\n\\nCurrent HWID: B8C5-3D03-3F31-C850-CBC3-60C9-977C-261F\\n\\nNOTE: This tool was designed for emergency use only.\\nContinued unauthorized access may trigger permanent data deletion protocols.\\n\\nSystem monitoring is now active.\\nProceed with extreme caution.\\n\\n- Emergency Response Team\"}]",
+  "discoveredFiles": null,
   "deletedFiles": null,
   "hwid_tool_installed": null
 }

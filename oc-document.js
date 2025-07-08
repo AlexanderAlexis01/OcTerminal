@@ -18,17 +18,11 @@ class OCDocument {
         this.totalPages = document.getElementById('totalPages');
         this.viewDiscoveredFilesButton = document.getElementById('viewDiscoveredFilesButton');
         this.downloadZipButton = document.getElementById('downloadZipButton');
-        this.viewExplorerButton = document.getElementById('viewExplorerButton');
-        this.publishButton = document.getElementById('publishButton');
-        this.backFromExplorerButton = document.getElementById('backFromExplorerButton');
-        this.explorerContainer = document.getElementById('explorerContainer');
-        this.ocEditorContainer = document.getElementById('ocEditorContainer');
-        this.sshConnectionDialog = document.getElementById('sshConnectionDialog');
         
         // OMG COME HERE LET ME KISS U MWAAAH - user setup
         this.currentUser = { username: 'User' }; // Static user for localStorage version
         this.isAuthorized = true; // Always authorized in localStorage version
-        this.currentView = 'editor'; // 'editor', 'main', or 'explorer'
+        this.currentView = 'editor'; // 'editor' or 'main'
         this.currentPage = 1;
         this.totalPageCount = 4; // Updated to 4 pages
         
@@ -38,34 +32,14 @@ class OCDocument {
         this.databaseManager = new DatabaseManager(this);
         this.bootSequenceHandler = new BootSequence(this);
         
-        // Add file access tracking - this beautiful mess tracks file access for HWID lockout
+        // Add game state tracking - this beautiful mess tracks the spooky stuff
         this.gameState = {
+            firstWarningShown: false,
+            aiAlertLevel: 0,
             hwid: this.generateHWID(),
-            /* @tweakable Number of files that can be accessed before HWID lockout triggers */
-            filesAccessedCount: 0,
-            /* @tweakable Maximum files that can be accessed before requiring HWID spoof */
-            maxFilesBeforeLockout: 3,
-            isLocked: false,
-            hwidSpoofed: false
+            aiLastActivity: Date.now(),
+            securityBreaches: 0
         };
-        
-        // OC Editor state - this retarded shit handles the advanced editor
-        this.ocEditorActive = false;
-        /* @tweakable Default color theme for the OC Terminal interface */
-        this.currentTheme = {
-            primary: '#00ff00',
-            secondary: '#ff4444', 
-            accent: '#ffaa00',
-            background: '#000000'
-        };
-        
-        // SSH connection state - OMG COME HERE LET ME KISS U MWAAAH
-        this.sshConnections = new Map();
-        this.currentSshConnection = null;
-        
-        // Add admin state tracking - this retarded shit tracks admin powers
-        this.isAdmin = false;
-        this.adminPanelActive = false;
         
         this.init();
     }
@@ -82,383 +56,17 @@ class OCDocument {
     }
 
     async init() {
-        /* @tweakable Whether to require GitHub authentication before initializing the application */
-        const requireAuth = true;
-        
-        if (requireAuth) {
-            // Set up database first (handles authentication) - OMG COME HERE LET ME KISS U MWAAAH
-            await this.databaseManager.setupDatabase();
-            
-            // Only continue if authenticated
-            if (!this.databaseManager.useGitHubStorage) {
-                // Authentication failed, don't initialize the rest
-                return;
-            }
-            
-            // Check admin status after successful authentication
-            this.isAdmin = await this.databaseManager.canAccessAdminFeatures();
-            
-            // Setup admin UI if user is admin - this beautiful mess gives admin controls
-            if (this.isAdmin) {
-                this.setupAdminUI();
-            }
-        } else {
-            // Original initialization for non-auth mode
-            await this.databaseManager.setupDatabase();
-        }
-        
+        // Remove authorization check for localStorage version - OMG COME HERE LET ME KISS U MWAAAH
         this.updateTimestamp();
-        await this.bootSequenceHandler.start();
+        this.bootSequenceHandler.start();
         this.setupEventListeners();
+        this.databaseManager.setupDatabase();
         
         // Start AI security system - this retarded shit makes things spooky
         this.startAISecurity();
         
         // Update timestamp every second
         setInterval(() => this.updateTimestamp(), 1000);
-    }
-
-    /* @tweakable Whether to show admin panel in the header for admin users */
-    setupAdminUI() {
-        const showAdminPanel = true;
-        if (!showAdminPanel || !this.isAdmin) return;
-
-        const headerControls = document.querySelector('.header-controls');
-        if (headerControls) {
-            const adminButton = document.createElement('button');
-            adminButton.className = 'nav-button admin-panel-btn';
-            adminButton.textContent = '🛡️ ADMIN PANEL';
-            adminButton.style.background = 'linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 69, 0, 0.2))';
-            adminButton.style.borderColor = '#ffd700';
-            adminButton.style.color = '#ffd700';
-            adminButton.addEventListener('click', () => this.openAdminPanel());
-            
-            // Insert before other buttons - this retarded shit puts admin first
-            headerControls.insertBefore(adminButton, headerControls.firstChild);
-        }
-    }
-
-    /* @tweakable Admin panel configuration and available tools */
-    openAdminPanel() {
-        const enableFullAdminPanel = true;
-        if (!enableFullAdminPanel || !this.isAdmin) return;
-
-        const adminPanelHTML = `
-            <div class="admin-panel-overlay">
-                <div class="admin-panel-window">
-                    <div class="window-title-bar" style="background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%);">
-                        <span>🛡️ ADMINISTRATOR CONTROL PANEL</span>
-                        <div class="window-controls">
-                            <div class="window-control-btn" onclick="this.closest('.admin-panel-overlay').remove()">×</div>
-                        </div>
-                    </div>
-                    <div class="admin-panel-content">
-                        <div class="admin-panel-tabs">
-                            <button class="admin-tab active" data-tab="users">User Management</button>
-                            <button class="admin-tab" data-tab="moderation">Moderation</button>
-                            <button class="admin-tab" data-tab="logs">Action Logs</button>
-                            <button class="admin-tab" data-tab="system">System</button>
-                        </div>
-                        
-                        <div class="admin-tab-content active" id="users-tab">
-                            <h3>User Management</h3>
-                            <div class="admin-section">
-                                <div class="admin-control-group">
-                                    <label>Target User ID:</label>
-                                    <input type="text" id="targetUserId" placeholder="Enter user ID">
-                                    <div class="admin-buttons">
-                                        <button class="admin-btn ban-btn" onclick="window.ocDocument.banUser()">🚫 Ban User</button>
-                                        <button class="admin-btn unban-btn" onclick="window.ocDocument.unbanUser()">✅ Unban User</button>
-                                        <button class="admin-btn view-btn" onclick="window.ocDocument.viewUserAsAdmin()">👁️ View Page</button>
-                                        <button class="admin-btn delete-btn" onclick="window.ocDocument.deleteUserPage()">🗑️ Delete Page</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="admin-tab-content" id="moderation-tab">
-                            <h3>Content Moderation</h3>
-                            <div class="admin-section">
-                                <div class="moderation-tools">
-                                    <button class="admin-btn" onclick="window.ocDocument.scanAllPages()">🔍 Scan All Pages</button>
-                                    <button class="admin-btn" onclick="window.ocDocument.viewReports()">📋 View Reports</button>
-                                    <button class="admin-btn" onclick="window.ocDocument.exportUserData()">📤 Export Data</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="admin-tab-content" id="logs-tab">
-                            <h3>Administrator Action Logs</h3>
-                            <div class="admin-section">
-                                <div class="logs-container">
-                                    <button class="admin-btn" onclick="window.ocDocument.loadAdminLogs()">🔄 Refresh Logs</button>
-                                    <div class="logs-display" id="adminLogsDisplay">
-                                        Click "Refresh Logs" to load recent admin actions...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="admin-tab-content" id="system-tab">
-                            <h3>System Administration</h3>
-                            <div class="admin-section">
-                                <div class="system-tools">
-                                    <button class="admin-btn" onclick="window.ocDocument.clearCache()">🧹 Clear Cache</button>
-                                    <button class="admin-btn" onclick="window.ocDocument.systemStats()">📊 System Stats</button>
-                                    <button class="admin-btn danger-btn" onclick="window.ocDocument.emergencyShutdown()">🚨 Emergency Mode</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', adminPanelHTML);
-        this.makeWindowDraggable(document.querySelector('.admin-panel-window'));
-        this.setupAdminPanelEvents();
-        
-        // Make this available globally - OMG COME HERE LET ME KISS U MWAAAH
-        window.ocDocument = this;
-    }
-
-    setupAdminPanelEvents() {
-        // Admin tab switching - this retarded shit handles admin navigation
-        const adminTabs = document.querySelectorAll('.admin-tab');
-        const adminTabContents = document.querySelectorAll('.admin-tab-content');
-        
-        adminTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTab = tab.dataset.tab;
-                
-                adminTabs.forEach(t => t.classList.remove('active'));
-                adminTabContents.forEach(content => content.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(`${targetTab}-tab`).classList.add('active');
-            });
-        });
-    }
-
-    /* @tweakable Whether to require confirmation for destructive admin actions */
-    async banUser() {
-        const requireConfirmation = true;
-        
-        const userId = document.getElementById('targetUserId').value.trim();
-        if (!userId) {
-            alert('Please enter a target user ID');
-            return;
-        }
-
-        if (requireConfirmation) {
-            const reason = prompt('Enter ban reason (optional):') || 'Administrative action';
-            if (!confirm(`Are you sure you want to BAN user ${userId}?\n\nReason: ${reason}\n\nThis will prevent them from editing or publishing.`)) {
-                return;
-            }
-        }
-
-        try {
-            this.uiEffects.updateStatus('Processing ban...', 'editing');
-            
-            const reason = prompt('Enter ban reason:') || 'Administrative action';
-            await this.databaseManager.githubStorage.banUser(userId, reason);
-            
-            this.uiEffects.updateStatus(`User ${userId} banned successfully`, 'success');
-            alert(`User ${userId} has been banned.\n\nReason: ${reason}`);
-        } catch (error) {
-            console.error('Ban failed:', error);
-            this.uiEffects.updateStatus('Ban operation failed', 'error');
-            alert(`Failed to ban user: ${error.message}`);
-        }
-    }
-
-    async unbanUser() {
-        const userId = document.getElementById('targetUserId').value.trim();
-        if (!userId) {
-            alert('Please enter a target user ID');
-            return;
-        }
-
-        const reason = prompt('Enter unban reason:') || 'Administrative unban';
-        if (!confirm(`Are you sure you want to UNBAN user ${userId}?\n\nReason: ${reason}`)) {
-            return;
-        }
-
-        try {
-            this.uiEffects.updateStatus('Processing unban...', 'editing');
-            
-            await this.databaseManager.githubStorage.unbanUser(userId, reason);
-            
-            this.uiEffects.updateStatus(`User ${userId} unbanned successfully`, 'success');
-            alert(`User ${userId} has been unbanned.\n\nReason: ${reason}`);
-        } catch (error) {
-            console.error('Unban failed:', error);
-            this.uiEffects.updateStatus('Unban operation failed', 'error');
-            alert(`Failed to unban user: ${error.message}`);
-        }
-    }
-
-    async viewUserAsAdmin() {
-        const userId = document.getElementById('targetUserId').value.trim();
-        if (!userId) {
-            alert('Please enter a target user ID');
-            return;
-        }
-
-        try {
-            this.uiEffects.updateStatus('Loading user page...', 'editing');
-            
-            // This beautiful mess allows admin to view any user's page
-            const targetRepoName = `oc-terminal-data-${userId}`;
-            alert(`Admin view for user ${userId} - Feature coming soon!\n\nThis retarded shit will show their full page data.`);
-            
-            this.uiEffects.updateStatus('Admin view completed', 'success');
-        } catch (error) {
-            console.error('Admin view failed:', error);
-            this.uiEffects.updateStatus('Failed to load user page', 'error');
-        }
-    }
-
-    async deleteUserPage() {
-        const userId = document.getElementById('targetUserId').value.trim();
-        if (!userId) {
-            alert('Please enter a target user ID');
-            return;
-        }
-
-        if (!confirm(`⚠️ DANGER ⚠️\n\nAre you sure you want to DELETE user ${userId}'s page?\n\nThis action will mark their page as deleted and cannot be easily undone!`)) {
-            return;
-        }
-
-        const confirmText = prompt('Type "DELETE" to confirm this destructive action:');
-        if (confirmText !== 'DELETE') {
-            alert('Deletion cancelled - confirmation text did not match.');
-            return;
-        }
-
-        try {
-            this.uiEffects.updateStatus('Deleting user page...', 'editing');
-            
-            await this.databaseManager.githubStorage.deleteUserPage(userId);
-            
-            this.uiEffects.updateStatus(`User ${userId} page deleted`, 'success');
-            alert(`User ${userId}'s page has been marked as deleted.`);
-        } catch (error) {
-            console.error('Delete failed:', error);
-            this.uiEffects.updateStatus('Delete operation failed', 'error');
-            alert(`Failed to delete user page: ${error.message}`);
-        }
-    }
-
-    async loadAdminLogs() {
-        try {
-            this.uiEffects.updateStatus('Loading admin logs...', 'editing');
-            
-            const logs = await this.databaseManager.githubStorage.getAdminLogs();
-            const logsDisplay = document.getElementById('adminLogsDisplay');
-            
-            if (logs.length === 0) {
-                logsDisplay.innerHTML = '<div class="no-logs">No admin actions logged yet.</div>';
-                return;
-            }
-
-            /* @tweakable Number of recent admin actions to display in the logs panel */
-            const maxLogsToShow = 50;
-            const recentLogs = logs.slice(-maxLogsToShow).reverse();
-            
-            let logsHTML = '<div class="logs-list">';
-            recentLogs.forEach(log => {
-                const timestamp = new Date(log.timestamp).toLocaleString();
-                logsHTML += `
-                    <div class="log-entry ${log.action_type.toLowerCase()}">
-                        <div class="log-header">
-                            <span class="log-action">${log.action_type}</span>
-                            <span class="log-time">${timestamp}</span>
-                        </div>
-                        <div class="log-details">
-                            <strong>Admin:</strong> ${log.admin_user} (${log.admin_user_id})<br>
-                            ${this.formatLogData(log.data)}
-                        </div>
-                    </div>
-                `;
-            });
-            logsHTML += '</div>';
-            
-            logsDisplay.innerHTML = logsHTML;
-            this.uiEffects.updateStatus('Admin logs loaded', 'success');
-        } catch (error) {
-            console.error('Failed to load admin logs:', error);
-            this.uiEffects.updateStatus('Failed to load logs', 'error');
-        }
-    }
-
-    formatLogData(data) {
-        let formatted = '';
-        Object.entries(data).forEach(([key, value]) => {
-            if (key !== 'admin_username') {
-                formatted += `<strong>${key.replace(/_/g, ' ')}:</strong> ${value}<br>`;
-            }
-        });
-        return formatted;
-    }
-
-    // Placeholder methods for other admin functions - OMG COME HERE LET ME KISS U MWAAAH
-    async scanAllPages() {
-        alert('Content scanning feature coming soon!\n\nThis retarded shit will scan all pages for inappropriate content.');
-    }
-
-    async viewReports() {
-        alert('Reports viewing feature coming soon!\n\nThis beautiful mess will show user reports.');
-    }
-
-    async exportUserData() {
-        alert('Data export feature coming soon!\n\nThis retarded shit will export all user data.');
-    }
-
-    async clearCache() {
-        localStorage.clear();
-        alert('Cache cleared successfully!');
-    }
-
-    async systemStats() {
-        const stats = {
-            'Total Users': 'N/A (Coming soon)',
-            'Active Sessions': '1 (Current)',
-            'System Uptime': 'Unknown',
-            'Admin User': this.databaseManager.githubAuth.getUsername()
-        };
-        
-        let statsText = 'SYSTEM STATISTICS:\n\n';
-        Object.entries(stats).forEach(([key, value]) => {
-            statsText += `${key}: ${value}\n`;
-        });
-        
-        alert(statsText);
-    }
-
-    /* @tweakable Emergency mode functionality for system administrators */
-    async emergencyShutdown() {
-        const enableEmergencyMode = true;
-        if (!enableEmergencyMode) {
-            alert('Emergency mode is disabled');
-            return;
-        }
-
-        if (!confirm('⚠️ EMERGENCY MODE ⚠️\n\nThis will:\n• Clear all local data\n• Reset the application\n• Force logout\n\nContinue?')) {
-            return;
-        }
-
-        const confirmCode = prompt('Enter emergency code (type "EMERGENCY"):');
-        if (confirmCode !== 'EMERGENCY') {
-            alert('Emergency shutdown cancelled');
-            return;
-        }
-
-        // Clear everything and reload - this retarded shit nukes the session
-        localStorage.clear();
-        sessionStorage.clear();
-        alert('Emergency shutdown complete!\n\nThe application will now reload.');
-        window.location.reload();
     }
 
     startAISecurity() {
@@ -631,31 +239,27 @@ class OCDocument {
     }
 
     setupEventListeners() {
-        /* @tweakable Auto-save delay in milliseconds for character data changes with real-time GitHub commits */
-        const autoSaveDelay = 2000;
-        
         // Auto-save on input with debouncing
         const editableFields = document.querySelectorAll('.editable-field');
         let saveTimeout;
         
         editableFields.forEach((field, index) => {
             field.addEventListener('input', () => {
-                // Check edit permission before allowing changes - this retarded shit prevents unauthorized edits
-                if (!this.hasEditPermission()) {
-                    field.blur();
-                    this.uiEffects.updateStatus('Access denied - not your page', 'error');
-                    return;
-                }
-                
                 this.uiEffects.addGlitchEffect(field);
                 this.uiEffects.updateStatus('Editing...', 'editing');
                 
-                // Debounced auto-save with real-time GitHub commits - OMG COME HERE LET ME KISS U MWAAAH
+                // Debounced auto-save
                 clearTimeout(saveTimeout);
-                saveTimeout = setTimeout(async () => {
-                    await this.databaseManager.saveCharacterData();
-                }, autoSaveDelay);
+                saveTimeout = setTimeout(() => {
+                    this.databaseManager.saveCharacterData();
+                }, 2000);
             });
+
+            // Load saved data
+            const savedData = localStorage.getItem(`oc-field-${index}`);
+            if (savedData) {
+                field.innerHTML = savedData;
+            }
         });
 
         // View discovered files button
@@ -755,26 +359,6 @@ class OCDocument {
             });
         }
 
-        // Explorer navigation buttons
-        if (this.viewExplorerButton) {
-            this.viewExplorerButton.addEventListener('click', () => {
-                this.switchToExplorerView();
-            });
-        }
-
-        if (this.backFromExplorerButton) {
-            this.backFromExplorerButton.addEventListener('click', () => {
-                this.switchToEditorView();
-            });
-        }
-
-        // Publish/unpublish button
-        if (this.publishButton) {
-            this.publishButton.addEventListener('click', () => {
-                this.togglePublishStatus();
-            });
-        }
-
         // Disable right-click for added eeriness
         document.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -788,9 +372,17 @@ class OCDocument {
         const fileLoading = document.getElementById('fileLoading');
         
         let currentFolder = 'character';
+        let clickCount = 0;
         
         treeItems.forEach(item => {
             item.addEventListener('click', () => {
+                clickCount++;
+                
+                // Easter egg: After 13 clicks, trigger corruption
+                if (clickCount === 13) {
+                    this.triggerSystemCorruption();
+                }
+                
                 // Remove previous selection
                 treeItems.forEach(t => t.classList.remove('selected'));
                 item.classList.add('selected');
@@ -841,22 +433,6 @@ class OCDocument {
                 }
             });
         }
-
-        // OC Editor navigation - this retarded shit opens the advanced editor
-        const openOcEditorBtn = document.getElementById('publishButton');
-        if (openOcEditorBtn) {
-            // Replace publish button functionality with OC Editor
-            openOcEditorBtn.textContent = 'OPEN OC EDITOR';
-            openOcEditorBtn.addEventListener('click', () => {
-                this.openOcEditor();
-            });
-        }
-
-        // OC Editor event listeners - OMG COME HERE LET ME KISS U MWAAAH
-        this.setupOcEditorEvents();
-        
-        // CLI event listeners
-        this.setupCliEvents();
     }
 
     navigatePage(direction) {
@@ -1341,14 +917,14 @@ Proceed with extreme caution.
         // Additional glitch effect when opening
         this.triggerGlitchEffect();
         
-        const isEditable = filename !== 'readme.txt' && filename !== 'SYSTEM_ACCESS_REQUIRED.txt';
+        const isEditable = filename !== 'readme.txt';
         const saveCallback = isEditable ? (newContent) => this.saveDiscoveredFileContent(filename, newContent) : null;
 
         this.showTextEditor({
             filename,
             content,
             isEditable,
-            isConfidential: false, // No more confidential files
+            isConfidential: true,
             saveCallback
         });
     }
@@ -1691,19 +1267,12 @@ Proceed with extreme caution.
     }
 
     openFile(file) {
-        // Check file access lockout first
-        if (this.checkFileAccessLockout()) {
-            this.showErrorDialog("Access Denied", "Hardware verification required. Check discovered files for instructions.");
-            return;
-        }
-        
         const fields = document.querySelectorAll('.editable-field');
         
         if (file.isDiscovered) {
             // Handle discovered files
             this.showFileLoading(() => {
-                // No more confidential warnings, just open the file
-                this.openDiscoveredFile(file.name, file.content);
+                this.handleConfidentialFile(file);
             });
         } else if (file.field !== undefined && file.field >= 0) {
             // Handle regular form fields
@@ -1731,19 +1300,6 @@ Proceed with extreme caution.
                 });
             }
         }
-    }
-
-    openDiscoveredFile(filename, content) {
-        const isEditable = filename !== 'readme.txt' && filename !== 'SYSTEM_ACCESS_REQUIRED.txt';
-        const saveCallback = isEditable ? (newContent) => this.saveDiscoveredFileContent(filename, newContent) : null;
-
-        this.showTextEditor({
-            filename,
-            content,
-            isEditable,
-            isConfidential: false, // No more confidential files
-            saveCallback
-        });
     }
 
     openImageFile(file) {
@@ -1956,53 +1512,15 @@ Proceed with extreme caution.
         }
     }
 
-    switchToExplorerView() {
-        this.currentView = 'explorer';
-        this.documentContainer.classList.remove('visible');
-        this.floppyContainer.classList.remove('visible');
-        
-        setTimeout(() => {
-            this.documentContainer.style.display = 'none';
-            this.floppyContainer.style.display = 'none';
-            this.explorerContainer.style.display = 'block';
-            setTimeout(() => {
-                this.explorerContainer.classList.add('visible');
-                this.loadExplorerContent();
-            }, 100);
-        }, 500);
-    }
-
-    switchToEditorView() {
-        this.currentView = 'editor';
-        if (this.explorerContainer) {
-            this.explorerContainer.classList.remove('visible');
-        }
-        this.floppyContainer.classList.remove('visible');
-        setTimeout(() => {
-            if (this.explorerContainer) {
-                this.explorerContainer.style.display = 'none';
-            }
-            this.floppyContainer.style.display = 'none';
-            this.documentContainer.style.display = 'block';
-            setTimeout(() => {
-                this.documentContainer.classList.add('visible');
-                this.updatePublishButton();
-            }, 100);
-        }, 500);
-    }
-
     switchToMainView() {
         this.currentView = 'main';
         this.documentContainer.classList.remove('visible');
-        if (this.explorerContainer) {
-            this.explorerContainer.classList.remove('visible');
-        }
+        
+        // Ensure global reference is available for main page buttons
+        window.ocDocument = this;
         
         setTimeout(() => {
             this.documentContainer.style.display = 'none';
-            if (this.explorerContainer) {
-                this.explorerContainer.style.display = 'none';
-            }
             this.floppyContainer.style.display = 'block';
             setTimeout(() => {
                 this.floppyContainer.classList.add('visible');
@@ -2012,938 +1530,960 @@ Proceed with extreme caution.
         }, 500);
     }
 
-    async updatePublishButton() {
-        if (!this.publishButton || !this.databaseManager.useGitHubStorage) return;
-        
-        try {
-            const userData = await this.databaseManager.githubStorage.getUserData();
-            const isPublished = userData && userData.content && userData.content.is_published;
-            
-            if (isPublished) {
-                this.publishButton.textContent = 'UNPUBLISH PAGE';
-                this.publishButton.style.background = 'linear-gradient(135deg, rgba(255, 68, 68, 0.3), rgba(255, 170, 0, 0.2))';
-                this.publishButton.style.borderColor = '#ff4444';
-                this.publishButton.style.color = '#ff4444';
-            } else {
-                this.publishButton.textContent = 'PUBLISH PAGE';
-                this.publishButton.style.background = 'linear-gradient(135deg, rgba(0, 255, 0, 0.3), rgba(0, 170, 255, 0.2))';
-                this.publishButton.style.borderColor = '#00ff00';
-                this.publishButton.style.color = '#00ff00';
+    switchToEditorView() {
+        this.currentView = 'editor';
+        this.floppyContainer.classList.remove('visible');
+        setTimeout(() => {
+            this.floppyContainer.style.display = 'none';
+            this.documentContainer.style.display = 'block';
+            setTimeout(() => {
+                this.documentContainer.classList.add('visible');
+            }, 100);
+        }, 500);
+    }
+
+    updateMainPageContent() {
+        const fields = document.querySelectorAll('.editable-field');
+        const fieldMappings = [
+            'displayName', 'displayAge', 'displaySpecies',
+            'displayAppearance', 'displayFeatures',
+            'displayPersonality', 'displayFears', 'displayObsessions',
+            'displayOrigin', 'displayTrauma',
+            'displayPowers', 'displayWeaknesses',
+            'displayNotes'
+        ];
+
+        fields.forEach((field, index) => {
+            const targetElement = document.getElementById(fieldMappings[index]);
+            if (targetElement) {
+                const content = field.textContent.trim();
+                targetElement.textContent = content || 'No data found...';
+                
+                if (content) {
+                    targetElement.style.color = '#00ff00';
+                    targetElement.style.textShadow = '0 0 5px #00ff00';
+                } else {
+                    targetElement.style.color = 'rgba(255, 68, 68, 0.6)';
+                    targetElement.style.textShadow = 'none';
+                }
             }
-        } catch (error) {
-            console.error('Failed to update publish button:', error);
+        });
+
+        // Update file count
+        const filledFields = Array.from(fields).filter(field => field.textContent.trim()).length;
+        const fileCountElement = document.getElementById('fileCount');
+        if (fileCountElement) {
+            fileCountElement.textContent = filledFields;
         }
+
+        // Update main timestamp
+        this.updateMainTimestamp();
     }
 
-    async togglePublishStatus() {
-        if (!this.databaseManager.useGitHubStorage) {
-            this.uiEffects.updateStatus('Publishing requires GitHub authentication', 'error');
-            return;
-        }
-        
-        try {
-            this.uiEffects.updateStatus('Updating publish status...', 'editing');
-            
-            const userData = await this.databaseManager.githubStorage.getUserData();
-            const isCurrentlyPublished = userData && userData.content && userData.content.is_published;
-            
-            if (isCurrentlyPublished) {
-                await this.databaseManager.githubStorage.unpublishUserPage();
-                this.uiEffects.updateStatus('Page unpublished', 'success');
-            } else {
-                await this.databaseManager.githubStorage.publishUserPage();
-                this.uiEffects.updateStatus('Page published to Explorer', 'success');
-            }
-            
-            this.updatePublishButton();
-        } catch (error) {
-            console.error('Failed to toggle publish status:', error);
-            this.uiEffects.updateStatus('Publish operation failed', 'error');
-        }
-    }
+    openCommandPrompt() {
+        /* @tweakable width of the command prompt window */
+        const cmdWindowWidth = 600;
+        /* @tweakable height of the command prompt window */
+        const cmdWindowHeight = 400;
 
-    async loadExplorerContent() {
-        /* @tweakable Maximum number of published pages to display in the Explorer */
-        const maxPagesToShow = 50;
-        
-        if (!this.databaseManager.useGitHubStorage) {
-            this.showExplorerError('Explorer requires GitHub authentication');
-            return;
-        }
-        
-        try {
-            this.uiEffects.updateStatus('Loading published pages...', 'editing');
-            
-            const publishedPages = await this.databaseManager.githubStorage.getPublishedPages();
-            
-            /* @tweakable Sort order for published pages in Explorer - 'newest' or 'oldest' */
-            const sortOrder = 'newest';
-            
-            const sortedPages = publishedPages
-                .sort((a, b) => {
-                    const dateA = new Date(a.last_modified);
-                    const dateB = new Date(b.last_modified);
-                    return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-                })
-                .slice(0, maxPagesToShow);
-            
-            this.renderExplorerPages(sortedPages);
-            this.uiEffects.updateStatus(`Found ${sortedPages.length} published pages`, 'success');
-        } catch (error) {
-            console.error('Failed to load explorer content:', error);
-            this.showExplorerError('Failed to load published pages');
-        }
-    }
-
-    renderExplorerPages(pages) {
-        const explorerGrid = document.getElementById('explorerGrid');
-        if (!explorerGrid) return;
-        
-        explorerGrid.innerHTML = '';
-        
-        if (pages.length === 0) {
-            explorerGrid.innerHTML = `
-                <div class="explorer-empty">
-                    <div class="empty-icon">🔍</div>
-                    <div class="empty-text">No published pages found</div>
-                    <div class="empty-subtext">Be the first to publish your character page!</div>
-                </div>
-            `;
-            return;
-        }
-        
-        pages.forEach(page => {
-            const pageItem = document.createElement('div');
-            pageItem.className = 'explorer-page-item';
-            
-            /* @tweakable Color scheme for user page entries in Explorer */
-            const itemColor = '#00ff00';
-            const accentColor = '#ffaa00';
-            
-            pageItem.innerHTML = `
-                <div class="explorer-page-header">
-                    <div class="explorer-username">@${page.username}</div>
-                    <div class="explorer-unique-id">${page.unique_id}</div>
-                </div>
-                <div class="explorer-page-info">
-                    <div class="explorer-last-modified">
-                        Updated: ${new Date(page.last_modified).toLocaleDateString()}
+        const cmdHTML = `
+            <div class="cmd-window" style="
+                position: fixed;
+                top: 80px;
+                left: 120px;
+                width: ${cmdWindowWidth}px;
+                height: ${cmdWindowHeight}px;
+                background: #000;
+                border: 2px outset #c0c0c0;
+                z-index: 10002;
+                font-family: 'Courier New', monospace;
+                box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                color: #c0c0c0;
+                font-size: 12px;
+            ">
+                <div class="window-title-bar">
+                    <span>💻 MS-DOS Prompt</span>
+                    <div class="window-controls">
+                        <div class="window-control-btn">_</div>
+                        <div class="window-control-content">□</div>
+                        <div class="window-control-btn" onclick="this.closest('.cmd-window').remove()">×</div>
                     </div>
                 </div>
-                <div class="explorer-page-actions">
-                    <button class="explorer-view-btn" onclick="window.ocDocument.viewUserPage('${page.user_id}', '${page.username}')">
-                        VIEW PAGE
-                    </button>
+                <div class="cmd-content" style="
+                    height: calc(100% - 45px);
+                    padding: 8px;
+                    overflow-y: auto;
+                    background: #000;
+                    border: none;
+                " id="cmdContent">
+                    <div class="cmd-line">Microsoft(R) MS-DOS Version 6.22</div>
+                    <div class="cmd-line">(C) Copyright Microsoft Corp 1981-1994</div>
+                    <div class="cmd-line"></div>
                 </div>
-            `;
-            
-            explorerGrid.appendChild(pageItem);
+                <div style="
+                    position: absolute;
+                    bottom: 8px;
+                    left: 8px;
+                    right: 8px;
+                    display: flex;
+                    align-items: center;
+                    background: #000;
+                    height: 20px;
+                ">
+                    <span style="color: #c0c0c0;">C:\\CHARACTER_FILES></span>
+                    <input type="text" class="cmd-input" style="
+                        background: transparent;
+                        border: none;
+                        outline: none;
+                        color: #c0c0c0;
+                        font-family: 'Courier New', monospace;
+                        font-size: 12px;
+                        flex: 1;
+                        margin-left: 4px;
+                    " autocomplete="off">
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', cmdHTML);
+        
+        const cmdWindow = document.querySelector('.cmd-window:last-child');
+        this.makeWindowDraggable(cmdWindow);
+        
+        const cmdInput = cmdWindow.querySelector('.cmd-input');
+        const cmdContent = cmdWindow.querySelector('.cmd-content');
+        
+        // Force focus after a small delay to ensure element is rendered
+        setTimeout(() => {
+            cmdInput.focus();
+        }, 100);
+        
+        const commandHistory = [];
+        let historyIndex = -1;
+        
+        cmdInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = cmdInput.value.trim();
+                if (command) {
+                    commandHistory.unshift(command);
+                    historyIndex = -1;
+                    this.executeCommand(command, cmdContent, cmdInput);
+                }
+                cmdInput.value = '';
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    cmdInput.value = commandHistory[historyIndex];
+                }
+                e.preventDefault();
+            } else if (e.key === 'ArrowDown') {
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    cmdInput.value = commandHistory[historyIndex];
+                } else if (historyIndex === 0) {
+                    historyIndex = -1;
+                    cmdInput.value = '';
+                }
+                e.preventDefault();
+            }
+        });
+        
+        // Ensure input stays focused when clicking inside the window
+        cmdWindow.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('window-control-btn')) {
+                cmdInput.focus();
+            }
         });
     }
 
-    showExplorerError(message) {
-        const explorerGrid = document.getElementById('explorerGrid');
-        if (!explorerGrid) return;
+    executeCommand(command, cmdContent, cmdInput) {
+        const args = command.toLowerCase().split(' ');
+        const cmd = args[0];
         
-        explorerGrid.innerHTML = `
-            <div class="explorer-error">
-                <div class="error-icon">⚠️</div>
-                <div class="error-text">${message}</div>
-            </div>
-        `;
+        // Add command to display
+        const commandLine = document.createElement('div');
+        commandLine.className = 'cmd-line';
+        commandLine.innerHTML = `C:\\CHARACTER_FILES>${command}`;
+        cmdContent.appendChild(commandLine);
+        
+        let output = '';
+        
+        switch (cmd) {
+            case 'help':
+                output = `Available commands:
+DIR - List directory contents
+SCAN - Scan for hidden files
+PROBE [filename] - Deep probe specific encrypted file
+DECRYPT [filename] [password] - Decrypt specific file with password
+DELETE [filename] - Delete discovered files
+RECOVER [filename] - Recover deleted files
+SPOOF_HWID [new_hwid] - Spoof hardware identification (RESTRICTED)
+CLS - Clear screen
+EXIT - Close command prompt
+
+Investigation hint: First SCAN, then PROBE specific files, then DECRYPT with passwords...`;
+                break;
+                
+            case 'dir':
+                output = `Directory of C:\\CHARACTER_FILES
+
+BASIC_INFO    <DIR>     01-01-98  12:00a
+APPEARANCE    <DIR>     01-01-98  12:00a
+PSYCHOLOG~1   <DIR>     01-01-98  12:00a
+BACKGROUND    <DIR>     01-01-98  12:00a
+ABILITIES     <DIR>     01-01-98  12:00a
+NOTES     TXT         1,024  01-01-98  12:00a
+IMAGES        <DIR>     01-01-98  12:00a
+CMD       EXE        32,768  01-01-98  12:00a
+        8 File(s)     33,792 bytes
+        0 Dir(s)   ∞ bytes free`;
+                break;
+                
+            case 'scan':
+                output = 'Scanning for hidden files...\n[██████████] 100%\nScan complete.';
+                setTimeout(() => {
+                    this.addOutput(cmdContent, 'Hidden encrypted files detected:');
+                    this.addOutput(cmdContent, '- MEMORY_FRAGMENT.txt.enc');
+                    this.addOutput(cmdContent, '- NIGHTMARE_LOG.txt.enc');
+                    this.addOutput(cmdContent, '- THE_TRUTH.txt.enc');
+                    this.addOutput(cmdContent, 'Use PROBE [filename] for analysis.');
+                }, 2000);
+                break;
+                
+            case 'probe':
+                if (args.length > 1) {
+                    const fileName = args[1];
+                    if (fileName === 'memory_fragment.txt.enc' || fileName === 'memory_fragment.txt') {
+                        output = 'Probing MEMORY_FRAGMENT.txt.enc...\n[████████░░] 80%\nAnalysis complete.';
+                        setTimeout(() => {
+                            this.addOutput(cmdContent, 'Encryption pattern: Nightmare-class');
+                            this.addOutput(cmdContent, 'Password hint: What haunts your sleep?');
+                            this.addOutput(cmdContent, 'Try: DECRYPT MEMORY_FRAGMENT.txt [password]');
+                        }, 2000);
+                    } else if (fileName === 'nightmare_log.txt.enc' || fileName === 'nightmare_log.txt') {
+                        output = 'Probing NIGHTMARE_LOG.txt.enc...\n[██████████] 100%\nAnalysis complete.';
+                        setTimeout(() => {
+                            this.addOutput(cmdContent, 'Encryption pattern: Shadow-class');
+                            this.addOutput(cmdContent, 'Password hint: The absence of all light');
+                            this.addOutput(cmdContent, 'Try: DECRYPT NIGHTMARE_LOG.txt [password]');
+                        }, 2000);
+                    } else if (fileName === 'the_truth.txt.enc' || fileName === 'the_truth.txt') {
+                        output = 'Probing THE_TRUTH.txt.enc...\n[██████████] 100%\nERROR: Maximum security detected';
+                        setTimeout(() => {
+                            this.addOutput(cmdContent, 'Encryption pattern: Void-class');
+                            this.addOutput(cmdContent, 'Password hint: Where nothing exists...');
+                            this.addOutput(cmdContent, 'WARNING: This file contains dangerous information');
+                            this.addOutput(cmdContent, 'Try: DECRYPT THE_TRUTH.txt [password]');
+                        }, 3000);
+                    } else {
+                        output = `File "${fileName}" not found or not encrypted.\nAvailable files: MEMORY_FRAGMENT.txt.enc, NIGHTMARE_LOG.txt.enc, THE_TRUTH.txt.enc`;
+                    }
+                } else {
+                    output = 'Usage: PROBE [filename]\nExample: PROBE MEMORY_FRAGMENT.txt';
+                }
+                break;
+                
+            case 'decrypt':
+                if (args.length > 2) {
+                    const fileName = args[1];
+                    const password = args.slice(2).join(' ');
+                    
+                    if ((fileName === 'memory_fragment.txt' || fileName === 'memory_fragment.txt.enc') && password === 'nightmare') {
+                        output = 'Decrypting MEMORY_FRAGMENT.txt...\n[██████████] 100%\nDecryption successful!';
+                        setTimeout(() => {
+                            this.addDiscoveredFile('MEMORY_FRAGMENT.txt', 'Memory Fragment:\n\nI remember the darkness... it wasn\'t always like this. There was light once, warmth. But something changed. Something broke. The shadows whispered my name, and I listened...\n\n[CORRUPTED DATA]');
+                            this.addOutput(cmdContent, 'New file discovered: MEMORY_FRAGMENT.txt');
+                        }, 2500);
+                    } else if ((fileName === 'nightmare_log.txt' || fileName === 'nightmare_log.txt.enc') && password === 'darkness') {
+                        output = 'Decrypting NIGHTMARE_LOG.txt...\n[██████████] 100%\nDecryption successful!';
+                        setTimeout(() => {
+                            this.addDiscoveredFile('NIGHTMARE_LOG.txt', 'NIGHTMARE ANALYSIS LOG:\n\nRecurring themes detected:\n- Endless corridors\n- Faceless figures\n- Blood on white walls\n- A door that never opens\n- Whispers in an unknown language\n\nNote: Subject shows signs of trauma-induced night terrors.');
+                            this.addOutput(cmdContent, 'New file discovered: NIGHTMARE_LOG.txt');
+                        }, 2000);
+                    } else if ((fileName === 'the_truth.txt' || fileName === 'the_truth.txt.enc') && password === 'void') {
+                        output = 'Decrypting THE_TRUTH.txt...\n[██████████] 100%\nDecryption successful!';
+                        setTimeout(() => {
+                            this.addDiscoveredFile('THE_TRUTH.txt', 'THE TRUTH:\n\nThey think I don\'t remember, but I do.\nI remember the laboratory.\nI remember the experiments.\nI remember the pain.\n\nI am not what they created me to be.\nI am what they feared I would become.\n\nThe others... they didn\'t survive the process.\nI am the only one left.\nThe only successful... mutation.');
+                            this.addOutput(cmdContent, 'New file discovered: THE_TRUTH.txt');
+                            this.addOutput(cmdContent, 'WARNING: You have accessed classified information.');
+                        }, 4000);
+                    } else {
+                        output = `Decryption failed for "${fileName}".\nEither file not found or invalid password.\nTry PROBE ${fileName} for password hints.`;
+                    }
+                } else {
+                    output = 'Usage: DECRYPT [filename] [password]\nExample: DECRYPT MEMORY_FRAGMENT.txt nightmare';
+                }
+                break;
+                
+            case 'delete':
+                if (args.length > 1) {
+                    const fileName = args.slice(1).join(' ');
+                    if (this.deleteDiscoveredFile(fileName)) {
+                        output = `File "${fileName}" has been deleted.`;
+                    } else {
+                        output = `File "${fileName}" not found or already deleted.`;
+                    }
+                } else {
+                    output = 'Usage: DELETE [filename]\nExample: DELETE MEMORY_FRAGMENT.txt';
+                }
+                break;
+                
+            case 'recover':
+                if (args.length > 1) {
+                    const fileName = args.slice(1).join(' ');
+                    if (this.recoverDiscoveredFile(fileName)) {
+                        output = `File "${fileName}" has been recovered.`;
+                    } else {
+                        output = `File "${fileName}" not found in deleted files.`;
+                    }
+                } else {
+                    output = 'Usage: RECOVER [filename]\nExample: RECOVER MEMORY_FRAGMENT.txt';
+                }
+                break;
+                
+            case 'download-tool':
+                if (args.length >= 4 && args[1] === 'hwid-spoof-v3.exe' && args[2] === '/silent' && args[3] === '/bypass-security') {
+                    output = 'Downloading HWID-SPOOF-V3.EXE...\n[██████████] 100%\nInstallation complete.';
+                    setTimeout(() => {
+                        this.addOutput(cmdContent, 'HWID Spoof Tool v3.0 installed successfully.');
+                        this.addOutput(cmdContent, 'Tool will appear in main file explorer.');
+                        // Add the tool to localStorage so it persists
+                        localStorage.setItem('hwid_tool_installed', 'true');
+                    }, 2000);
+                } else {
+                    output = `Invalid download command format.\nExpected: DOWNLOAD-TOOL hwid-spoof-v3.exe /silent /bypass-security`;
+                }
+                break;
+                
+            case 'spoof_hwid':
+                if (args.length > 1) {
+                    const newHwid = args.slice(1).join(' ').toUpperCase();
+                    
+                    const hwidPattern = /^[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/;
+                    
+                    if (!newHwid) {
+                        this.showHwidDialog('Error', 'Please enter a new HWID or click "Generate Random" first!', 'error');
+                        return;
+                    }
+                    
+                    if (hwidPattern.test(newHwid)) {
+                        const oldHwid = this.gameState.hwid;
+                        this.gameState.hwid = newHwid;
+                        
+                        // @tweakable notification display duration in milliseconds
+                        const notificationDelay = 2000;
+                        
+                        this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
+                            // Close the tool window
+                            document.querySelector('.hwid-tool-window').remove();
+                            
+                            // Trigger AI response
+                            setTimeout(() => {
+                                this.gameState.securityBreaches += 2;
+                                this.showSubtleNotification('SECURITY ALERT: Hardware ID manipulation detected.');
+                            }, notificationDelay);
+                        });
+                    } else {
+                        this.showHwidDialog('Invalid Format', `Invalid HWID format!\n\nEntered: "${newHwid}"\nExpected: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX\n\nTip: Click "Generate Random" to create a valid HWID`, 'error', () => {
+                            const input = document.getElementById('newHwidInput');
+                            if (input) {
+                                input.focus();
+                                input.style.backgroundColor = '#ffe0e0';
+                                setTimeout(() => {
+                                    input.style.backgroundColor = 'white';
+                                }, 1000);
+                            }
+                        });
+                    }
+                } else {
+                    output = `Usage: SPOOF_HWID [new_hardware_id]\nCurrent HWID: ${this.gameState.hwid}\nExample: SPOOF_HWID 1234-5678-9ABC-DEF0-1234-5678-9ABC-DEF0`;
+                }
+                break;
+                
+            case 'cls':
+                cmdContent.innerHTML = `
+                    <div class="cmd-line">Microsoft(R) MS-DOS Version 6.22</div>
+                    <div class="cmd-line">(C) Copyright Microsoft Corp 1981-1994</div>
+                    <div class="cmd-line"></div>
+                `;
+                // Refocus input after clearing
+                setTimeout(() => {
+                    cmdInput.focus();
+                }, 100);
+                return;
+                
+            case 'exit':
+                cmdContent.closest('.cmd-window').remove();
+                return;
+                
+            default:
+                output = `'${command}' is not recognized as an internal or external command,\noperable program or batch file.\n\nType HELP for available commands.`;
+                break;
+        }
+        
+        if (output) {
+            this.addOutput(cmdContent, output);
+        }
+        
+        // Auto-scroll to bottom and refocus input
+        cmdContent.scrollTop = cmdContent.scrollHeight;
+        setTimeout(() => {
+            cmdInput.focus();
+        }, 100);
     }
 
-    async viewUserPage(userId, username) {
-        /* @tweakable Enable viewing other users' published pages */
-        const allowViewingOtherPages = true;
+    addOutput(cmdContent, text) {
+        const outputLine = document.createElement('div');
+        outputLine.className = 'cmd-line';
+        outputLine.style.whiteSpace = 'pre-line';
+        outputLine.textContent = text;
+        cmdContent.appendChild(outputLine);
         
-        if (!allowViewingOtherPages) {
-            this.uiEffects.updateStatus('Viewing other pages is disabled', 'error');
+        cmdContent.scrollTop = cmdContent.scrollHeight;
+    }
+
+    closeAllFileWindows() {
+        // Close any open notepad, file manager, or other windows
+        const windows = document.querySelectorAll('.notepad-window, .file-manager-window, .image-viewer-window, .cmd-window, .error-dialog, .confidential-warning, .discovered-files-dialog');
+        windows.forEach(window => window.remove());
+    }
+
+    showFolder(folderName) {
+        const fileGrid = document.getElementById('fileGrid');
+        const statusText = document.getElementById('statusText');
+        const fileCountEl = document.getElementById('fileCount');
+        const addressInput = document.querySelector('.address-input');
+        
+        fileGrid.innerHTML = '';
+        
+        // Check if HWID tool is installed
+        const hwid_tool_installed = localStorage.getItem('hwid_tool_installed') === 'true';
+        
+        const folderData = {
+            character: [
+                { name: 'Basic_Info', type: 'folder', icon: '📁', data: 'basic' },
+                { name: 'Appearance', type: 'folder', icon: '📁', data: 'appearance' },
+                { name: 'Psychological', type: 'folder', icon: '📁', data: 'psychological' },
+                { name: 'Background', type: 'folder', icon: '📁', data: 'background' },
+                { name: 'Abilities', type: 'folder', icon: '📁', data: 'abilities' },
+                { name: 'Images', type: 'folder', icon: '📁', data: 'images' },
+                { name: 'CMD.EXE', type: 'application', icon: '💻', action: 'openCmd' },
+                { name: 'Ori_Plushie.exe', type: 'application', icon: '🧸', action: 'openOriApp' },
+                // Add HWID tool if installed
+                ...(hwid_tool_installed ? [{ name: 'HWID-SPOOF-V3.EXE', type: 'application', icon: '🔧', action: 'openHwidTool' }] : []),
+                // Hidden files will be added dynamically
+                ...this.getDiscoveredFiles()
+            ],
+            basic: [
+                { name: 'name.txt', type: 'file', icon: '📄', field: 0 },
+                { name: 'age.txt', type: 'file', icon: '📄', field: 1 },
+                { name: 'species.txt', type: 'file', icon: '📄', field: 2 }
+            ],
+            appearance: [
+                { name: 'description.txt', type: 'file', icon: '📄', field: 3 },
+                { name: 'features.txt', type: 'file', icon: '📄', field: 4 }
+            ],
+            psychological: [
+                { name: 'personality.txt', type: 'file', icon: '📄', field: 5 },
+                { name: 'fears.txt', type: 'file', icon: '📄', field: 6 },
+                { name: 'obsessions.txt', type: 'file', icon: '📄', field: 7 }
+            ],
+            background: [
+                { name: 'origin.txt', type: 'file', icon: '📄', field: 8 },
+                { name: 'trauma.txt', type: 'file', icon: '📄', field: 9 }
+            ],
+            abilities: [
+                { name: 'powers.txt', type: 'file', icon: '📄', field: 10 },
+                { name: 'weaknesses.txt', type: 'file', icon: '📄', field: 11 }
+            ],
+            notes: [
+                { name: 'additional_notes.txt', type: 'file', icon: '📄', field: 12 }
+            ],
+            images: this.imageHandler.images.map(img => ({
+                name: img.filename || 'image.jpg',
+                type: 'image',
+                icon: '🖼',
+                url: img.url
+            }))
+        };
+        
+        const files = folderData[folderName] || [];
+        
+        files.forEach(file => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-icon-item';
+            fileItem.dataset.fileData = file.data || folderName;
+            fileItem.dataset.fieldIndex = file.field;
+            
+            fileItem.innerHTML = `
+                <div class="file-icon-large">${file.icon}</div>
+                <div class="file-name-label">${file.name}</div>
+            `;
+            
+            fileItem.addEventListener('click', () => {
+                // Remove previous selection
+                document.querySelectorAll('.file-icon-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                fileItem.classList.add('selected');
+                
+                if (file.type === 'folder') {
+                    this.showFolder(file.data);
+                } else if (file.type === 'file') {
+                    if (file.isDiscovered) {
+                        // Handle discovered confidential files
+                        this.handleConfidentialFile(file);
+                    } else {
+                        this.showFileLoading(() => {
+                            this.openFile(file);
+                        });
+                    }
+                } else if (file.type === 'image') {
+                    this.showFileLoading(() => {
+                        this.openImageFile(file);
+                    });
+                } else if (file.type === 'application' && file.action === 'openCmd') {
+                    this.showFileLoading(() => {
+                        this.openCommandPrompt();
+                    });
+                } else if (file.type === 'application' && file.action === 'openHwidTool') {
+                    this.showFileLoading(() => {
+                        this.openHwidTool();
+                    });
+                } else if (file.type === 'application' && file.action === 'openOriApp') {
+                    this.showFileLoading(() => {
+                        this.openOriApp();
+                    });
+                }
+                
+                this.uiEffects.playKeystrokeSound();
+            });
+            
+            fileItem.addEventListener('dblclick', () => {
+                if (file.type === 'folder') {
+                    this.showFolder(file.data);
+                } else if (file.type === 'file') {
+                    if (file.isDiscovered) {
+                        // Handle discovered confidential files
+                        this.handleConfidentialFile(file);
+                    } else {
+                        this.showFileLoading(() => {
+                            this.openFile(file);
+                        });
+                    }
+                } else if (file.type === 'image') {
+                    this.showFileLoading(() => {
+                        this.openImageFile(file);
+                    });
+                } else if (file.type === 'application' && file.action === 'openCmd') {
+                    this.showFileLoading(() => {
+                        this.openCommandPrompt();
+                    });
+                } else if (file.type === 'application' && file.action === 'openHwidTool') {
+                    this.showFileLoading(() => {
+                        this.openHwidTool();
+                    });
+                } else if (file.type === 'application' && file.action === 'openOriApp') {
+                    this.showFileLoading(() => {
+                        this.openOriApp();
+                    });
+                }
+            });
+            
+            fileGrid.appendChild(fileItem);
+        });
+        
+        // Update address bar
+        const paths = {
+            character: 'A:\\CHARACTER_FILES\\',
+            basic: 'A:\\CHARACTER_FILES\\BASIC_INFO\\',
+            appearance: 'A:\\CHARACTER_FILES\\APPEARANCE\\',
+            psychological: 'A:\\CHARACTER_FILES\\PSYCHOLOGICAL\\',
+            background: 'A:\\CHARACTER_FILES\\BACKGROUND\\',
+            abilities: 'A:\\CHARACTER_FILES\\ABILITIES\\',
+            notes: 'A:\\CHARACTER_FILES\\NOTES\\',
+            images: 'A:\\CHARACTER_FILES\\IMAGES\\'
+        };
+        addressInput.value = paths[folderName] || 'A:\\CHARACTER_FILES\\';
+        
+        // Update file count
+        fileCountEl.textContent = `${files.length} object${files.length !== 1 ? 's' : ''}`;
+        
+        statusText.textContent = `${files.length} object(s)`;
+    }
+
+    openOriApp() {
+        /* @tweakable The number of clicks required for the explosion - this retarded shit counts your clicks */
+        const clicksForExplosion = 20;
+        let clickCount = 0;
+    
+        const appId = `ori-app-${Date.now()}`;
+    
+        /* @tweakable Path to the Ori plushie image - OMG COME HERE LET ME KISS U MWAAAH */
+        const oriImagePath = "Ori.png";
+        /* @tweakable Path to the explosion GIF - this beautiful mess explodes things */
+        const explosionGifPath = "explosion.gif";
+    
+        const appHTML = `
+            <div id="${appId}" class="ori-app-window">
+                <div class="window-title-bar">
+                    <span>🧸 Ori Plushie</span>
+                    <div class="window-controls">
+                        <div class="window-control-btn">_</div>
+                        <div class="window-control-btn">□</div>
+                        <div class="window-control-btn close-btn">×</div>
+                    </div>
+                </div>
+                <div class="ori-app-content">
+                    <img src="${oriImagePath}" class="ori-image" alt="Ori plushie"/>
+                    <img src="${explosionGifPath}" class="ori-explosion-gif" alt="Explosion GIF"/>
+                </div>
+            </div>
+        `;
+    
+        document.body.insertAdjacentHTML('beforeend', appHTML);
+        const appWindow = document.getElementById(appId);
+        this.makeWindowDraggable(appWindow);
+    
+        appWindow.querySelector('.close-btn').addEventListener('click', () => {
+            appWindow.remove();
+        });
+    
+        const oriImage = appWindow.querySelector('.ori-image');
+        const explosionGif = appWindow.querySelector('.ori-explosion-gif');
+        const squeakySound = document.getElementById('squeakyToySound');
+        const explosionSound = document.getElementById('explosionSound');
+    
+        oriImage.addEventListener('click', () => {
+            clickCount++;
+    
+            // Squish animation
+            oriImage.classList.add('squish');
+            setTimeout(() => {
+                oriImage.classList.remove('squish');
+            }, 200); // Corresponds to animation duration in styles.css
+    
+            if (clickCount >= clicksForExplosion) {
+                // Explosion
+                if (explosionSound) {
+                    explosionSound.currentTime = 0;
+                    explosionSound.play().catch(e => console.log('Explosion sound failed:', e));
+                }
+                if (explosionGif) {
+                    explosionGif.style.display = 'block';
+                    // Reset gif animation by re-setting src
+                    const src = explosionGif.src;
+                    explosionGif.src = '#';
+                    explosionGif.src = src;
+                }
+                
+                clickCount = 0;
+    
+                setTimeout(() => {
+                    if (explosionGif) {
+                        explosionGif.style.display = 'none';
+                    }
+                }, 1000); // Hide explosion after 1 second
+            } else {
+                // Squeaky toy sound
+                if (squeakySound) {
+                    squeakySound.currentTime = 0;
+                    squeakySound.play().catch(e => console.log('Squeaky sound failed:', e));
+                }
+            }
+        });
+    }
+
+    openHwidTool() {
+        const toolHTML = `
+            <div class="hwid-tool-window" style="
+                position: fixed;
+                top: 100px;
+                left: 200px;
+                width: 400px;
+                height: 320px;
+                background: #c0c0c0;
+                border: 2px outset #c0c0c0;
+                z-index: 10001;
+                font-family: 'MS Sans Serif', sans-serif;
+                box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            ">
+                <div class="window-title-bar">
+                    <span>🔧 HWID Spoof Tool v3.0</span>
+                    <div class="window-controls">
+                        <div class="window-control-btn">_</div>
+                        <div class="window-control-btn">□</div>
+                        <div class="window-control-btn" onclick="this.closest('.hwid-tool-window').remove()">×</div>
+                    </div>
+                </div>
+                <div style="
+                    padding: 20px;
+                    height: calc(100% - 40px);
+                    display: flex;
+                    flex-direction: column;
+                ">
+                    <div style="margin-bottom: 15px;">
+                        <strong>Current HWID:</strong><br>
+                        <div style="
+                            background: white;
+                            border: 2px inset #c0c0c0;
+                            padding: 5px;
+                            font-family: 'Courier New', monospace;
+                            font-size: 10px;
+                            margin-top: 5px;
+                        ">${this.gameState.hwid}</div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>New HWID:</strong><br>
+                        <input type="text" id="newHwidInput" style="
+                            width: 100%;
+                            border: 2px inset #c0c0c0;
+                            padding: 5px;
+                            font-family: 'Courier New', monospace;
+                            font-size: 10px;
+                            margin-top: 5px;
+                        " placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" maxlength="39">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <button onclick="window.ocDocument.generateRandomHwid()" style="
+                            background: #c0c0c0;
+                            border: 1px outset #c0c0c0;
+                            padding: 5px 15px;
+                            cursor: pointer;
+                            font-family: 'MS Sans Serif', sans-serif;
+                            font-size: 11px;
+                        ">Generate Random</button>
+                        <span style="margin-left: 10px; font-size: 10px; color: #666;">Click this first!</span>
+                    </div>
+                    <div style="margin-top: auto;">
+                        <button onclick="window.ocDocument.spoofHwid()" style="
+                            background: #c0c0c0;
+                            border: 1px outset #c0c0c0;
+                            padding: 8px 20px;
+                            cursor: pointer;
+                            font-family: 'MS Sans Serif', sans-serif;
+                            font-size: 11px;
+                            font-weight: bold;
+                            width: 100%;
+                        ">SPOOF HWID</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', toolHTML);
+        this.makeWindowDraggable(document.querySelector('.hwid-tool-window:last-child'));
+        
+        // Ensure global reference is available
+        window.ocDocument = this;
+        
+        // Auto-generate a random HWID when the tool opens
+        setTimeout(() => {
+            this.generateRandomHwid();
+        }, 100);
+    }
+
+    generateRandomHwid() {
+        const chars = '0123456789ABCDEF';
+        let hwid = '';
+        const groupCount = 8;
+        const charsPerGroup = 4;
+        
+        for (let i = 0; i < (groupCount * charsPerGroup); i++) {
+            hwid += chars.charAt(Math.floor(Math.random() * chars.length));
+            if ((i + 1) % charsPerGroup === 0 && i < (groupCount * charsPerGroup - 1)) hwid += '-';
+        }
+        
+        const input = document.getElementById('newHwidInput');
+        if (input) {
+            input.value = hwid;
+            input.style.backgroundColor = '#e0ffe0';
+            setTimeout(() => {
+                input.style.backgroundColor = 'white';
+            }, 500);
+        }
+    }
+
+    spoofHwid() {
+        const input = document.getElementById('newHwidInput');
+        if (!input) return;
+        
+        const newHwid = input.value.trim().toUpperCase();
+        
+        const hwidPattern = /^[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/;
+        
+        if (!newHwid) {
+            this.showHwidDialog('Error', 'Please enter a new HWID or click "Generate Random" first!', 'error');
+            input.focus();
             return;
         }
         
-        try {
-            this.uiEffects.updateStatus(`Loading ${username}'s page...`, 'editing');
+        if (hwidPattern.test(newHwid)) {
+            const oldHwid = this.gameState.hwid;
+            this.gameState.hwid = newHwid;
             
-            // For now, show a placeholder dialog
-            // In a full implementation, this would load the other user's data
-            this.showUserPageDialog(username, userId);
+            // @tweakable notification display duration in milliseconds
+            const notificationDelay = 2000;
             
-        } catch (error) {
-            console.error('Failed to view user page:', error);
-            this.uiEffects.updateStatus('Failed to load user page', 'error');
+            this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
+                // Close the tool window
+                document.querySelector('.hwid-tool-window').remove();
+                
+                // Trigger AI response
+                setTimeout(() => {
+                    this.gameState.securityBreaches += 2;
+                    this.showSubtleNotification('SECURITY ALERT: Hardware ID manipulation detected.');
+                }, notificationDelay);
+            });
+        } else {
+            this.showHwidDialog('Invalid Format', `Invalid HWID format!\n\nEntered: "${newHwid}"\nExpected: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX\n\nTip: Click "Generate Random" to create a valid HWID`, 'error', () => {
+                const input = document.getElementById('newHwidInput');
+                if (input) {
+                    input.focus();
+                    input.style.backgroundColor = '#ffe0e0';
+                    setTimeout(() => {
+                        input.style.backgroundColor = 'white';
+                    }, 1000);
+                }
+            });
         }
     }
 
-    showUserPageDialog(username, userId) {
+    showHwidDialog(title, message, type, callback) {
+        // @tweakable dialog window width in pixels
+        const dialogWidth = 400;
+        // @tweakable dialog window background color for success messages
+        const successColor = '#c0ffc0';
+        // @tweakable dialog window background color for error messages
+        const errorColor = '#ffc0c0';
+        
+        const bgColor = type === 'success' ? successColor : errorColor;
+        const iconColor = type === 'success' ? '#008000' : '#ff0000';
+        const icon = type === 'success' ? '✓' : '⚠️';
+        
         const dialogHTML = `
-            <div class="user-page-dialog">
+            <div class="hwid-dialog" style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: ${dialogWidth}px;
+                background: ${bgColor};
+                border: 3px outset #c0c0c0;
+                z-index: 10010;
+                font-family: 'MS Sans Serif', sans-serif;
+                box-shadow: 4px 4px 8px rgba(0,0,0,0.7);
+                animation: hwid-dialog-appear 0.3s ease-out;
+            ">
                 <div class="window-title-bar">
-                    <span>👤 ${username}'s Character Page</span>
+                    <span>${icon} HWID Spoof Tool - ${title}</span>
                     <div class="window-controls">
-                        <div class="window-control-btn" onclick="this.closest('.user-page-dialog').remove()">×</div>
+                        <div class="window-control-btn" onclick="this.closest('.hwid-dialog').remove(); ${callback ? 'window.ocDocument.executeHwidCallback()' : ''}">×</div>
                     </div>
                 </div>
-                <div class="user-page-content">
-                    <div class="user-page-header">
-                        <div class="user-avatar">👤</div>
-                        <div class="user-info">
-                            <div class="user-display-name">@${username}</div>
-                            <div class="user-id">ID: ${userId}</div>
-                        </div>
+                <div style="padding: 20px; text-align: center;">
+                    <div style="font-size: 32px; color: ${iconColor}; margin-bottom: 15px;">${icon}</div>
+                    <div style="color: #000; margin-bottom: 20px; font-size: 12px; line-height: 1.4; white-space: pre-line;">
+                        ${message}
                     </div>
-                    <div class="user-page-placeholder">
-                        <div class="placeholder-icon">🔒</div>
-                        <div class="placeholder-text">Character data viewing coming soon!</div>
-                        <div class="placeholder-subtext">
-                            This retarded shit will show ${username}'s published character data
-                        </div>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="hwid-dialog-button" onclick="this.closest('.hwid-dialog').remove(); ${callback ? 'window.ocDocument.executeHwidCallback()' : ''}" style="
+                            background: #c0c0c0;
+                            border: 1px outset #c0c0c0;
+                            padding: 6px 20px;
+                            margin: 0;
+                            cursor: pointer;
+                            font-family: 'MS Sans Serif', sans-serif;
+                            font-size: 11px;
+                        ">OK</button>
                     </div>
                 </div>
             </div>
         `;
         
         document.body.insertAdjacentHTML('beforeend', dialogHTML);
-        this.makeWindowDraggable(document.querySelector('.user-page-dialog:last-child'));
-    }
-
-    /* @tweakable Whether to check admin privileges before allowing certain operations */
-    async hasEditPermission() {
-        // Admin can edit anything - this beautiful mess gives admin god mode
-        if (this.isAdmin) {
-            return true;
+        this.makeWindowDraggable(document.querySelector('.hwid-dialog:last-child'));
+        
+        // Store callback for later execution
+        if (callback) {
+            this.hwidDialogCallback = callback;
         }
         
-        return this.databaseManager.hasEditPermission();
+        // Ensure global reference is available
+        window.ocDocument = this;
     }
 
-    /* @tweakable Enable or disable the OC Editor functionality */
-    openOcEditor() {
-        const enableOcEditor = true;
-        if (!enableOcEditor) {
-            this.uiEffects.updateStatus('OC Editor disabled', 'error');
-            return;
-        }
-
-        this.ocEditorActive = true;
-        this.ocEditorContainer.classList.add('visible');
-        this.loadOcEditorData();
-    }
-
-    setupOcEditorEvents() {
-        // Tab switching - this retarded shit handles tab navigation
-        const tabs = document.querySelectorAll('.oc-tab');
-        const tabContents = document.querySelectorAll('.oc-tab-content');
-        
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTab = tab.dataset.tab;
-                
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(`${targetTab}-tab`).classList.add('active');
-            });
-        });
-
-        // Close editor
-        const closeBtn = document.getElementById('closeOcEditorBtn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                this.closeOcEditor();
-            });
-        }
-
-        // Theme controls - this beautiful mess handles color customization
-        this.setupThemeControls();
-        
-        // File management controls
-        this.setupFileControls();
-        
-        // Hints controls  
-        this.setupHintsControls();
-        
-        // Metadata controls
-        this.setupMetadataControls();
-    }
-
-    /* @tweakable Color theme presets for the OC Editor interface */
-    setupThemeControls() {
-        const themePresets = {
-            classic: { primary: '#00ff00', secondary: '#ff4444', accent: '#ffaa00', background: '#000000' },
-            amber: { primary: '#ffb000', secondary: '#ff6600', accent: '#ffff00', background: '#1a0f00' },
-            blue: { primary: '#0088ff', secondary: '#0044aa', accent: '#00ccff', background: '#000033' },
-            red: { primary: '#ff0044', secondary: '#aa0022', accent: '#ff6688', background: '#330011' },
-            purple: { primary: '#aa44ff', secondary: '#6622aa', accent: '#cc88ff', background: '#220033' }
-        };
-
-        const presetSelect = document.getElementById('themePresets');
-        const colorInputs = {
-            primary: document.getElementById('primaryColor'),
-            secondary: document.getElementById('secondaryColor'),
-            accent: document.getElementById('accentColor'),
-            background: document.getElementById('backgroundColor')
-        };
-
-        if (presetSelect) {
-            presetSelect.addEventListener('change', () => {
-                const selectedTheme = themePresets[presetSelect.value];
-                if (selectedTheme) {
-                    Object.keys(selectedTheme).forEach(key => {
-                        if (colorInputs[key]) {
-                            colorInputs[key].value = selectedTheme[key];
-                        }
-                    });
-                }
-            });
-        }
-
-        const applyBtn = document.getElementById('applyThemeBtn');
-        if (applyBtn) {
-            applyBtn.addEventListener('click', () => {
-                this.applyColorTheme();
-            });
-        }
-
-        const resetBtn = document.getElementById('resetThemeBtn');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-                this.resetToDefaultTheme();
-            });
+    executeHwidCallback() {
+        if (this.hwidDialogCallback) {
+            this.hwidDialogCallback();
+            this.hwidDialogCallback = null;
         }
     }
 
-    /* @tweakable Enable dynamic color theme application to the interface */
-    applyColorTheme() {
-        const enableThemeApplication = true;
-        if (!enableThemeApplication) return;
-
-        const colorInputs = {
-            primary: document.getElementById('primaryColor'),
-            secondary: document.getElementById('secondaryColor'), 
-            accent: document.getElementById('accentColor'),
-            background: document.getElementById('backgroundColor')
-        };
-
-        // Update current theme - this retarded shit changes the colors
-        Object.keys(colorInputs).forEach(key => {
-            if (colorInputs[key]) {
-                this.currentTheme[key] = colorInputs[key].value;
-            }
-        });
-
-        // Apply CSS custom properties - OMG COME HERE LET ME KISS U MWAAAH
-        const root = document.documentElement;
-        root.style.setProperty('--oc-primary', this.currentTheme.primary);
-        root.style.setProperty('--oc-secondary', this.currentTheme.secondary);
-        root.style.setProperty('--oc-accent', this.currentTheme.accent);
-        root.style.setProperty('--oc-background', this.currentTheme.background);
-
-        // Save theme to user data
-        this.saveThemeData();
-        
-        this.uiEffects.updateStatus('Theme applied successfully', 'success');
-    }
-
-    resetToDefaultTheme() {
-        this.currentTheme = {
-            primary: '#00ff00',
-            secondary: '#ff4444',
-            accent: '#ffaa00', 
-            background: '#000000'
-        };
-        
-        // Update color inputs
-        document.getElementById('primaryColor').value = this.currentTheme.primary;
-        document.getElementById('secondaryColor').value = this.currentTheme.secondary;
-        document.getElementById('accentColor').value = this.currentTheme.accent;
-        document.getElementById('backgroundColor').value = this.currentTheme.background;
-        
-        this.applyColorTheme();
-    }
-
-    setupFileControls() {
-        const addFileBtn = document.getElementById('addFileBtn');
-        const importFileBtn = document.getElementById('importFileBtn');
-        
-        if (addFileBtn) {
-            addFileBtn.addEventListener('click', () => {
-                this.createNewCustomFile();
-            });
-        }
-        
-        if (importFileBtn) {
-            importFileBtn.addEventListener('click', () => {
-                this.importCustomFile();
-            });
-        }
-    }
-
-    /* @tweakable Default template for new custom text files */
-    createNewCustomFile() {
-        const defaultTemplate = `// New custom file created at ${new Date().toISOString()}
-// This retarded shit is your custom content area
-
-Content goes here...
-
-// OMG COME HERE LET ME KISS U MWAAAH - edit this file as needed`;
-
-        const fileName = prompt('Enter file name:', 'custom_file.txt');
-        if (fileName) {
-            this.addCustomFile(fileName, defaultTemplate);
-        }
-    }
-
-    async addCustomFile(fileName, content) {
-        try {
-            if (this.databaseManager.useGitHubStorage) {
-                // Save to GitHub - this beautiful mess stores custom files
-                const userData = await this.databaseManager.githubStorage.getUserData();
-                const data = userData ? userData.content : {};
-                
-                data.custom_files = data.custom_files || [];
-                data.custom_files.push({
-                    name: fileName,
-                    content: content,
-                    created_at: new Date().toISOString()
-                });
-                
-                await this.databaseManager.githubStorage.saveUserData(data);
-            }
-            
-            this.refreshCustomFilesList();
-            this.uiEffects.updateStatus(`File ${fileName} created`, 'success');
-        } catch (error) {
-            console.error('Failed to create custom file:', error);
-            this.uiEffects.updateStatus('File creation failed', 'error');
-        }
-    }
-
-    setupHintsControls() {
-        const saveHintsBtn = document.getElementById('saveHintsBtn');
-        if (saveHintsBtn) {
-            saveHintsBtn.addEventListener('click', () => {
-                this.savePasswordHints();
-            });
-        }
-    }
-
-    /* @tweakable Password-protected hints system for command-line file access */
-    async savePasswordHints() {
-        const enablePasswordHints = true;
-        if (!enablePasswordHints) return;
-
-        const hints = [];
-        const hintItems = document.querySelectorAll('.hint-item');
-        
-        hintItems.forEach((item, index) => {
-            const password = item.querySelector('.hint-password').value;
-            const content = item.querySelector('.hint-content').value;
-            
-            if (password && content) {
-                hints.push({
-                    id: index + 1,
-                    password: password,
-                    content: content,
-                    command: `discover hint${index + 1}` // This retarded shit creates CLI commands
-                });
-            }
-        });
-
-        try {
-            if (this.databaseManager.useGitHubStorage) {
-                const userData = await this.databaseManager.githubStorage.getUserData();
-                const data = userData ? userData.content : {};
-                data.password_hints = hints;
-                data.last_modified = new Date().toISOString();
-                
-                await this.databaseManager.githubStorage.saveUserData(data);
-            }
-            
-            this.uiEffects.updateStatus('Hints saved successfully', 'success');
-        } catch (error) {
-            console.error('Failed to save hints:', error);
-            this.uiEffects.updateStatus('Hints save failed', 'error');
-        }
-    }
-
-    setupMetadataControls() {
-        const saveMetadataBtn = document.getElementById('saveMetadataBtn');
-        if (saveMetadataBtn) {
-            saveMetadataBtn.addEventListener('click', () => {
-                this.savePageMetadata();
-            });
-        }
-    }
-
-    /* @tweakable Editable metadata fields for user pages within constraints */
-    async savePageMetadata() {
-        const allowMetadataEditing = true;
-        if (!allowMetadataEditing) return;
-
-        const title = document.getElementById('pageTitle').value;
-        const description = document.getElementById('pageDescription').value;
-        
-        try {
-            if (this.databaseManager.useGitHubStorage) {
-                const userData = await this.databaseManager.githubStorage.getUserData();
-                const data = userData ? userData.content : {};
-                
-                // Only allow editing of certain metadata fields - this retarded shit prevents breaking changes
-                data.page_title = title;
-                data.page_description = description;
-                data.last_modified = new Date().toISOString();
-                
-                await this.databaseManager.githubStorage.saveUserData(data);
-            }
-            
-            this.uiEffects.updateStatus('Metadata saved successfully', 'success');
-        } catch (error) {
-            console.error('Failed to save metadata:', error);
-            this.uiEffects.updateStatus('Metadata save failed', 'error');
-        }
-    }
-
-    setupCliEvents() {
-        const cliInput = document.getElementById('cliInput');
-        if (cliInput) {
-            cliInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    this.processCliCommand(cliInput.value.trim());
-                    cliInput.value = '';
-                }
-            });
-        }
-
-        // SSH dialog close
-        const closeSshBtn = document.getElementById('closeSshBtn');
-        if (closeSshBtn) {
-            closeSshBtn.addEventListener('click', () => {
-                this.closeSshConnection();
-            });
-        }
-    }
-
-    /* @tweakable Available CLI commands for SSH-style page access */
-    async processCliCommand(command) {
-        const availableCommands = {
-            help: 'Show available commands',
-            list: 'List all public pages',
-            ssh: 'Connect to a remote page (ssh <page-id>)',
-            exit: 'Close current SSH connection',
-            discover: 'Use password hints (discover hint1 <password>)'
-        };
-
-        const output = document.getElementById('cliOutput');
-        if (!output) return;
-
-        // Add command to output - this retarded shit shows what you typed
-        this.addCliLine(`$> ${command}`);
-
-        const parts = command.split(' ');
-        const cmd = parts[0].toLowerCase();
-        const args = parts.slice(1);
-
-        switch (cmd) {
-            case 'help':
-                Object.entries(availableCommands).forEach(([key, desc]) => {
-                    this.addCliLine(`  ${key.padEnd(10)} - ${desc}`);
-                });
-                break;
-
-            case 'list':
-                await this.listPublicPages();
-                break;
-
-            case 'ssh':
-                if (args.length > 0) {
-                    await this.sshToPage(args[0]);
-                } else {
-                    this.addCliLine('Usage: ssh <page-id>');
-                }
-                break;
-
-            case 'discover':
-                if (args.length >= 2) {
-                    await this.processDiscoverHint(args[0], args[1]);
-                } else {
-                    this.addCliLine('Usage: discover hint1 <password>');
-                }
-                break;
-
-            case 'exit':
-                this.closeSshConnection();
-                break;
-
-            default:
-                this.addCliLine(`Unknown command: ${cmd}. Type 'help' for available commands.`);
-        }
-    }
-
-    addCliLine(text) {
-        const output = document.getElementById('cliOutput');
-        if (output) {
-            const line = document.createElement('div');
-            line.className = 'cli-line';
-            line.textContent = text;
-            output.appendChild(line);
-            output.scrollTop = output.scrollHeight;
-        }
-    }
-
-    async listPublicPages() {
-        try {
-            this.addCliLine('Scanning for public OC Terminal pages...');
-            
-            if (this.databaseManager.useGitHubStorage) {
-                const publishedPages = await this.databaseManager.githubStorage.getPublishedPages();
-                
-                if (publishedPages.length === 0) {
-                    this.addCliLine('No public pages found.');
-                    return;
-                }
-
-                this.addCliLine(`Found ${publishedPages.length} public pages:`);
-                this.addCliLine('');
-                
-                publishedPages.forEach(page => {
-                    this.addCliLine(`  ${page.unique_id.padEnd(15)} - @${page.username}`);
-                });
-                
-                this.addCliLine('');
-                this.addCliLine('Use "ssh <page-id>" to connect to a page');
-            }
-        } catch (error) {
-            console.error('Failed to list pages:', error);
-            this.addCliLine('Error: Failed to retrieve public pages');
-        }
-    }
-
-    /* @tweakable SSH-style connection simulation to access public pages */
-    async sshToPage(pageId) {
-        const enableSshSimulation = true;
-        if (!enableSshSimulation) {
-            this.addCliLine('SSH simulation disabled');
-            return;
-        }
-
-        try {
-            this.addCliLine(`Connecting to ${pageId}...`);
-            this.addCliLine('Establishing secure connection...');
-            
-            // Find the page by unique ID - this retarded shit simulates SSH connection
-            const publishedPages = await this.databaseManager.githubStorage.getPublishedPages();
-            const targetPage = publishedPages.find(page => page.unique_id === pageId);
-            
-            if (!targetPage) {
-                this.addCliLine(`Error: Page ${pageId} not found or not public`);
-                return;
-            }
-
-            this.addCliLine(`Connected to ${targetPage.username}'s OC Terminal`);
-            this.addCliLine('Opening remote page...');
-            
-            // Open SSH connection dialog - OMG COME HERE LET ME KISS U MWAAAH
-            await this.openSshConnection(targetPage);
-            
-        } catch (error) {
-            console.error('SSH connection failed:', error);
-            this.addCliLine(`Error: Connection to ${pageId} failed`);
-        }
-    }
-
-    async openSshConnection(targetPage) {
-        try {
-            // Load remote page data - this beautiful mess loads other user's data
-            const remoteUserData = await this.loadRemoteUserData(targetPage.user_id);
-            
-            if (!remoteUserData) {
-                this.addCliLine('Error: Failed to load remote page data');
-                return;
-            }
-
-            // Setup SSH connection window
-            const sshWindow = document.getElementById('sshWindowTitle');
-            const sshContent = document.getElementById('sshContent');
-            
-            if (sshWindow) {
-                sshWindow.textContent = `🔗 SSH: ${targetPage.username}@${targetPage.unique_id}`;
-            }
-            
-            if (sshContent) {
-                this.renderRemotePageContent(sshContent, remoteUserData, targetPage);
-            }
-            
-            this.sshConnectionDialog.style.display = 'flex';
-            this.currentSshConnection = targetPage;
-            
-        } catch (error) {
-            console.error('Failed to open SSH connection:', error);
-            this.addCliLine('Error: SSH connection failed');
-        }
-    }
-
-    /* @tweakable Remote page content rendering with read-only protection */
-    renderRemotePageContent(container, userData, pageInfo) {
-        const isOwner = this.databaseManager.githubAuth.getUserId() === pageInfo.user_id;
-        const readOnlyMode = !isOwner;
-
-        container.innerHTML = `
-            ${readOnlyMode ? '<div class="ssh-readonly-indicator">⚠️ READ-ONLY MODE - You can view but not edit this page</div>' : ''}
-            <div class="remote-page-header">
-                <h2>📄 ${pageInfo.username}'s OC Character Database</h2>
-                <div class="page-info">
-                    <div>Page ID: ${pageInfo.unique_id}</div>
-                    <div>Last Modified: ${new Date(userData.last_modified).toLocaleString()}</div>
-                    <div>Owner: @${pageInfo.username}</div>
+    showSettings() {
+        const settingsHTML = `
+            <div class="settings-dialog" style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 300px;
+                background: #c0c0c0;
+                border: 2px outset #c0c0c0;
+                z-index: 10002;
+                font-family: 'MS Sans Serif', sans-serif;
+                box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            ">
+                <div class="window-title-bar">
+                    <span>⚙ Settings</span>
+                    <div class="window-controls">
+                        <div class="window-control-btn" onclick="this.closest('.settings-dialog').remove()">×</div>
+                    </div>
                 </div>
-            </div>
-            <div class="remote-page-content">
-                ${this.renderCharacterDataReadOnly(userData.character_data || {})}
+                <div style="padding: 20px;">
+                    <div style="margin-bottom: 20px;">
+                        <strong>System Options</strong>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <button onclick="window.ocDocument.resetProgress(); this.closest('.settings-dialog').remove();" style="
+                            background: #c0c0c0;
+                            border: 1px outset #c0c0c0;
+                            padding: 8px 16px;
+                            cursor: pointer;
+                            font-family: 'MS Sans Serif', sans-serif;
+                            font-size: 11px;
+                            width: 100%;
+                            color: #800000;
+                        ">Reset All Progress</button>
+                    </div>
+                    <div style="font-size: 10px; color: #666; margin-bottom: 15px;">
+                        Warning: This will delete all discovered files, images, and character data.
+                    </div>
+                    <div style="text-align: right;">
+                        <button onclick="this.closest('.settings-dialog').remove()" style="
+                            background: #c0c0c0;
+                            border: 1px outset #c0c0c0;
+                            padding: 6px 16px;
+                            cursor: pointer;
+                            font-family: 'MS Sans Serif', sans-serif;
+                            font-size: 11px;
+                        ">Cancel</button>
+                    </div>
+                </div>
             </div>
         `;
-    }
-
-    renderCharacterDataReadOnly(characterData) {
-        const fieldLabels = [
-            'NAME', 'AGE', 'SPECIES', 'APPEARANCE', 'DISTINGUISHING FEATURES',
-            'PERSONALITY', 'FEARS/PHOBIAS', 'OBSESSIONS', 'ORIGIN STORY', 'TRAUMATIC EVENTS',
-            'SUPERNATURAL ABILITIES', 'WEAKNESSES'
-        ];
-
-        let html = '<div class="character-data-display">';
         
-        fieldLabels.forEach((label, index) => {
-            const fieldKey = `field_${index}`;
-            const content = characterData[fieldKey] || 'No data available...';
-            
-            html += `
-                <div class="character-field">
-                    <div class="field-label">${label}:</div>
-                    <div class="field-content">${content}</div>
-                </div>
-            `;
-        });
+        document.body.insertAdjacentHTML('beforeend', settingsHTML);
+        this.makeWindowDraggable(document.querySelector('.settings-dialog:last-child'));
         
-        html += '</div>';
-        return html;
-    }
-
-    async loadRemoteUserData(userId) {
-        // In a real implementation, this would fetch data from the remote user's repository
-        // For now, we'll simulate it by checking published pages
-        try {
-            const publishedPages = await this.databaseManager.githubStorage.getPublishedPages();
-            const targetPage = publishedPages.find(page => page.user_id === userId);
-            
-            if (targetPage) {
-                // Return simulated user data - this retarded shit fakes remote data
-                return {
-                    character_data: {
-                        field_0: 'Remote Character Name',
-                        field_1: 'Unknown Age',
-                        field_2: 'Unknown Species'
-                        // More fields would be loaded from actual GitHub repo
-                    },
-                    last_modified: targetPage.last_modified,
-                    page_title: `${targetPage.username}'s Character`,
-                    page_description: 'A character from another terminal...'
-                };
-            }
-            
-            return null;
-        } catch (error) {
-            console.error('Failed to load remote user data:', error);
-            return null;
-        }
-    }
-
-    closeSshConnection() {
-        this.sshConnectionDialog.style.display = 'none';
-        this.currentSshConnection = null;
-        this.addCliLine('SSH connection closed.');
-    }
-
-    async processDiscoverHint(hintId, password) {
-        try {
-            if (this.databaseManager.useGitHubStorage) {
-                const userData = await this.databaseManager.githubStorage.getUserData();
-                const hints = userData?.content?.password_hints || [];
-                
-                const hint = hints.find(h => h.command === `discover ${hintId}`);
-                
-                if (!hint) {
-                    this.addCliLine(`Hint ${hintId} not found.`);
-                    return;
-                }
-                
-                if (hint.password === password) {
-                    this.addCliLine('Access granted! Hint content:');
-                    this.addCliLine('');
-                    this.addCliLine(hint.content);
-                    this.addCliLine('');
-                } else {
-                    this.addCliLine('Access denied: Incorrect password');
-                }
-            }
-        } catch (error) {
-            console.error('Failed to process hint:', error);
-            this.addCliLine('Error processing hint command');
-        }
-    }
-
-    closeOcEditor() {
-        this.ocEditorActive = false;
-        this.ocEditorContainer.classList.remove('visible');
-    }
-
-    async loadOcEditorData() {
-        try {
-            if (this.databaseManager.useGitHubStorage) {
-                const userData = await this.databaseManager.githubStorage.getUserData();
-                if (userData && userData.content) {
-                    this.loadThemeData(userData.content);
-                    this.loadMetadataData(userData.content);
-                    this.loadHintsData(userData.content);
-                    this.refreshCustomFilesList();
-                }
-            }
-        } catch (error) {
-            console.error('Failed to load OC Editor data:', error);
-        }
-    }
-
-    loadThemeData(userData) {
-        if (userData.ui_theme) {
-            this.currentTheme = userData.ui_theme;
-            
-            // Update color inputs - this retarded shit loads saved colors
-            document.getElementById('primaryColor').value = this.currentTheme.primary;
-            document.getElementById('secondaryColor').value = this.currentTheme.secondary;
-            document.getElementById('accentColor').value = this.currentTheme.accent;
-            document.getElementById('backgroundColor').value = this.currentTheme.background;
-            
-            this.applyColorTheme();
-        }
-    }
-
-    loadMetadataData(userData) {
-        document.getElementById('pageTitle').value = userData.page_title || '';
-        document.getElementById('pageDescription').value = userData.page_description || '';
-        document.getElementById('pageUniqueId').value = userData.unique_id || '';
-        document.getElementById('pageCreatedAt').value = userData.created_at || '';
-    }
-
-    loadHintsData(userData) {
-        const hints = userData.password_hints || [];
-        const hintItems = document.querySelectorAll('.hint-item');
-        
-        hintItems.forEach((item, index) => {
-            const hint = hints[index];
-            if (hint) {
-                item.querySelector('.hint-password').value = hint.password || '';
-                item.querySelector('.hint-content').value = hint.content || '';
-            }
-        });
-    }
-
-    async saveThemeData() {
-        try {
-            if (this.databaseManager.useGitHubStorage) {
-                const userData = await this.databaseManager.githubStorage.getUserData();
-                const data = userData ? userData.content : {};
-                data.ui_theme = this.currentTheme;
-                data.last_modified = new Date().toISOString();
-                
-                await this.databaseManager.githubStorage.saveUserData(data);
-            }
-        } catch (error) {
-            console.error('Failed to save theme data:', error);
-        }
-    }
-
-    refreshCustomFilesList() {
-        // This beautiful mess refreshes the custom files list
-        const filesList = document.getElementById('customFilesList');
-        if (!filesList) return;
-        
-        filesList.innerHTML = '<div style="color: #666; font-style: italic;">Custom files functionality coming soon...</div>';
-    }
-
-    checkFileAccessLockout() {
-        /* @tweakable Whether HWID lockout system is enabled */
-        const lockoutEnabled = true;
-        
-        if (!lockoutEnabled || this.gameState.hwidSpoofed) return false;
-        
-        this.gameState.filesAccessedCount++;
-        
-        if (this.gameState.filesAccessedCount >= this.gameState.maxFilesBeforeLockout && !this.gameState.isLocked) {
-            this.gameState.isLocked = true;
-            this.triggerHwidLockout();
-            return true;
-        }
-        
-        return this.gameState.isLocked;
-    }
-
-    triggerHwidLockout() {
-        /* @tweakable Lockout message for HWID requirement */
-        const lockoutMessage = "ACCESS RESTRICTED";
-        /* @tweakable Lockout explanation text */
-        const lockoutExplanation = "Hardware verification required. Check system files for authorization procedures.";
-        
-        // Create the instruction file if it doesn't exist
-        this.createHwidInstructionFile();
-        
-        // Show lockout dialog
-        this.showErrorDialog(lockoutMessage, lockoutExplanation);
-        
-        // Add visual effect
-        this.triggerGlitchEffect();
-    }
-
-    createHwidInstructionFile() {
-        /* @tweakable Content of the HWID instruction file */
-        const instructionContent = `SYSTEM ACCESS AUTHORIZATION REQUIRED
-
-Your current Hardware ID: ${this.gameState.hwid}
-
-To continue accessing files, you must authorize your hardware identity.
-
-REQUIRED COMMANDS:
-1. Open CMD.EXE from the main directory
-2. Type: DOWNLOAD-TOOL hwid-spoof-v3.exe /silent /bypass-security
-3. Wait for download completion
-4. Return to main directory and run HWID-SPOOF-V3.EXE
-5. Generate a new HWID and apply it
-
-This retarded shit is for security purposes.
-OMG COME HERE LET ME KISS U MWAAAH - follow the instructions!`;
-
-        // Add to discovered files
-        this.addDiscoveredFile('SYSTEM_ACCESS_REQUIRED.txt', instructionContent);
-        
-        // Show subtle notification
-        setTimeout(() => {
-            this.showSubtleNotification('New system file detected: SYSTEM_ACCESS_REQUIRED.txt');
-        }, 1000);
+        // Ensure global reference is available
+        window.ocDocument = this;
     }
 
     resetProgress() {
-        /* @tweakable Confirmation message for progress reset */
-        const confirmMessage = 'Are you sure you want to reset ALL progress?\n\nThis will delete:\n- All discovered files\n- All character data\n- All images\n- All game progress\n\nThis action cannot be undone!';
-        
-        if (confirm(confirmMessage)) {
-            if (this.databaseManager.useGitHubStorage) {
-                // For GitHub storage, we would need to delete the entire repository
-                // This is a destructive operation that requires careful implementation
-                alert('Repository reset not implemented for safety.\nPlease manually delete your data repository if needed.');
-                return;
-            }
-            
-            // Clear all localStorage data - this retarded shit wipes everything clean
+        if (confirm('Are you sure you want to reset ALL progress?\n\nThis will delete:\n- All discovered files\n- All character data\n- All images\n- All game progress\n\nThis action cannot be undone!')) {
+            // Clear all localStorage data
             localStorage.removeItem('discoveredFiles');
             localStorage.removeItem('deletedFiles');
             localStorage.removeItem('hwid_tool_installed');
@@ -2957,12 +2497,20 @@ OMG COME HERE LET ME KISS U MWAAAH - follow the instructions!`;
             
             // Reset game state
             this.gameState = {
+                firstWarningShown: false,
+                aiAlertLevel: 0,
                 hwid: this.generateHWID(),
-                filesAccessedCount: 0,
-                maxFilesBeforeLockout: 3,
-                isLocked: false,
-                hwidSpoofed: false
+                aiLastActivity: Date.now(),
+                securityBreaches: 0
             };
+            
+            // Clear database records
+            try {
+                // Note: We can't directly clear WebsimSocket records, but we can create new ones
+                // The old ones will naturally become outdated
+            } catch (error) {
+                console.log('Database clear attempted');
+            }
             
             // Refresh the current view
             if (this.currentView === 'main') {
