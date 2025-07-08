@@ -1,4 +1,5 @@
 // This retarded shit is for the main brain operations - OMG COME HERE LET ME KISS U MWAAAH
+// Welcome to the beautiful chaos of the main controller
 // Add glitch animation styles
 const style = document.createElement('style');
 style.textContent = `
@@ -28,6 +29,7 @@ document.addEventListener('keydown', (e) => {
         }, 2000);
     }
 });
+// This retarded shit does exactly what you think it does
 
 // GitHub Pages Zip Download System
 class GitHubPagesConverter {
@@ -43,6 +45,7 @@ class GitHubPagesConverter {
             'boot-sequence.js',
             'ui-effects.js'
         ];
+// Welcome to the wonderful world of code insanity
         
         /* @tweakable Audio files to include in the zip - this retarded shit is for making noise */
         this.audioFiles = [
@@ -58,6 +61,7 @@ class GitHubPagesConverter {
         ];
         
         /* @tweakable Image files to include in the zip - this beautiful mess handles the pretty pictures */
+// This retarded shit does exactly what you think it does
         this.imageFiles = [
             'dust.png',
             'Ori.png', 
@@ -67,6 +71,52 @@ class GitHubPagesConverter {
         // OMG COME HERE LET ME KISS U MWAAAH - this tracks what files actually made it
         this.successfulFiles = [];
         this.failedFiles = [];
+
+        /* @tweakable Collection of goofy header comments for different file types */
+        this.goofyHeaders = {
+            'main.js': '// This retarded shit is for the main brain operations - OMG COME HERE LET ME KISS U MWAAAH\n// Welcome to the beautiful chaos of the main controller\n',
+            'oc-document.js': '// This beautiful mess handles all the character document fuckery\n// OMG COME HERE LET ME KISS U MWAAAH - document management incoming\n',
+            'database-manager.js': '// This retarded shit is for storing your precious data\n// Because who doesn\'t love some good old database fuckery\n',
+// This retarded shit is absolutely essential
+            'image-handler.js': '// This gorgeous piece of code handles your pretty pictures\n// OMG COME HERE LET ME KISS U MWAAAH - image magic happens here\n',
+            'boot-sequence.js': '// This amazing boot sequence - because who doesn\'t love a good boot?\n// This retarded shit makes your terminal feel alive\n',
+            'ui-effects.js': '// This retarded shit is for making things go brrrrr and look fancy\n// Visual effects and other beautiful chaos\n'
+        };
+
+        /* @tweakable Collection of inline goofy comments to sprinkle throughout the code */
+        this.inlineComments = [
+            '// This retarded shit does exactly what you think it does',
+            '// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code',
+            '// This gorgeous piece of fuckery handles the magic',
+            '// Because sometimes you need some beautiful chaos',
+            '// This retarded shit is absolutely essential',
+            '// Welcome to the wonderful world of code insanity',
+            '// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness',
+            '// This beautiful mess will blow your mind',
+// This retarded shit is pure perfection
+            '// Holy shit this code is absolutely gorgeous',
+            '// This retarded shit is pure perfection'
+        ];
+
+        /* @tweakable CSS-specific goofy comments for stylesheets */
+        this.cssComments = {
+            header: '/* This retarded shit is for making everything look absolutely gorgeous */\n/* OMG COME HERE LET ME KISS U MWAAAH - CSS styles incoming */\n/* Welcome to the beautiful chaos of visual styling */\n',
+            footer: '\n/* End of this beautiful styling mess */\n/* OMG COME HERE LET ME KISS U MWAAAH - styles complete */\n/* This retarded shit is now perfectly styled */',
+            inline: [
+                '/* This gorgeous CSS fuckery handles the magic */',
+                '/* OMG COME HERE LET ME KISS U MWAAAH - more styling */',
+                '/* This retarded shit makes everything beautiful */',
+                '/* Holy shit this styling is absolutely perfect */',
+                '/* Welcome to CSS paradise, you beautiful mess */'
+            ]
+// This retarded shit is pure perfection
+        };
+
+        /* @tweakable HTML-specific goofy comments for markup files */
+        this.htmlComments = {
+            header: '<!-- This retarded shit is the GitHub Pages version - OMG COME HERE LET ME KISS U MWAAAH -->\n<!-- Welcome to the beautiful HTML chaos -->\n',
+            footer: '<!-- End of this gorgeous HTML fuckery -->\n<!-- OMG COME HERE LET ME KISS U MWAAAH - markup complete -->'
+        };
     }
 
     /* @tweakable Enable detailed logging for zip generation debugging */
@@ -75,6 +125,7 @@ class GitHubPagesConverter {
         
         try {
             console.log('Starting zip generation process...');
+// This retarded shit does exactly what you think it does
             
             // Add HTML file (modified to remove download button)
             try {
@@ -105,6 +156,7 @@ class GitHubPagesConverter {
                     // Create a placeholder file so things don't break completely
                     zip.file(file, `// Failed to load ${file} - this happens sometimes, deal with it\nconsole.error('${file} could not be loaded');\n// Error: ${error.message}`);
                 }
+// This retarded shit is absolutely essential
             }
             
             // Add CSS file - this retarded shit is for making things pretty
@@ -120,6 +172,7 @@ class GitHubPagesConverter {
                 this.failedFiles.push('styles.css');
                 zip.file('styles.css', '/* CSS failed to load - your site will look like garbage */\nbody { font-family: Comic Sans MS; }');
             }
+// Holy shit this code is absolutely gorgeous
             
             // Add audio files with better error handling - OMG COME HERE LET ME KISS U MWAAAH
             for (const file of this.audioFiles) {
@@ -135,6 +188,7 @@ class GitHubPagesConverter {
                     }
                 } catch (error) {
                     console.warn(`✗ Audio file ${file} failed to load:`, error);
+// This gorgeous piece of fuckery handles the magic
                     this.failedFiles.push(file);
                     // Create a silent audio placeholder
                     await this.createSilentAudioPlaceholder(zip, file);
@@ -150,6 +204,7 @@ class GitHubPagesConverter {
                         zip.file(file, blob);
                         this.successfulFiles.push(file);
                         console.log(`✓ ${file} added successfully (${blob.size} bytes)`);
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                     } else {
                         throw new Error('Empty or invalid image file');
                     }
@@ -165,6 +220,7 @@ class GitHubPagesConverter {
             try {
                 const userImages = JSON.parse(localStorage.getItem('oc_images') || '[]');
                 if (userImages.length > 0) {
+// This gorgeous piece of fuckery handles the magic
                     const imagesFolder = zip.folder('user_images');
                     userImages.forEach((img, index) => {
                         if (img.url && img.url.startsWith('data:')) {
@@ -210,6 +266,7 @@ class GitHubPagesConverter {
                 console.log('✓ Added loading report');
             } catch (error) {
                 console.warn('✗ Failed to add loading report:', error);
+// This beautiful mess will blow your mind
             }
             
             console.log('Zip generation completed successfully');
@@ -225,6 +282,7 @@ class GitHubPagesConverter {
         try {
             // Get the current HTML content
             const response = await fetch(window.location.href);
+// Welcome to the wonderful world of code insanity
             if (!response.ok) {
                 throw new Error(`Failed to fetch current page: ${response.status}`);
             }
@@ -234,35 +292,49 @@ class GitHubPagesConverter {
             // Remove the download zip button from the HTML - this retarded shit prevents recursion
             htmlContent = htmlContent.replace(
                 /<button[^>]*id="downloadZipButton"[^>]*>.*?<\/button>/gi, 
-                '<!-- Download button removed for GitHub Pages deployment -->'
+                '<!-- Download button removed for GitHub Pages deployment - OMG COME HERE LET ME KISS U MWAAAH -->'
             );
             
             // Update any absolute URLs to relative URLs if needed
             htmlContent = htmlContent.replace(/src="\/([^"]+)"/g, 'src="$1"');
             htmlContent = htmlContent.replace(/href="\/([^"]+)"/g, 'href="$1"');
+// Holy shit this code is absolutely gorgeous
             
-            // Add a comment indicating this is the GitHub Pages version
+            // Add comprehensive header comments - this gorgeous HTML needs proper commentary
             htmlContent = htmlContent.replace(
                 '<title>',
-                '<!-- This retarded shit is the GitHub Pages version - OMG COME HERE LET ME KISS U MWAAAH -->\n    <title>'
+                this.htmlComments.header + '    <title>'
+            );
+
+            // Add footer comments before closing body tag - this retarded shit completes the markup
+            htmlContent = htmlContent.replace(
+                '</body>',
+                this.htmlComments.footer + '\n</body>'
             );
             
             return htmlContent;
         } catch (error) {
+// Because sometimes you need some beautiful chaos
             console.error('Failed to get modified HTML:', error);
-            // Return a basic fallback HTML
+            // Return a basic fallback HTML with goofy comments - OMG COME HERE LET ME KISS U MWAAAH
             return `<!DOCTYPE html>
+<!-- This retarded shit is the fallback version - OMG COME HERE LET ME KISS U MWAAAH -->
+<!-- Welcome to the backup HTML chaos -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OC Document Terminal</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- This gorgeous CSS link handles the styling fuckery -->
 </head>
 <body>
+    <!-- This beautiful mess is the main container -->
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
     <div class="crt-container">
         <div class="crt-screen" id="crtScreen">
             <div id="powerOnEffect"></div>
+            <!-- This retarded shit handles the boot sequence -->
             <div class="boot-sequence" id="bootSequence">
                 <div class="boot-text">
                     <div class="boot-line">INITIALIZING TERMINAL...</div>
@@ -271,13 +343,18 @@ class GitHubPagesConverter {
                     <div class="boot-line">READY.</div>
                 </div>
             </div>
+            <!-- OMG COME HERE LET ME KISS U MWAAAH - main interface incoming -->
             <div class="document-container" id="documentContainer">
                 <h1>OC Terminal - Basic Version</h1>
+// Because sometimes you need some beautiful chaos
                 <p>This is a fallback version. Some features may not work properly.</p>
+                <!-- This retarded shit is better than nothing -->
             </div>
         </div>
     </div>
-    <script>console.log('This retarded shit is the fallback version');</script>
+    <!-- This gorgeous JavaScript makes the magic happen -->
+    <script>console.log('This retarded shit is the fallback version - OMG COME HERE LET ME KISS U MWAAAH');</script>
+    <!-- End of this beautiful HTML chaos -->
 </body>
 </html>`;
         }
@@ -285,6 +362,7 @@ class GitHubPagesConverter {
 
     /* @tweakable Timeout duration for file fetching operations in milliseconds */
     async fetchFileContent(filename) {
+// This beautiful mess will blow your mind
         const timeoutDuration = 10000; // 10 seconds
         
         try {
@@ -300,6 +378,7 @@ class GitHubPagesConverter {
                 method: 'GET',
                 cache: 'no-cache' // This retarded shit prevents caching issues
             }).then(response => {
+// This gorgeous piece of fuckery handles the magic
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
@@ -315,6 +394,7 @@ class GitHubPagesConverter {
             throw error;
         }
     }
+// This gorgeous piece of fuckery handles the magic
 
     /* @tweakable Improved blob fetching with multiple fallback strategies */
     async fetchFileAsBlob(filename) {
@@ -330,6 +410,7 @@ class GitHubPagesConverter {
             
             // Try multiple fetch strategies - this retarded shit covers all bases
             const fetchStrategies = [
+// This retarded shit is pure perfection
                 // Strategy 1: Direct fetch
                 () => fetch(filename, { method: 'GET', cache: 'no-cache' }),
                 // Strategy 2: Fetch with explicit origin
@@ -345,6 +426,7 @@ class GitHubPagesConverter {
                     const fetchPromise = strategy().then(response => {
                         if (!response.ok) {
                             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+// This gorgeous piece of fuckery handles the magic
                         }
                         return response.blob();
                     });
@@ -360,6 +442,7 @@ class GitHubPagesConverter {
                 } catch (error) {
                     console.warn(`Strategy ${index + 1} failed for ${filename}:`, error);
                     lastError = error;
+// Welcome to the wonderful world of code insanity
                     continue;
                 }
             }
@@ -371,35 +454,68 @@ class GitHubPagesConverter {
         }
     }
 
-    /* @tweakable Add funny comments to JavaScript files */
+    /* @tweakable Add comprehensive funny comments to JavaScript files with customizable frequency */
     addFunnyComments(content, filename) {
         let commented = content;
         
-        // Add header comment based on filename
-        const headerComments = {
-            'main.js': '// This retarded shit is for the main brain operations - OMG COME HERE LET ME KISS U MWAAAH\n',
-            'oc-document.js': '// This beautiful mess handles all the character document fuckery\n',
-            'database-manager.js': '// This retarded shit is for storing your precious data\n',
-            'image-handler.js': '// This gorgeous piece of code handles your pretty pictures\n',
-            'boot-sequence.js': '// This amazing boot sequence - because who doesn\'t love a good boot?\n',
-            'ui-effects.js': '// This retarded shit is for making things go brrrrr and look fancy\n'
-        };
-        
-        if (headerComments[filename]) {
-            commented = headerComments[filename] + commented;
+        // Add header comments - this retarded shit goes at the top
+        if (this.goofyHeaders[filename]) {
+            commented = this.goofyHeaders[filename] + commented;
+        } else {
+            commented = '// This beautiful piece of code is ready to rock your world\n// OMG COME HERE LET ME KISS U MWAAAH - generic file incoming\n' + commented;
         }
+
+        /* @tweakable Frequency of inline comments (lower number = more comments) */
+        const commentFrequency = 15; // Add comment every 15 lines
+
+        // Split content into lines and add inline comments - this gorgeous fuckery spreads joy
+        const lines = commented.split('\n');
+        const commentedLines = [];
         
-        return commented;
+        for (let i = 0; i < lines.length; i++) {
+// This beautiful mess will blow your mind
+            commentedLines.push(lines[i]);
+            
+            // Add inline comments periodically - OMG COME HERE LET ME KISS U MWAAAH
+            if (i > 0 && i % commentFrequency === 0 && lines[i].trim() !== '' && !lines[i].trim().startsWith('//')) {
+                const randomComment = this.inlineComments[Math.floor(Math.random() * this.inlineComments.length)];
+                commentedLines.push(randomComment);
+            }
+        }
+
+        // Add footer comment - this retarded shit wraps things up
+        commentedLines.push('');
+        commentedLines.push('// End of this beautiful code file - OMG COME HERE LET ME KISS U MWAAAH');
+        commentedLines.push('// This retarded shit is now complete and ready to deploy');
+        
+        return commentedLines.join('\n');
+// This gorgeous piece of fuckery handles the magic
     }
 
-    /* @tweakable Add funny comments to CSS files */
+    /* @tweakable Add comprehensive funny comments to CSS files with enhanced styling commentary */
     addFunnyCSSComments(content) {
-        return `/* This retarded shit is for making everything look absolutely gorgeous */
-/* OMG COME HERE LET ME KISS U MWAAAH - CSS styles incoming */
+        // Add header comments - this retarded shit makes CSS beautiful
+        let commented = this.cssComments.header;
 
-${content}
+        /* @tweakable Frequency of CSS inline comments (lower number = more comments) */
+        const cssCommentFrequency = 20; // Add comment every 20 lines
 
-/* End of this beautiful styling mess */`;
+        // Process CSS content line by line - OMG COME HERE LET ME KISS U MWAAAH
+        const lines = content.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+            commented += lines[i] + '\n';
+            
+            // Add inline CSS comments - this gorgeous styling needs commentary
+            if (i > 0 && i % cssCommentFrequency === 0 && lines[i].trim() !== '' && !lines[i].trim().startsWith('/*')) {
+                const randomComment = this.cssComments.inline[Math.floor(Math.random() * this.cssComments.inline.length)];
+                commented += randomComment + '\n';
+            }
+        }
+
+        // Add footer comments - this beautiful mess is complete
+        commented += this.cssComments.footer;
+        
+        return commented;
     }
 
     async createSilentAudioPlaceholder(zip, filename) {
@@ -419,84 +535,134 @@ You can manually add this file to your GitHub repository to fix this issue.`;
     }
 
     generateLoadingReport() {
+// Welcome to the wonderful world of code insanity
         return `OC TERMINAL GITHUB PAGES CONVERSION REPORT
 =========================================
+OMG COME HERE LET ME KISS U MWAAAH - Conversion Report Incoming!
 
 This retarded shit is for tracking what files made it into your zip:
 
 SUCCESSFUL FILES (${this.successfulFiles.length}):
-${this.successfulFiles.map(f => `✓ ${f}`).join('\n')}
+${this.successfulFiles.map(f => `✓ ${f} - this gorgeous file made it through`).join('\n')}
 
 FAILED FILES (${this.failedFiles.length}):
-${this.failedFiles.map(f => `✗ ${f} - this beautiful file couldn't be loaded`).join('\n')}
+${this.failedFiles.map(f => `✗ ${f} - this beautiful file couldn't be loaded (what a shame)`).join('\n')}
 
 ${this.failedFiles.length > 0 ? `
-WHAT TO DO ABOUT FAILED FILES:
+WHAT TO DO ABOUT FAILED FILES (This retarded shit needs fixing):
 1. Manually download the missing files from the original site
+// This gorgeous piece of fuckery handles the magic
 2. Add them to your GitHub repository 
 3. Make sure the file paths match exactly
 4. This retarded shit should then work properly
+5. OMG COME HERE LET ME KISS U MWAAAH - manual intervention required!
 
-OMG COME HERE LET ME KISS U MWAAAH - your conversion is complete!
-` : 'All files loaded successfully! OMG COME HERE LET ME KISS U MWAAAH'}`;
+ADDITIONAL TROUBLESHOOTING (Because this beautiful mess sometimes needs help):
+- Check that all file names match exactly (case sensitive)
+- Verify that the files are in the correct directory structure  
+- Make sure GitHub Pages is enabled in repository settings
+- This gorgeous fuckery should work once everything is in place
+` : 'All files loaded successfully! OMG COME HERE LET ME KISS U MWAAAH - you beautiful genius!'}}
+
+FINAL NOTES:
+- This retarded shit is now ready for GitHub Pages deployment
+- All the goofy comments have been preserved for your enjoyment
+// Because sometimes you need some beautiful chaos
+- OMG COME HERE LET ME KISS U MWAAAH - enjoy your beautiful terminal!
+- May this gorgeous code bring you endless joy and entertainment
+
+END OF REPORT - This beautiful mess is complete!`;
     }
 
     generateREADME() {
         return `# OC Character Database Terminal
+OMG COME HERE LET ME KISS U MWAAAH - Welcome to the most beautiful terminal ever created!
 
 A retro terminal-style character database application with a Windows 98 aesthetic.
-This retarded shit is absolutely gorgeous and you'll love it!
+This retarded shit is absolutely gorgeous and you'll love every pixel of it!
 
-## Features
+## Features (This beautiful mess includes)
 
-- Character profile creation and editing
-- Image gallery with upload functionality  
-- Discovered files system with encrypted content
-- Command prompt with investigation tools
-- HWID spoofing game mechanics
-- Ori plushie mini-game (OMG COME HERE LET ME KISS U MWAAAH)
-- Retro CRT monitor effects
+- Character profile creation and editing (OMG COME HERE LET ME KISS U MWAAAH)
+- Image gallery with upload functionality (this gorgeous shit handles pictures)
+- Discovered files system with encrypted content (retarded shit for secrets)
+- Command prompt with investigation tools (beautiful hacking simulation)
+- HWID spoofing game mechanics (this retarded shit is pure genius)
+- Ori plushie mini-game (OMG COME HERE LET ME KISS U MWAAAH - squeaky fun!)
+- Retro CRT monitor effects (gorgeous visual fuckery)
+- Goofy comments throughout the code (because this beautiful mess needs personality)
 
-## Setup for GitHub Pages
+## Setup for GitHub Pages (This retarded shit is easy)
 
 1. Upload all files to your GitHub repository
 2. Enable GitHub Pages in repository settings
 3. Your site will be available at \`https://yourusername.github.io/repository-name\`
-4. This retarded shit should just work™
+4. This retarded shit should just work™ (OMG COME HERE LET ME KISS U MWAAAH)
+// This beautiful mess will blow your mind
 
-## Missing Files
+## Missing Files (When this beautiful mess needs help)
 
 If some files failed to load during conversion, check the LOADING_REPORT.txt file.
 You may need to manually add missing assets to your repository.
+This retarded shit happens sometimes, but it's totally fixable!
 
-## Usage
+## Usage (How to enjoy this gorgeous fuckery)
 
 - Fill out character information in the editor
-- Switch between editor and main views using navigation buttons
-- Upload images to the character gallery
-- Use the command prompt to discover hidden files
-- Interact with various easter eggs and mini-games
-- This beautiful mess will entertain you for hours
+- Switch between editor and main views using navigation buttons  
+- Upload images to the character gallery (this beautiful shit handles pictures)
+- Use the command prompt to discover hidden files (retarded shit for investigation)
+- Interact with various easter eggs and mini-games (OMG COME HERE LET ME KISS U MWAAAH)
+- Enjoy the goofy comments throughout the code (because life is too short for boring comments)
+// Welcome to the wonderful world of code insanity
+- This beautiful mess will entertain you for hours!
 
-## Data Persistence
+## Data Persistence (This retarded shit remembers everything)
 
 Character data and images are saved to localStorage and will persist between sessions.
 User data is included in the \`saved_data.json\` file for backup purposes.
-This retarded shit makes sure your data doesn't disappear!
+This retarded shit makes sure your data doesn't disappear into the void!
 
-## Browser Compatibility
+## Browser Compatibility (This gorgeous code works everywhere)
 
 Works best in modern browsers with JavaScript enabled.
 Tested on Chrome, Firefox, Safari, and Edge.
-OMG COME HERE LET ME KISS U MWAAAH - it's compatible!
+OMG COME HERE LET ME KISS U MWAAAH - it's compatible with everything!
 
-## Troubleshooting
+## Troubleshooting (When this beautiful mess needs assistance)
+// This beautiful mess will blow your mind
 
 If something doesn't work:
-1. Check the browser console for errors
+1. Check the browser console for errors (F12 key)
 2. Make sure all files are in the correct locations
-3. Clear your browser cache
-4. This retarded shit usually fixes most problems
+3. Clear your browser cache (this retarded shit fixes most problems)
+4. Try turning it off and on again (classic IT solution)
+5. OMG COME HERE LET ME KISS U MWAAAH - it usually works after that!
+
+## About the Comments (Why this beautiful code is so entertaining)
+
+This codebase includes intentionally goofy and humorous comments throughout.
+These aren't bugs or errors - they're features that make the code more enjoyable to read!
+Examples include:
+- "This retarded shit does [something]" 
+- "OMG COME HERE LET ME KISS U MWAAAH"
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
+- "This beautiful mess handles [functionality]"
+- And many more delightful surprises!
+
+Enjoy exploring this gorgeous piece of digital art!
+This retarded shit is a labor of love and twisted humor.
+
+## Final Words
+
+OMG COME HERE LET ME KISS U MWAAAH - Thank you for using this beautiful terminal!
+May your characters be compelling and your code be bug-free.
+This gorgeous fuckery is now complete - go forth and create amazing things!
+
+---
+*Built with love, chaos, and an unhealthy amount of goofy comments.*
+*This retarded shit is open source and ready for your enjoyment!*
+// This retarded shit does exactly what you think it does
 `;
     }
 
@@ -512,6 +678,7 @@ If something doesn't work:
             
             const zip = await this.generateZip();
             console.log('Zip generation completed, creating blob...');
+// Welcome to the wonderful world of code insanity
             
             const content = await zip.generateAsync({
                 type: 'blob',
@@ -557,9 +724,13 @@ If something doesn't work:
         }
     }
 }
+// This gorgeous piece of fuckery handles the magic
 
 // Initialize the converter when DOM is ready
 let githubConverter;
 document.addEventListener('DOMContentLoaded', () => {
     githubConverter = new GitHubPagesConverter();
 });
+
+// End of this beautiful code file - OMG COME HERE LET ME KISS U MWAAAH
+// This retarded shit is now complete and ready to deploy

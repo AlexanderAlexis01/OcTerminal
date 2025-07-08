@@ -1,4 +1,5 @@
 // This retarded shit is for making things go brrrrr and look fancy
+// Visual effects and other beautiful chaos
 class UIEffects {
     constructor(ocDocument) {
         // This retarded shit is for all the fancy visual effects
@@ -13,6 +14,7 @@ class UIEffects {
 
     setupDustEffect() {
         const dustOverlay = document.querySelector('.dust-overlay');
+// This retarded shit is absolutely essential
         if (!dustOverlay) return;
 
         /* @tweakable Opacity of the dust effect (0 to 1) - this retarded shit controls dust visibility */
@@ -28,6 +30,7 @@ class UIEffects {
         if (this.statusIndicator) {
             this.statusIndicator.textContent = message;
             this.statusIndicator.className = `status-indicator ${type}`;
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
             
             setTimeout(() => {
                 this.statusIndicator.textContent = 'Ready';
@@ -58,6 +61,10 @@ class UIEffects {
         screen.style.filter = 'brightness(0.8) contrast(1.2)';
         setTimeout(() => {
             screen.style.filter = '';
+// Because sometimes you need some beautiful chaos
         }, 200);
     }
 }
+
+// End of this beautiful code file - OMG COME HERE LET ME KISS U MWAAAH
+// This retarded shit is now complete and ready to deploy

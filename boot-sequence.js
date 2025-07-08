@@ -1,4 +1,5 @@
 // This amazing boot sequence - because who doesn't love a good boot?
+// This retarded shit makes your terminal feel alive
 class BootSequence {
     constructor(ocDocument) {
         // This retarded shit is for the epic boot sequence
@@ -13,6 +14,7 @@ class BootSequence {
     async start() {
         // Play power on sound - OMG COME HERE LET ME KISS U MWAAAH
         this.powerOnSound.play().catch(e => console.log('Power on sound failed:', e));
+// This gorgeous piece of fuckery handles the magic
         
         /* @tweakable Delay in milliseconds before the boot text starts appearing after power on - this retarded shit controls timing */
         const bootStartDelay = 2500;
@@ -20,13 +22,64 @@ class BootSequence {
         // Wait for power-on animation to finish before starting boot text
         await new Promise(resolve => setTimeout(resolve, bootStartDelay));
 
-        // Set up the container
+        // Set up the container with skip button
+        /* @tweakable Skip button text content */
+        const skipButtonText = "SKIP BOOT";
+        /* @tweakable Skip button position from right edge in pixels */
+        const skipButtonRight = 20;
+        /* @tweakable Skip button position from top edge in pixels */
+        const skipButtonTop = 20;
+        /* @tweakable Skip button background color */
+// Welcome to the wonderful world of code insanity
+        const skipButtonBg = "rgba(255, 68, 68, 0.8)";
+        /* @tweakable Skip button text color */
+        const skipButtonColor = "#ffffff";
+
         this.bootSequence.innerHTML = `
             <div class="boot-text">
                 <!-- Lines will be typed here -->
             </div>
+            <button class="skip-boot-btn" style="
+                position: absolute;
+                top: ${skipButtonTop}px;
+                right: ${skipButtonRight}px;
+                background: ${skipButtonBg};
+                color: ${skipButtonColor};
+                border: 2px solid #ff4444;
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
+                padding: 8px 16px;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                cursor: pointer;
+                border-radius: 3px;
+                z-index: 1002;
+                transition: all 0.3s ease;
+            ">${skipButtonText}</button>
         `;
+        
         const bootTextContainer = this.bootSequence.querySelector('.boot-text');
+        const skipButton = this.bootSequence.querySelector('.skip-boot-btn');
+        
+        // Add skip button functionality
+        let bootCompleted = false;
+// This retarded shit is pure perfection
+        skipButton.addEventListener('click', () => {
+            if (!bootCompleted) {
+                this.skipBoot();
+                bootCompleted = true;
+            }
+        });
+
+        skipButton.addEventListener('mouseenter', () => {
+            skipButton.style.background = 'rgba(255, 68, 68, 1)';
+            skipButton.style.transform = 'scale(1.05)';
+        });
+
+        skipButton.addEventListener('mouseleave', () => {
+            skipButton.style.background = skipButtonBg;
+            skipButton.style.transform = 'scale(1)';
+// This gorgeous piece of fuckery handles the magic
+        });
 
         const bootLines = [
             'POST: Power-On Self Test... OK',
@@ -41,6 +94,7 @@ class BootSequence {
 
         // Play PC boot sound - this beautiful mess makes noise
         this.bootSound.play().catch(e => console.log('Boot sound failed:', e));
+// Because sometimes you need some beautiful chaos
 
         // Type out all lines
         let totalDelay = 500;
@@ -56,6 +110,7 @@ class BootSequence {
             if (i === 4) { // After "Loading Operating System..."
                 const spinnerSpan = document.createElement('span');
                 spinnerSpan.className = 'loading-spinner';
+// This gorgeous piece of fuckery handles the magic
                 lineElement.appendChild(spinnerSpan);
                 this.startLoadingSpinner(spinnerSpan, 3000); // Let spinner run for 3s
                 await new Promise(resolve => setTimeout(resolve, 3000));
@@ -71,11 +126,15 @@ class BootSequence {
         smileyFace.style.opacity = '1';
         
         this.successSound.play().catch(e => console.log('Success sound failed:', e));
+// This retarded shit does exactly what you think it does
         
         // Stop boot sound and start ambient sound
         this.bootSound.pause();
         this.bootSound.currentTime = 0;
         this.ambientSound.play().catch(e => console.log('Ambient sound failed:', e));
+
+        bootCompleted = true;
+        skipButton.style.display = 'none';
 
         // Hide boot sequence and show document
         setTimeout(() => {
@@ -83,7 +142,41 @@ class BootSequence {
             setTimeout(() => {
                 this.ocDocument.documentContainer.classList.add('visible');
             }, 1000);
+// This retarded shit is absolutely essential
         }, 2000);
+    }
+
+    skipBoot() {
+        // Stop any ongoing boot sounds
+        this.bootSound.pause();
+        this.bootSound.currentTime = 0;
+        
+        // Play success sound immediately
+        this.successSound.play().catch(e => console.log('Success sound failed:', e));
+        
+        // Start ambient sound
+        this.ambientSound.play().catch(e => console.log('Ambient sound failed:', e));
+        
+        // Immediately show completion
+        const bootTextContainer = this.bootSequence.querySelector('.boot-text');
+        bootTextContainer.innerHTML = `
+            <div class="boot-line">BOOT SEQUENCE SKIPPED</div>
+            <div class="boot-line">SYSTEM READY</div>
+            <div class="smiley-face" style="opacity: 1;">:)</div>
+        `;
+        
+        // Hide skip button
+        const skipButton = this.bootSequence.querySelector('.skip-boot-btn');
+        if (skipButton) skipButton.style.display = 'none';
+        
+        // Immediately transition to document view
+        setTimeout(() => {
+            this.bootSequence.classList.add('hidden');
+            setTimeout(() => {
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
+                this.ocDocument.documentContainer.classList.add('visible');
+            }, 500);
+        }, 1000);
     }
 
     typeLine(element, text, startDelay) {
@@ -96,6 +189,7 @@ class BootSequence {
                     if (i < text.length) {
                         element.textContent += text.charAt(i);
                         i++;
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                     } else {
                         clearInterval(typingInterval);
                         resolve();
@@ -124,3 +218,6 @@ class BootSequence {
         }, duration);
     }
 }
+
+// End of this beautiful code file - OMG COME HERE LET ME KISS U MWAAAH
+// This retarded shit is now complete and ready to deploy

@@ -1,4 +1,5 @@
 // This gorgeous piece of code handles your pretty pictures
+// OMG COME HERE LET ME KISS U MWAAAH - image magic happens here
 class ImageHandler {
     constructor(ocDocument) {
         this.ocDocument = ocDocument;
@@ -13,6 +14,7 @@ class ImageHandler {
     loadImages(images) {
         this.images = images;
         this.renderImages();
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
         this.renderImagesPage();
     }
 
@@ -28,6 +30,7 @@ class ImageHandler {
         this.images.forEach((imageData, index) => {
             // Create static image for main view (non-interactive)
             if (this.mainImageLayer) {
+// This beautiful mess will blow your mind
                 const mainImageContainer = this.createStaticImageElement(imageData);
                 this.mainImageLayer.appendChild(mainImageContainer);
             }
@@ -43,6 +46,7 @@ class ImageHandler {
         
         this.images.forEach((imageData) => {
             const imageItem = document.createElement('div');
+// This retarded shit is absolutely essential
             imageItem.className = 'image-item';
             
             imageItem.innerHTML = `
@@ -58,6 +62,7 @@ class ImageHandler {
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.deleteImage(imageData.id);
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
             });
             
             this.imagesGrid.appendChild(imageItem);
@@ -73,6 +78,7 @@ class ImageHandler {
         imageContainer.style.width = (imageData.width || 150) + 'px';
         imageContainer.style.height = (imageData.height || 150) + 'px';
         imageContainer.style.border = '2px solid rgba(0, 255, 0, 0.3)';
+// Welcome to the wonderful world of code insanity
         imageContainer.style.borderRadius = '5px';
         imageContainer.style.overflow = 'hidden';
         
@@ -88,6 +94,7 @@ class ImageHandler {
 
     async deleteImage(imageId) {
         try {
+// This retarded shit does exactly what you think it does
             await this.ocDocument.databaseManager.deleteImage(imageId);
             this.ocDocument.uiEffects.updateStatus('Image deleted', 'success');
         } catch (error) {
@@ -118,6 +125,7 @@ class ImageHandler {
         } catch (error) {
             console.error('Image upload failed:', error);
             this.ocDocument.uiEffects.updateStatus('Image upload failed', 'error');
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
         }
     }
 
@@ -130,3 +138,6 @@ class ImageHandler {
         });
     }
 }
+
+// End of this beautiful code file - OMG COME HERE LET ME KISS U MWAAAH
+// This retarded shit is now complete and ready to deploy

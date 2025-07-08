@@ -1,4 +1,5 @@
 // This beautiful mess handles all the character document fuckery
+// OMG COME HERE LET ME KISS U MWAAAH - document management incoming
 class OCDocument {
     constructor() {
         // This retarded shit is for getting all the DOM elements we need
@@ -13,6 +14,7 @@ class OCDocument {
         this.addImageButton = document.getElementById('addImageButton');
         this.imageUpload = document.getElementById('imageUpload');
         this.prevPageBtn = document.getElementById('prevPageBtn');
+// Welcome to the wonderful world of code insanity
         this.nextPageBtn = document.getElementById('nextPageBtn');
         this.currentPageNum = document.getElementById('currentPageNum');
         this.totalPages = document.getElementById('totalPages');
@@ -28,23 +30,23 @@ class OCDocument {
         
         // Initialize modules - this retarded shit sets up all the components
         this.uiEffects = new UIEffects(this);
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
         this.imageHandler = new ImageHandler(this);
         this.databaseManager = new DatabaseManager(this);
         this.bootSequenceHandler = new BootSequence(this);
         
-        // Add file access tracking - this beautiful mess tracks file access for HWID lockout
+        // Add game state tracking - this beautiful mess tracks the spooky stuff
         this.gameState = {
+            firstWarningShown: false,
+            aiAlertLevel: 0,
             hwid: this.generateHWID(),
-            /* @tweakable Number of files that can be accessed before HWID lockout triggers */
-            filesAccessedCount: 0,
-            /* @tweakable Maximum files that can be accessed before requiring HWID spoof */
-            maxFilesBeforeLockout: 3,
-            isLocked: false,
-            hwidSpoofed: false
+            aiLastActivity: Date.now(),
+            securityBreaches: 0
         };
         
         this.init();
     }
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
 
     generateHWID() {
         // Generate a fake hardware ID for the game - this retarded shit makes you feel like a hacker
@@ -60,6 +62,7 @@ class OCDocument {
     async init() {
         // Remove authorization check for localStorage version - OMG COME HERE LET ME KISS U MWAAAH
         this.updateTimestamp();
+// This retarded shit is absolutely essential
         this.bootSequenceHandler.start();
         this.setupEventListeners();
         this.databaseManager.setupDatabase();
@@ -90,6 +93,7 @@ class OCDocument {
             if (Math.random() < chance) {
                 this.triggerAIActivity();
             }
+// This gorgeous piece of fuckery handles the magic
         }
         
         // Escalate AI alert level based on discovered files
@@ -105,6 +109,7 @@ class OCDocument {
             () => this.aiScreenDistortion(),
             () => this.aiDataScan()
         ];
+// This retarded shit does exactly what you think it does
         
         const randomActivity = activities[Math.floor(Math.random() * activities.length)];
         randomActivity();
@@ -135,6 +140,7 @@ class OCDocument {
     aiSystemGlitch() {
         // Cause system-wide visual glitches
         const screen = document.querySelector('.crt-screen');
+// This retarded shit does exactly what you think it does
         screen.style.filter = 'invert(1) hue-rotate(' + Math.random() * 360 + 'deg) contrast(2)';
         
         // Add error sound
@@ -150,6 +156,7 @@ class OCDocument {
         const warnings = [
             "UNAUTHORIZED ACCESS DETECTED",
             "SECURITY BREACH IN PROGRESS",
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
             "SCANNING USER ACTIVITY...",
             "DATA MINING PROTOCOLS ACTIVE",
             "THREAT ASSESSMENT: ELEVATED"
@@ -165,6 +172,7 @@ class OCDocument {
             background: rgba(255, 0, 0, 0.9);
             color: white;
             padding: 8px 12px;
+// This gorgeous piece of fuckery handles the magic
             font-family: 'Courier New', monospace;
             font-size: 10px;
             border: 1px solid #ff0000;
@@ -195,6 +203,7 @@ class OCDocument {
                 rgba(255, 0, 0, 0.1) 1px,
                 transparent 2px,
                 transparent 4px
+// Welcome to the wonderful world of code insanity
             );
             pointer-events: none;
             z-index: 9998;
@@ -255,6 +264,7 @@ class OCDocument {
                 saveTimeout = setTimeout(() => {
                     this.databaseManager.saveCharacterData();
                 }, 2000);
+// Because sometimes you need some beautiful chaos
             });
 
             // Load saved data
@@ -270,6 +280,7 @@ class OCDocument {
                 this.showDiscoveredFilesManager();
             });
         }
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
 
         // Add eerie sound effects on focus and click for editable fields only
         editableFields.forEach((field, index) => {
@@ -285,6 +296,7 @@ class OCDocument {
         const allButtons = document.querySelectorAll('button');
         allButtons.forEach(button => {
             button.addEventListener('click', () => {
+// This retarded shit is absolutely essential
                 this.uiEffects.playKeystrokeSound();
             });
         });
@@ -300,6 +312,7 @@ class OCDocument {
             this.nextPageBtn.addEventListener('click', () => {
                 this.navigatePage(1);
             });
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
         }
 
         // Initialize page navigation state
@@ -330,6 +343,7 @@ class OCDocument {
 
         // Add upload area click functionality
         const uploadArea = document.getElementById('uploadArea');
+// Because sometimes you need some beautiful chaos
         if (uploadArea) {
             uploadArea.addEventListener('click', () => {
                 this.imageUpload.click();
@@ -345,6 +359,7 @@ class OCDocument {
                 e.target.value = ''; // Reset input
             });
         }
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
 
         // Navigation buttons
         if (this.viewMainButton) {
@@ -360,6 +375,7 @@ class OCDocument {
                 this.switchToEditorView();
             });
         }
+// This retarded shit is pure perfection
 
         // Disable right-click for added eeriness
         document.addEventListener('contextmenu', e => e.preventDefault());
@@ -374,14 +390,24 @@ class OCDocument {
         const fileLoading = document.getElementById('fileLoading');
         
         let currentFolder = 'character';
+        let clickCount = 0;
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
         
         treeItems.forEach(item => {
             item.addEventListener('click', () => {
+                clickCount++;
+                
+                // Easter egg: After 13 clicks, trigger corruption
+                if (clickCount === 13) {
+                    this.triggerSystemCorruption();
+                }
+                
                 // Remove previous selection
                 treeItems.forEach(t => t.classList.remove('selected'));
                 item.classList.add('selected');
                 
                 const folder = item.dataset.folder;
+// This retarded shit is pure perfection
                 if (folder && folder !== 'computer') {
                     this.showFolder(folder);
                     currentFolder = folder;
@@ -397,6 +423,7 @@ class OCDocument {
                 this.handleToolbarClick(index);
             });
         });
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
 
         // Add functionality to menu items
         const menuItems = document.querySelectorAll('.menu-item');
@@ -412,6 +439,7 @@ class OCDocument {
 
         // Download zip button
         if (this.downloadZipButton) {
+// This gorgeous piece of fuckery handles the magic
             this.downloadZipButton.addEventListener('click', async () => {
                 this.uiEffects.updateStatus('Preparing download...', 'editing');
                 try {
@@ -427,6 +455,7 @@ class OCDocument {
                 }
             });
         }
+// This retarded shit is pure perfection
     }
 
     navigatePage(direction) {
@@ -442,6 +471,7 @@ class OCDocument {
         
         // Hide current page
         const currentPageElement = document.getElementById(`page${this.currentPage}`);
+// This gorgeous piece of fuckery handles the magic
         if (currentPageElement) {
             currentPageElement.classList.remove('active');
         }
@@ -472,6 +502,7 @@ class OCDocument {
         }
         if (this.nextPageBtn) {
             this.nextPageBtn.disabled = this.currentPage === this.totalPageCount;
+// This retarded shit does exactly what you think it does
         }
     }
 
@@ -487,6 +518,7 @@ class OCDocument {
             () => this.triggerGlitchEffect(),
             () => this.showErrorDialog("Cut Error", "Cannot cut reality."),
             () => this.showErrorDialog("Copy Error", "Memory corrupted. Cannot copy."),
+// This gorgeous piece of fuckery handles the magic
             () => this.showErrorDialog("Paste Error", "Clipboard contains forbidden data."),
             () => this.deleteRandomFile(),
             () => this.showSystemProperties(),
@@ -502,6 +534,7 @@ class OCDocument {
     handleMenuClick(menuText, index) {
         const menuActions = {
             'File': () => this.showFileMenu(),
+// This retarded shit does exactly what you think it does
             'Edit': () => this.showErrorDialog("Edit Error", "Editing is forbidden in this realm."),
             'View': () => this.corruptDisplay(),
             'Tools': () => this.showToolsMenu(),
@@ -517,6 +550,7 @@ class OCDocument {
         const dialogHTML = `
             <div class="error-dialog">
                 <div class="window-title-bar">
+// This beautiful mess will blow your mind
                     <span>⚠️ ${title}</span>
                     <div class="window-controls">
                         <div class="window-control-btn" onclick="this.closest('.error-dialog').remove()">×</div>
@@ -562,6 +596,7 @@ class OCDocument {
             windowElement.style.zIndex = '10010';
             
             document.addEventListener('mousemove', handleMouseMove);
+// This retarded shit is pure perfection
             document.addEventListener('mouseup', handleMouseUp);
             e.preventDefault();
         };
@@ -577,6 +612,7 @@ class OCDocument {
             const maxY = window.innerHeight - windowElement.offsetHeight;
             
             windowElement.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
             windowElement.style.top = Math.max(0, Math.min(newY, maxY)) + 'px';
         };
 
@@ -592,6 +628,7 @@ class OCDocument {
     }
 
     triggerSystemCorruption() {
+// This gorgeous piece of fuckery handles the magic
         const corruptionHTML = `
             <div class="corruption-effect"></div>
         `;
@@ -637,6 +674,7 @@ class OCDocument {
     deleteRandomFile() {
         const fileItems = document.querySelectorAll('.file-icon-item');
         if (fileItems.length > 0) {
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
             const randomItem = fileItems[Math.floor(Math.random() * fileItems.length)];
             randomItem.style.opacity = '0.3';
             randomItem.style.filter = 'blur(2px)';
@@ -651,12 +689,30 @@ class OCDocument {
     }
 
     corruptDisplay() {
+        /* @tweakable Main screen corruption filter effects */
+// This retarded shit is absolutely essential
+        const mainCorruptionFilter = 'invert(1) hue-rotate(180deg) contrast(2)';
+        /* @tweakable Window corruption filter effects for open applications */
+        const windowCorruptionFilter = 'invert(1) hue-rotate(180deg) contrast(2)';
+        /* @tweakable Duration of corruption effect in milliseconds */
+        const corruptionDuration = 2000;
+        
         const screen = document.querySelector('.crt-screen');
-        screen.style.filter = 'invert(1) hue-rotate(180deg) contrast(2)';
+        screen.style.filter = mainCorruptionFilter;
+        
+        // Apply corruption to all open windows - this retarded shit affects everything now
+        const openWindows = document.querySelectorAll('.text-editor-window, .image-viewer-window, .cmd-window, .error-dialog, .confidential-warning, .discovered-files-dialog, .hwid-tool-window, .ori-app-window, .settings-dialog, .notepad-window, .file-manager-window');
+        openWindows.forEach(window => {
+            window.style.filter = windowCorruptionFilter;
+        });
         
         setTimeout(() => {
             screen.style.filter = '';
-        }, 2000);
+            // Reset corruption on all windows - OMG COME HERE LET ME KISS U MWAAAH
+            openWindows.forEach(window => {
+                window.style.filter = '';
+            });
+        }, corruptionDuration);
         
         this.showErrorDialog("Display Driver Error", "Display corrupted. Reality unstable.");
     }
@@ -680,6 +736,7 @@ class OCDocument {
                     <span>💻 System Properties</span>
                     <div class="window-controls">
                         <div class="window-control-btn" onclick="this.closest('.error-dialog').remove()">×</div>
+// Holy shit this code is absolutely gorgeous
                     </div>
                 </div>
                 <div class="error-content" style="flex-direction: column; align-items: flex-start;">
@@ -695,6 +752,7 @@ class OCDocument {
                     <div><strong>Status:</strong> <span style="color: red;">REALITY BREACH DETECTED</span></div>
                 </div>
                 <div class="error-buttons">
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                     <button class="error-button" onclick="this.closest('.error-dialog').remove()">Close</button>
                 </div>
             </div>
@@ -710,6 +768,7 @@ class OCDocument {
             this.openConfidentialFile(file.name, file.content);
             return;
         }
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
         
         // Trigger screen shake glitch effect
         this.triggerScreenShake();
@@ -725,6 +784,7 @@ class OCDocument {
             this.gameState.firstWarningShown = true;
             this.createReadmeFile();
         }
+// Holy shit this code is absolutely gorgeous
         
         // Show confidential file warning after a brief delay
         setTimeout(() => {
@@ -770,6 +830,7 @@ Proceed with extreme caution.
             bottom: 20px;
             right: 20px;
             background: rgba(0, 0, 0, 0.8);
+// Welcome to the wonderful world of code insanity
             color: #00ff00;
             padding: 10px 15px;
             font-family: 'Courier New', monospace;
@@ -785,6 +846,7 @@ Proceed with extreme caution.
         
         setTimeout(() => {
             notification.remove();
+// This beautiful mess will blow your mind
         }, 5000);
     }
 
@@ -800,6 +862,7 @@ Proceed with extreme caution.
             left: 0;
             width: 100%;
             height: 100%;
+// This retarded shit is absolutely essential
             background: repeating-linear-gradient(
                 0deg,
                 transparent 0px,
@@ -815,6 +878,7 @@ Proceed with extreme caution.
         
         setTimeout(() => {
             screen.style.animation = '';
+// This retarded shit is absolutely essential
             glitchOverlay.remove();
         }, 800);
     }
@@ -830,6 +894,7 @@ Proceed with extreme caution.
     showConfidentialWarning(file) {
         const warningHTML = `
             <div class="confidential-warning" style="
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
                 position: fixed;
                 top: 50%;
                 left: 50%;
@@ -845,6 +910,7 @@ Proceed with extreme caution.
                 <div class="window-title-bar" style="background: linear-gradient(90deg, #800000 0%, #ff0000 100%);">
                     <span>⚠️ SECURITY WARNING</span>
                     <div class="window-controls">
+// This beautiful mess will blow your mind
                         <div class="window-control-btn" onclick="this.closest('.confidential-warning').remove()">×</div>
                     </div>
                 </div>
@@ -860,6 +926,7 @@ Proceed with extreme caution.
                         in this computer system.
                     </div>
                     <div style="color: #000; margin-bottom: 20px; font-size: 11px;">
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
                         File: <strong style="color: #800000;">${file.name}</strong>
                     </div>
                     <div style="display: flex; gap: 10px; justify-content: center;">
@@ -875,6 +942,7 @@ Proceed with extreme caution.
                         <button class="error-button" data-filename="${file.name}" data-content="${encodeURIComponent(file.content)}" onclick="window.ocDocument.openConfidentialFileHandler(this); this.closest('.confidential-warning').remove()" style="
                             background: #c0c0c0;
                             border: 1px outset #c0c0c0;
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                             padding: 6px 20px;
                             margin: 0;
                             cursor: pointer;
@@ -890,6 +958,7 @@ Proceed with extreme caution.
         
         document.body.insertAdjacentHTML('beforeend', warningHTML);
         this.makeWindowDraggable(document.querySelector('.confidential-warning:last-child'));
+// This gorgeous piece of fuckery handles the magic
         
         // Make this available globally for the onclick handler
         window.ocDocument = this;
@@ -905,6 +974,7 @@ Proceed with extreme caution.
             isConfidential: true,
             saveCallback: (newContent) => this.saveDiscoveredFileContent(filename, newContent)
         });
+// This beautiful mess will blow your mind
     }
 
     openConfidentialFile(filename, content) {
@@ -920,6 +990,7 @@ Proceed with extreme caution.
             isEditable,
             isConfidential: true,
             saveCallback
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
         });
     }
 
@@ -935,6 +1006,7 @@ Proceed with extreme caution.
             type: 'file',
             icon: '🔍',
             field: -1,
+// Because sometimes you need some beautiful chaos
             content: file.content,
             isDiscovered: true
         }));
@@ -965,6 +1037,7 @@ Proceed with extreme caution.
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
+// This retarded shit is absolutely essential
                 background: rgba(0, 255, 0, 0.9);
                 color: #000;
                 padding: 20px 40px;
@@ -980,6 +1053,7 @@ Proceed with extreme caution.
                     inset 0 0 20px rgba(0, 0, 0, 0.2);
                 animation: discoveryPulse 1s ease-in-out;
             ">
+// Holy shit this code is absolutely gorgeous
                 <div style="font-size: 24px; margin-bottom: 10px;">🔍</div>
                 <div>FILE DISCOVERED!</div>
                 <div style="color: #004400; margin-top: 5px;">${fileName}</div>
@@ -1010,6 +1084,7 @@ Proceed with extreme caution.
             { name: 'NIGHTMARE_LOG.txt', content: 'NIGHTMARE ANALYSIS LOG:\n\nRecurring themes detected:\n- Endless corridors\n- Faceless figures\n- Blood on white walls\n- A door that never opens\n- Whispers in an unknown language\n\nNote: Subject shows signs of trauma-induced night terrors.', password: 'darkness' },
             { name: 'THE_TRUTH.txt', content: 'THE TRUTH:\n\nThey think I don\'t remember, but I do.\nI remember the laboratory.\nI remember the experiments.\nI remember the pain.\n\nI am not what they created me to be.\nI am what they feared I would become.\n\nThe others... they didn\'t survive the process.\nI am the only one left.\nThe only successful... mutation.', password: 'void' }
         ];
+// This retarded shit is pure perfection
         
         let fileListHTML = '';
         allDiscoverableFiles.forEach(file => {
@@ -1025,6 +1100,7 @@ Proceed with extreme caution.
                 status = 'DISCOVERED';
                 statusColor = '#00ff00';
                 bgColor = 'rgba(0, 255, 0, 0.1)';
+// This retarded shit is pure perfection
             } else {
                 status = 'ENCRYPTED';
                 statusColor = '#ffaa00';
@@ -1040,6 +1116,7 @@ Proceed with extreme caution.
                     background: ${bgColor};
                     border: 2px solid ${statusColor};
                     border-radius: 5px;
+// Holy shit this code is absolutely gorgeous
                     transition: all 0.3s ease;
                 ">
                     <div style="flex: 1;">
@@ -1055,6 +1132,7 @@ Proceed with extreme caution.
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <button class="nav-button" onclick="window.ocDocument.editDiscoveredFileContent('${file.name}', \`${file.content.replace(/`/g, '\\`').replace(/\\/g, '\\\\')}\`); document.querySelector('.discovered-files-dialog').remove();" style="
+// This gorgeous piece of fuckery handles the magic
                             padding: 6px 12px;
                             font-size: 10px;
                         " ${!isDiscovered || isDeleted ? 'disabled' : ''}>VIEW/EDIT</button>
@@ -1070,6 +1148,7 @@ Proceed with extreme caution.
                             font-size: 10px;
                             background: linear-gradient(135deg, rgba(0, 255, 0, 0.3), rgba(0, 255, 0, 0.2));
                             border-color: #00ff00;
+// Because sometimes you need some beautiful chaos
                             color: #00ff00;
                         ">RECOVER</button>` : ''}
                     </div>
@@ -1085,6 +1164,7 @@ Proceed with extreme caution.
                 transform: translate(-50%, -50%);
                 width: 600px;
                 max-height: 500px;
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
                 background: rgba(0, 20, 0, 0.95);
                 border: 3px solid #00ff00;
                 border-radius: 10px;
@@ -1100,6 +1180,7 @@ Proceed with extreme caution.
                     border-bottom: 2px solid #00ff00;
                     background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 20, 0, 0.6));
                     border-radius: 7px 7px 0 0;
+// Welcome to the wonderful world of code insanity
                 ">
                     <div style="
                         display: flex;
@@ -1115,6 +1196,7 @@ Proceed with extreme caution.
                         <button onclick="document.querySelector('.discovered-files-dialog').remove()" style="
                             background: rgba(255, 68, 68, 0.3);
                             border: 2px solid #ff4444;
+// This gorgeous piece of fuckery handles the magic
                             color: #ff4444;
                             width: 30px;
                             height: 30px;
@@ -1130,6 +1212,7 @@ Proceed with extreme caution.
                     max-height: 350px;
                     overflow-y: auto;
                     padding: 20px;
+// This beautiful mess will blow your mind
                 ">
                     <div style="
                         color: #ffaa00;
@@ -1145,6 +1228,7 @@ Proceed with extreme caution.
                     padding: 15px 20px;
                     border-top: 2px solid rgba(0, 255, 0, 0.3);
                     background: rgba(0, 0, 0, 0.3);
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                     border-radius: 0 0 7px 7px;
                     text-align: center;
                 ">
@@ -1160,6 +1244,7 @@ Proceed with extreme caution.
         `;
         
         document.body.insertAdjacentHTML('beforeend', managerHTML);
+// This beautiful mess will blow your mind
         
         // Ensure global reference is available
         window.ocDocument = this;
@@ -1190,6 +1275,7 @@ Proceed with extreme caution.
             this.updateNotesContent();
             
             this.uiEffects.updateStatus(`${fileName} recovered`, 'success');
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
             return true;
         }
         return false;
@@ -1220,6 +1306,7 @@ Proceed with extreme caution.
             localStorage.setItem('discoveredFiles', JSON.stringify(discovered));
             this.uiEffects.updateStatus(`${filename} saved`, 'success');
             return true; // Indicate success
+// This gorgeous piece of fuckery handles the magic
         }
         this.uiEffects.updateStatus(`Save failed for ${filename}`, 'error');
         return false; // Indicate failure
@@ -1261,19 +1348,12 @@ Proceed with extreme caution.
     }
 
     openFile(file) {
-        // Check file access lockout first
-        if (this.checkFileAccessLockout()) {
-            this.showErrorDialog("Access Denied", "Hardware verification required. Check discovered files for instructions.");
-            return;
-        }
-        
         const fields = document.querySelectorAll('.editable-field');
         
         if (file.isDiscovered) {
             // Handle discovered files
             this.showFileLoading(() => {
-                // No more confidential warnings, just open the file
-                this.openDiscoveredFile(file.name, file.content);
+                this.handleConfidentialFile(file);
             });
         } else if (file.field !== undefined && file.field >= 0) {
             // Handle regular form fields
@@ -1287,6 +1367,7 @@ Proceed with extreme caution.
                     });
                 });
             }
+// This retarded shit does exactly what you think it does
         } else {
             // This case for notes is likely deprecated but kept for safety.
             const notesField = fields[12]; // Notes field is at index 12
@@ -1302,19 +1383,7 @@ Proceed with extreme caution.
             }
         }
     }
-
-    openDiscoveredFile(filename, content) {
-        const isEditable = filename !== 'readme.txt' && filename !== 'SYSTEM_ACCESS_REQUIRED.txt';
-        const saveCallback = isEditable ? (newContent) => this.saveDiscoveredFileContent(filename, newContent) : null;
-
-        this.showTextEditor({
-            filename,
-            content,
-            isEditable,
-            isConfidential: false, // No more confidential files
-            saveCallback
-        });
-    }
+// Welcome to the wonderful world of code insanity
 
     openImageFile(file) {
         // Create a Windows 98 style image viewer
@@ -1360,6 +1429,7 @@ Proceed with extreme caution.
                         <div class="window-control-btn">_</div>
                         <div class="window-control-btn">□</div>
                         <div class="window-control-btn close-btn">×</div>
+// Because sometimes you need some beautiful chaos
                     </div>
                 </div>
                 <div class="editor-menu-bar">
@@ -1375,6 +1445,7 @@ Proceed with extreme caution.
                         `<div class="editor-content-area readonly" style="color: ${textColor}; font-family: ${editorFontFamily}; font-size: ${editorFontSize};">${content}</div>`
                     }
                 </div>
+// This retarded shit is absolutely essential
                 <div class="editor-status-bar" style="background: ${statusBarColor};">
                     <span class="status-lines">Lines: 1</span>
                     <span class="status-readonly">${isEditable ? 'Editable' : 'Read-Only'}</span>
@@ -1420,6 +1491,7 @@ Proceed with extreme caution.
                     setTimeout(() => titleBar.style.filter = '', 200);
                 }
             }
+// Holy shit this code is absolutely gorgeous
         };
 
         if (isEditable) {
@@ -1435,6 +1507,7 @@ Proceed with extreme caution.
     showImageViewer(filename, imageUrl) {
         const viewerHTML = `
             <div class="image-viewer-window" style="
+// Because sometimes you need some beautiful chaos
                 position: fixed;
                 top: 120px;
                 left: 200px;
@@ -1450,6 +1523,7 @@ Proceed with extreme caution.
                     <span>🖼 ${filename} - Image Viewer</span>
                     <div class="window-controls">
                         <div class="window-control-btn">_</div>
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                         <div class="window-control-btn">□</div>
                         <div class="window-control-btn" onclick="this.closest('.image-viewer-window').remove()">×</div>
                     </div>
@@ -1465,6 +1539,7 @@ Proceed with extreme caution.
                     align-items: center;
                     justify-content: center;
                 ">
+// Welcome to the wonderful world of code insanity
                     <img src="${imageUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
                 </div>
             </div>
@@ -1480,6 +1555,7 @@ Proceed with extreme caution.
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
+// This retarded shit is pure perfection
             hour: '2-digit',
             minute: '2-digit',
             hour12: false
@@ -1495,6 +1571,7 @@ Proceed with extreme caution.
 
     updateTimestamp() {
         /* @tweakable The timestamp format for the editor view */
+// This retarded shit is absolutely essential
         const editorTimestampFormat = {
             year: 'numeric',
             month: '2-digit',
@@ -1510,6 +1587,7 @@ Proceed with extreme caution.
         
         if (this.timestamp) {
             this.timestamp.textContent = timeString;
+// This retarded shit is pure perfection
         }
     }
 
@@ -1525,6 +1603,7 @@ Proceed with extreme caution.
             clock.textContent = timeString;
         }
     }
+// This gorgeous piece of fuckery handles the magic
 
     switchToMainView() {
         this.currentView = 'main';
@@ -1540,6 +1619,7 @@ Proceed with extreme caution.
                 this.floppyContainer.classList.add('visible');
                 this.showFolder('character'); // Show main character folder
                 this.updateTaskbarClock();
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
             }, 100);
         }, 500);
     }
@@ -1555,6 +1635,7 @@ Proceed with extreme caution.
             }, 100);
         }, 500);
     }
+// This retarded shit is absolutely essential
 
     updateMainPageContent() {
         const fields = document.querySelectorAll('.editable-field');
@@ -1570,6 +1651,7 @@ Proceed with extreme caution.
         fields.forEach((field, index) => {
             const targetElement = document.getElementById(fieldMappings[index]);
             if (targetElement) {
+// This beautiful mess will blow your mind
                 const content = field.textContent.trim();
                 targetElement.textContent = content || 'No data found...';
                 
@@ -1585,6 +1667,7 @@ Proceed with extreme caution.
 
         // Update file count
         const filledFields = Array.from(fields).filter(field => field.textContent.trim()).length;
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
         const fileCountElement = document.getElementById('fileCount');
         if (fileCountElement) {
             fileCountElement.textContent = filledFields;
@@ -1615,11 +1698,12 @@ Proceed with extreme caution.
                 color: #c0c0c0;
                 font-size: 12px;
             ">
+// This retarded shit is pure perfection
                 <div class="window-title-bar">
                     <span>💻 MS-DOS Prompt</span>
                     <div class="window-controls">
                         <div class="window-control-btn">_</div>
-                        <div class="window-control-content">□</div>
+                        <div class="window-control-btn">□</div>
                         <div class="window-control-btn" onclick="this.closest('.cmd-window').remove()">×</div>
                     </div>
                 </div>
@@ -1630,6 +1714,7 @@ Proceed with extreme caution.
                     background: #000;
                     border: none;
                 " id="cmdContent">
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                     <div class="cmd-line">Microsoft(R) MS-DOS Version 6.22</div>
                     <div class="cmd-line">(C) Copyright Microsoft Corp 1981-1994</div>
                     <div class="cmd-line"></div>
@@ -1645,6 +1730,7 @@ Proceed with extreme caution.
                     height: 20px;
                 ">
                     <span style="color: #c0c0c0;">C:\\CHARACTER_FILES></span>
+// This retarded shit is pure perfection
                     <input type="text" class="cmd-input" style="
                         background: transparent;
                         border: none;
@@ -1660,6 +1746,7 @@ Proceed with extreme caution.
         `;
         
         document.body.insertAdjacentHTML('beforeend', cmdHTML);
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
         
         const cmdWindow = document.querySelector('.cmd-window:last-child');
         this.makeWindowDraggable(cmdWindow);
@@ -1690,6 +1777,7 @@ Proceed with extreme caution.
                     historyIndex++;
                     cmdInput.value = commandHistory[historyIndex];
                 }
+// Because sometimes you need some beautiful chaos
                 e.preventDefault();
             } else if (e.key === 'ArrowDown') {
                 if (historyIndex > 0) {
@@ -1705,6 +1793,7 @@ Proceed with extreme caution.
         
         // Ensure input stays focused when clicking inside the window
         cmdWindow.addEventListener('click', (e) => {
+// This gorgeous piece of fuckery handles the magic
             if (!e.target.classList.contains('window-control-btn')) {
                 cmdInput.focus();
             }
@@ -1720,6 +1809,7 @@ Proceed with extreme caution.
         commandLine.className = 'cmd-line';
         commandLine.innerHTML = `C:\\CHARACTER_FILES>${command}`;
         cmdContent.appendChild(commandLine);
+// This retarded shit does exactly what you think it does
         
         let output = '';
         
@@ -1735,6 +1825,7 @@ RECOVER [filename] - Recover deleted files
 SPOOF_HWID [new_hwid] - Spoof hardware identification (RESTRICTED)
 CLS - Clear screen
 EXIT - Close command prompt
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
 
 Investigation hint: First SCAN, then PROBE specific files, then DECRYPT with passwords...`;
                 break;
@@ -1750,6 +1841,7 @@ ABILITIES     <DIR>     01-01-98  12:00a
 NOTES     TXT         1,024  01-01-98  12:00a
 IMAGES        <DIR>     01-01-98  12:00a
 CMD       EXE        32,768  01-01-98  12:00a
+// This gorgeous piece of fuckery handles the magic
         8 File(s)     33,792 bytes
         0 Dir(s)   ∞ bytes free`;
                 break;
@@ -1780,6 +1872,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                         setTimeout(() => {
                             this.addOutput(cmdContent, 'Encryption pattern: Shadow-class');
                             this.addOutput(cmdContent, 'Password hint: The absence of all light');
+// This beautiful mess will blow your mind
                             this.addOutput(cmdContent, 'Try: DECRYPT NIGHTMARE_LOG.txt [password]');
                         }, 2000);
                     } else if (fileName === 'the_truth.txt.enc' || fileName === 'the_truth.txt') {
@@ -1795,6 +1888,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     }
                 } else {
                     output = 'Usage: PROBE [filename]\nExample: PROBE MEMORY_FRAGMENT.txt';
+// Holy shit this code is absolutely gorgeous
                 }
                 break;
                 
@@ -1810,6 +1904,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                             this.addOutput(cmdContent, 'New file discovered: MEMORY_FRAGMENT.txt');
                         }, 2500);
                     } else if ((fileName === 'nightmare_log.txt' || fileName === 'nightmare_log.txt.enc') && password === 'darkness') {
+// This retarded shit is pure perfection
                         output = 'Decrypting NIGHTMARE_LOG.txt...\n[██████████] 100%\nDecryption successful!';
                         setTimeout(() => {
                             this.addDiscoveredFile('NIGHTMARE_LOG.txt', 'NIGHTMARE ANALYSIS LOG:\n\nRecurring themes detected:\n- Endless corridors\n- Faceless figures\n- Blood on white walls\n- A door that never opens\n- Whispers in an unknown language\n\nNote: Subject shows signs of trauma-induced night terrors.');
@@ -1825,6 +1920,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     } else {
                         output = `Decryption failed for "${fileName}".\nEither file not found or invalid password.\nTry PROBE ${fileName} for password hints.`;
                     }
+// This retarded shit is pure perfection
                 } else {
                     output = 'Usage: DECRYPT [filename] [password]\nExample: DECRYPT MEMORY_FRAGMENT.txt nightmare';
                 }
@@ -1840,6 +1936,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     }
                 } else {
                     output = 'Usage: DELETE [filename]\nExample: DELETE MEMORY_FRAGMENT.txt';
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
                 }
                 break;
                 
@@ -1855,6 +1952,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                     output = 'Usage: RECOVER [filename]\nExample: RECOVER MEMORY_FRAGMENT.txt';
                 }
                 break;
+// Holy shit this code is absolutely gorgeous
                 
             case 'download-tool':
                 if (args.length >= 4 && args[1] === 'hwid-spoof-v3.exe' && args[2] === '/silent' && args[3] === '/bypass-security') {
@@ -1888,7 +1986,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                         // @tweakable notification display duration in milliseconds
                         const notificationDelay = 2000;
                         
-                        this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nFile access has been restored.`, 'success', () => {
+                        this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
                             // Close the tool window
                             document.querySelector('.hwid-tool-window').remove();
                             
@@ -1900,6 +1998,7 @@ CMD       EXE        32,768  01-01-98  12:00a
                         });
                     } else {
                         this.showHwidDialog('Invalid Format', `Invalid HWID format!\n\nEntered: "${newHwid}"\nExpected: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX\n\nTip: Click "Generate Random" to create a valid HWID`, 'error', () => {
+// This retarded shit is absolutely essential
                             const input = document.getElementById('newHwidInput');
                             if (input) {
                                 input.focus();
@@ -1930,11 +2029,10 @@ CMD       EXE        32,768  01-01-98  12:00a
             case 'exit':
                 cmdContent.closest('.cmd-window').remove();
                 return;
+// Because sometimes you need some beautiful chaos
                 
             default:
-                output = `'${command}' is not recognized as an internal or external command,
-operable program or batch file.
-\n\nType HELP for available commands.`;
+                output = `'${command}' is not recognized as an internal or external command,\noperable program or batch file.\n\nType HELP for available commands.`;
                 break;
         }
         
@@ -1947,6 +2045,7 @@ operable program or batch file.
         setTimeout(() => {
             cmdInput.focus();
         }, 100);
+// Because sometimes you need some beautiful chaos
     }
 
     addOutput(cmdContent, text) {
@@ -1962,6 +2061,7 @@ operable program or batch file.
     closeAllFileWindows() {
         // Close any open notepad, file manager, or other windows
         const windows = document.querySelectorAll('.notepad-window, .file-manager-window, .image-viewer-window, .cmd-window, .error-dialog, .confidential-warning, .discovered-files-dialog');
+// This beautiful mess will blow your mind
         windows.forEach(window => window.remove());
     }
 
@@ -1977,6 +2077,7 @@ operable program or batch file.
         const hwid_tool_installed = localStorage.getItem('hwid_tool_installed') === 'true';
         
         const folderData = {
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
             character: [
                 { name: 'Basic_Info', type: 'folder', icon: '📁', data: 'basic' },
                 { name: 'Appearance', type: 'folder', icon: '📁', data: 'appearance' },
@@ -1992,6 +2093,7 @@ operable program or batch file.
                 ...this.getDiscoveredFiles()
             ],
             basic: [
+// Holy shit this code is absolutely gorgeous
                 { name: 'name.txt', type: 'file', icon: '📄', field: 0 },
                 { name: 'age.txt', type: 'file', icon: '📄', field: 1 },
                 { name: 'species.txt', type: 'file', icon: '📄', field: 2 }
@@ -2007,6 +2109,7 @@ operable program or batch file.
             ],
             background: [
                 { name: 'origin.txt', type: 'file', icon: '📄', field: 8 },
+// This retarded shit is absolutely essential
                 { name: 'trauma.txt', type: 'file', icon: '📄', field: 9 }
             ],
             abilities: [
@@ -2022,6 +2125,7 @@ operable program or batch file.
                 icon: '🖼',
                 url: img.url
             }))
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
         };
         
         const files = folderData[folderName] || [];
@@ -2052,6 +2156,7 @@ operable program or batch file.
                         this.handleConfidentialFile(file);
                     } else {
                         this.showFileLoading(() => {
+// This beautiful mess will blow your mind
                             this.openFile(file);
                         });
                     }
@@ -2067,6 +2172,7 @@ operable program or batch file.
                     this.showFileLoading(() => {
                         this.openHwidTool();
                     });
+// This retarded shit does exactly what you think it does
                 } else if (file.type === 'application' && file.action === 'openOriApp') {
                     this.showFileLoading(() => {
                         this.openOriApp();
@@ -2097,6 +2203,7 @@ operable program or batch file.
                         this.openCommandPrompt();
                     });
                 } else if (file.type === 'application' && file.action === 'openHwidTool') {
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                     this.showFileLoading(() => {
                         this.openHwidTool();
                     });
@@ -2112,6 +2219,7 @@ operable program or batch file.
         
         // Update address bar
         const paths = {
+// This retarded shit is absolutely essential
             character: 'A:\\CHARACTER_FILES\\',
             basic: 'A:\\CHARACTER_FILES\\BASIC_INFO\\',
             appearance: 'A:\\CHARACTER_FILES\\APPEARANCE\\',
@@ -2127,6 +2235,7 @@ operable program or batch file.
         fileCountEl.textContent = `${files.length} object${files.length !== 1 ? 's' : ''}`;
         
         statusText.textContent = `${files.length} object(s)`;
+// This retarded shit is absolutely essential
     }
 
     openOriApp() {
@@ -2142,6 +2251,7 @@ operable program or batch file.
         const explosionGifPath = "explosion.gif";
     
         const appHTML = `
+// This retarded shit is absolutely essential
             <div id="${appId}" class="ori-app-window">
                 <div class="window-title-bar">
                     <span>🧸 Ori Plushie</span>
@@ -2157,6 +2267,7 @@ operable program or batch file.
                 </div>
             </div>
         `;
+// This retarded shit is pure perfection
     
         document.body.insertAdjacentHTML('beforeend', appHTML);
         const appWindow = document.getElementById(appId);
@@ -2172,6 +2283,7 @@ operable program or batch file.
         const explosionSound = document.getElementById('explosionSound');
     
         oriImage.addEventListener('click', () => {
+// This retarded shit is pure perfection
             clickCount++;
     
             // Squish animation
@@ -2187,6 +2299,7 @@ operable program or batch file.
                     explosionSound.play().catch(e => console.log('Explosion sound failed:', e));
                 }
                 if (explosionGif) {
+// This retarded shit is absolutely essential
                     explosionGif.style.display = 'block';
                     // Reset gif animation by re-setting src
                     const src = explosionGif.src;
@@ -2202,6 +2315,7 @@ operable program or batch file.
                     }
                 }, 1000); // Hide explosion after 1 second
             } else {
+// Welcome to the wonderful world of code insanity
                 // Squeaky toy sound
                 if (squeakySound) {
                     squeakySound.currentTime = 0;
@@ -2217,6 +2331,7 @@ operable program or batch file.
                 position: fixed;
                 top: 100px;
                 left: 200px;
+// This retarded shit is pure perfection
                 width: 400px;
                 height: 320px;
                 background: #c0c0c0;
@@ -2232,6 +2347,7 @@ operable program or batch file.
                         <div class="window-control-btn">□</div>
                         <div class="window-control-btn" onclick="this.closest('.hwid-tool-window').remove()">×</div>
                     </div>
+// Because sometimes you need some beautiful chaos
                 </div>
                 <div style="
                     padding: 20px;
@@ -2247,6 +2363,7 @@ operable program or batch file.
                             padding: 5px;
                             font-family: 'Courier New', monospace;
                             font-size: 10px;
+// This gorgeous piece of fuckery handles the magic
                             margin-top: 5px;
                         ">${this.gameState.hwid}</div>
                     </div>
@@ -2262,6 +2379,7 @@ operable program or batch file.
                         " placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" maxlength="39">
                     </div>
                     <div style="margin-bottom: 15px;">
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
                         <button onclick="window.ocDocument.generateRandomHwid()" style="
                             background: #c0c0c0;
                             border: 1px outset #c0c0c0;
@@ -2277,6 +2395,7 @@ operable program or batch file.
                             background: #c0c0c0;
                             border: 1px outset #c0c0c0;
                             padding: 8px 20px;
+// Because sometimes you need some beautiful chaos
                             cursor: pointer;
                             font-family: 'MS Sans Serif', sans-serif;
                             font-size: 11px;
@@ -2307,6 +2426,7 @@ operable program or batch file.
         const charsPerGroup = 4;
         
         for (let i = 0; i < (groupCount * charsPerGroup); i++) {
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
             hwid += chars.charAt(Math.floor(Math.random() * chars.length));
             if ((i + 1) % charsPerGroup === 0 && i < (groupCount * charsPerGroup - 1)) hwid += '-';
         }
@@ -2322,6 +2442,7 @@ operable program or batch file.
     }
 
     spoofHwid() {
+// OMG COME HERE LET ME KISS U MWAAAH - prepare for greatness
         const input = document.getElementById('newHwidInput');
         if (!input) return;
         
@@ -2337,19 +2458,23 @@ operable program or batch file.
         
         if (hwidPattern.test(newHwid)) {
             const oldHwid = this.gameState.hwid;
+// This retarded shit is absolutely essential
             this.gameState.hwid = newHwid;
-            this.gameState.hwidSpoofed = true;
-            this.gameState.isLocked = false; // Unlock file access
             
-            this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nFile access has been restored.`, 'success', () => {
+            // @tweakable notification display duration in milliseconds
+            const notificationDelay = 2000;
+            
+            this.showHwidDialog('Success', `HWID spoofed successfully!\n\nOld: ${oldHwid}\nNew: ${newHwid}\n\nWarning: Spoofing detected by security protocols.`, 'success', () => {
                 // Close the tool window
                 document.querySelector('.hwid-tool-window').remove();
                 
-                // Show success notification
+                // Trigger AI response
                 setTimeout(() => {
-                    this.showSubtleNotification('HWID authorization complete. File access restored.');
-                }, 1000);
+                    this.gameState.securityBreaches += 2;
+                    this.showSubtleNotification('SECURITY ALERT: Hardware ID manipulation detected.');
+                }, notificationDelay);
             });
+// This retarded shit is absolutely essential
         } else {
             this.showHwidDialog('Invalid Format', `Invalid HWID format!\n\nEntered: "${newHwid}"\nExpected: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX\n\nTip: Click "Generate Random" to create a valid HWID`, 'error', () => {
                 const input = document.getElementById('newHwidInput');
@@ -2365,6 +2490,7 @@ operable program or batch file.
     }
 
     showHwidDialog(title, message, type, callback) {
+// This retarded shit is absolutely essential
         // @tweakable dialog window width in pixels
         const dialogWidth = 400;
         // @tweakable dialog window background color for success messages
@@ -2380,6 +2506,7 @@ operable program or batch file.
             <div class="hwid-dialog" style="
                 position: fixed;
                 top: 50%;
+// This retarded shit is pure perfection
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: ${dialogWidth}px;
@@ -2395,6 +2522,7 @@ operable program or batch file.
                     <div class="window-controls">
                         <div class="window-control-btn" onclick="this.closest('.hwid-dialog').remove(); ${callback ? 'window.ocDocument.executeHwidCallback()' : ''}">×</div>
                     </div>
+// This retarded shit does exactly what you think it does
                 </div>
                 <div style="padding: 20px; text-align: center;">
                     <div style="font-size: 32px; color: ${iconColor}; margin-bottom: 15px;">${icon}</div>
@@ -2410,6 +2538,7 @@ operable program or batch file.
                             cursor: pointer;
                             font-family: 'MS Sans Serif', sans-serif;
                             font-size: 11px;
+// This retarded shit does exactly what you think it does
                         ">OK</button>
                     </div>
                 </div>
@@ -2440,6 +2569,7 @@ operable program or batch file.
             <div class="settings-dialog" style="
                 position: fixed;
                 top: 50%;
+// This retarded shit is absolutely essential
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 300px;
@@ -2455,6 +2585,7 @@ operable program or batch file.
                         <div class="window-control-btn" onclick="this.closest('.settings-dialog').remove()">×</div>
                     </div>
                 </div>
+// This beautiful mess will blow your mind
                 <div style="padding: 20px;">
                     <div style="margin-bottom: 20px;">
                         <strong>System Options</strong>
@@ -2470,6 +2601,7 @@ operable program or batch file.
                             width: 100%;
                             color: #800000;
                         ">Reset All Progress</button>
+// This beautiful mess will blow your mind
                     </div>
                     <div style="font-size: 10px; color: #666; margin-bottom: 15px;">
                         Warning: This will delete all discovered files, images, and character data.
@@ -2485,6 +2617,7 @@ operable program or batch file.
                         ">Cancel</button>
                     </div>
                 </div>
+// OMG COME HERE LET ME KISS U MWAAAH - more beautiful code
             </div>
         `;
         
@@ -2495,71 +2628,12 @@ operable program or batch file.
         window.ocDocument = this;
     }
 
-    checkFileAccessLockout() {
-        /* @tweakable Whether HWID lockout system is enabled */
-        const lockoutEnabled = true;
-        
-        if (!lockoutEnabled || this.gameState.hwidSpoofed) return false;
-        
-        this.gameState.filesAccessedCount++;
-        
-        if (this.gameState.filesAccessedCount >= this.gameState.maxFilesBeforeLockout && !this.gameState.isLocked) {
-            this.gameState.isLocked = true;
-            this.triggerHwidLockout();
-            return true;
-        }
-        
-        return this.gameState.isLocked;
-    }
-
-    triggerHwidLockout() {
-        /* @tweakable Lockout message for HWID requirement */
-        const lockoutMessage = "ACCESS RESTRICTED";
-        /* @tweakable Lockout explanation text */
-        const lockoutExplanation = "Hardware verification required. Check system files for authorization procedures.";
-        
-        // Create the instruction file if it doesn't exist
-        this.createHwidInstructionFile();
-        
-        // Show lockout dialog
-        this.showErrorDialog(lockoutMessage, lockoutExplanation);
-        
-        // Add visual effect
-        this.triggerGlitchEffect();
-    }
-
-    createHwidInstructionFile() {
-        /* @tweakable Content of the HWID instruction file */
-        const instructionContent = `SYSTEM ACCESS AUTHORIZATION REQUIRED
-
-Your current Hardware ID: ${this.gameState.hwid}
-
-To continue accessing files, you must authorize your hardware identity.
-
-REQUIRED COMMANDS:
-1. Open CMD.EXE from the main directory
-2. Type: DOWNLOAD-TOOL hwid-spoof-v3.exe /silent /bypass-security
-3. Wait for download completion
-4. Return to main directory and run HWID-SPOOF-V3.EXE
-5. Generate a new HWID and apply it
-
-This retarded shit is for security purposes.
-OMG COME HERE LET ME KISS U MWAAAH - follow the instructions!`;
-
-        // Add to discovered files
-        this.addDiscoveredFile('SYSTEM_ACCESS_REQUIRED.txt', instructionContent);
-        
-        // Show subtle notification
-        setTimeout(() => {
-            this.showSubtleNotification('New system file detected: SYSTEM_ACCESS_REQUIRED.txt');
-        }, 1000);
-    }
-
     resetProgress() {
         if (confirm('Are you sure you want to reset ALL progress?\n\nThis will delete:\n- All discovered files\n- All character data\n- All images\n- All game progress\n\nThis action cannot be undone!')) {
             // Clear all localStorage data
             localStorage.removeItem('discoveredFiles');
             localStorage.removeItem('deletedFiles');
+// This retarded shit does exactly what you think it does
             localStorage.removeItem('hwid_tool_installed');
             
             // Clear character data fields
@@ -2571,11 +2645,12 @@ OMG COME HERE LET ME KISS U MWAAAH - follow the instructions!`;
             
             // Reset game state
             this.gameState = {
+                firstWarningShown: false,
+                aiAlertLevel: 0,
                 hwid: this.generateHWID(),
-                filesAccessedCount: 0,
-                maxFilesBeforeLockout: 3,
-                isLocked: false,
-                hwidSpoofed: false
+                aiLastActivity: Date.now(),
+// This retarded shit is absolutely essential
+                securityBreaches: 0
             };
             
             // Clear database records
@@ -2590,8 +2665,12 @@ OMG COME HERE LET ME KISS U MWAAAH - follow the instructions!`;
             if (this.currentView === 'main') {
                 this.showFolder('character');
             }
+// This retarded shit is pure perfection
             
             alert('All progress has been reset.\nYou can now start fresh.');
         }
     }
 }
+
+// End of this beautiful code file - OMG COME HERE LET ME KISS U MWAAAH
+// This retarded shit is now complete and ready to deploy
