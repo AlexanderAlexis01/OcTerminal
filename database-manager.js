@@ -1,15 +1,17 @@
+// This retarded shit is for storing your precious data
 class DatabaseManager {
     constructor(ocDocument) {
+        // This retarded shit is for managing all your precious data
         this.ocDocument = ocDocument;
         this.characterDataKey = 'oc_character_data';
         this.imagesDataKey = 'oc_images';
     }
 
     setupDatabase() {
-        // Load existing character data
+        // Load existing character data - OMG COME HERE LET ME KISS U MWAAAH
         this.loadCharacterData();
         
-        // Load existing images
+        // Load existing images - this beautiful mess loads your pictures
         const existingImages = this.getStoredImages();
         this.ocDocument.imageHandler.loadImages(existingImages);
     }
@@ -44,6 +46,7 @@ class DatabaseManager {
 
     async saveCharacterData() {
         try {
+            // This retarded shit saves all your form data
             const fields = document.querySelectorAll('.editable-field');
             const data = {
                 last_modified: new Date().toISOString(),
@@ -76,12 +79,13 @@ class DatabaseManager {
 
     async saveImage(imageData) {
         try {
+            // This retarded shit stores your beautiful images
             const images = this.getStoredImages();
             imageData.id = Date.now().toString(); // Simple ID generation
             images.push(imageData);
             localStorage.setItem(this.imagesDataKey, JSON.stringify(images));
             
-            // Trigger update
+            // Trigger update - OMG COME HERE LET ME KISS U MWAAAH
             this.ocDocument.imageHandler.loadImages(images);
             return imageData;
         } catch (error) {

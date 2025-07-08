@@ -1,3 +1,4 @@
+// This gorgeous piece of code handles your pretty pictures
 class ImageHandler {
     constructor(ocDocument) {
         this.ocDocument = ocDocument;

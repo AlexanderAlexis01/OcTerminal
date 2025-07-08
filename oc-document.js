@@ -1,5 +1,7 @@
+// This beautiful mess handles all the character document fuckery
 class OCDocument {
     constructor() {
+        // This retarded shit is for getting all the DOM elements we need
         this.bootSequence = document.getElementById('bootSequence');
         this.documentContainer = document.getElementById('documentContainer');
         this.floppyContainer = document.getElementById('floppyContainer');
@@ -17,19 +19,20 @@ class OCDocument {
         this.viewDiscoveredFilesButton = document.getElementById('viewDiscoveredFilesButton');
         this.downloadZipButton = document.getElementById('downloadZipButton');
         
+        // OMG COME HERE LET ME KISS U MWAAAH - user setup
         this.currentUser = { username: 'User' }; // Static user for localStorage version
         this.isAuthorized = true; // Always authorized in localStorage version
         this.currentView = 'editor'; // 'editor' or 'main'
         this.currentPage = 1;
         this.totalPageCount = 4; // Updated to 4 pages
         
-        // Initialize modules
+        // Initialize modules - this retarded shit sets up all the components
         this.uiEffects = new UIEffects(this);
         this.imageHandler = new ImageHandler(this);
         this.databaseManager = new DatabaseManager(this);
         this.bootSequenceHandler = new BootSequence(this);
         
-        // Add game state tracking
+        // Add game state tracking - this beautiful mess tracks the spooky stuff
         this.gameState = {
             firstWarningShown: false,
             aiAlertLevel: 0,
@@ -42,7 +45,7 @@ class OCDocument {
     }
 
     generateHWID() {
-        // Generate a fake hardware ID for the game
+        // Generate a fake hardware ID for the game - this retarded shit makes you feel like a hacker
         const chars = '0123456789ABCDEF';
         let hwid = '';
         for (let i = 0; i < 32; i++) {
@@ -53,13 +56,13 @@ class OCDocument {
     }
 
     async init() {
-        // Remove authorization check for localStorage version
+        // Remove authorization check for localStorage version - OMG COME HERE LET ME KISS U MWAAAH
         this.updateTimestamp();
         this.bootSequenceHandler.start();
         this.setupEventListeners();
         this.databaseManager.setupDatabase();
         
-        // Start AI security system
+        // Start AI security system - this retarded shit makes things spooky
         this.startAISecurity();
         
         // Update timestamp every second
@@ -1457,26 +1460,6 @@ Proceed with extreme caution.
         this.makeWindowDraggable(document.querySelector('.image-viewer-window:last-child'));
     }
 
-    updateTimestamp() {
-        /* @tweakable The timestamp format for the document editor */
-        const timestampFormat = {
-            year: 'numeric',
-            month: '2-digit', 
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        };
-        
-        const now = new Date();
-        const timeString = now.toLocaleDateString('en-US', timestampFormat);
-        
-        if (this.timestamp) {
-            this.timestamp.textContent = timeString;
-        }
-    }
-
     updateMainTimestamp() {
         /* @tweakable The timestamp format for the main view */
         const mainTimestampFormat = {
@@ -1493,6 +1476,26 @@ Proceed with extreme caution.
         
         if (this.mainTimestamp) {
             this.mainTimestamp.textContent = timeString;
+        }
+    }
+
+    updateTimestamp() {
+        /* @tweakable The timestamp format for the editor view */
+        const editorTimestampFormat = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+        
+        const now = new Date();
+        const timeString = now.toLocaleDateString('en-US', editorTimestampFormat);
+        
+        if (this.timestamp) {
+            this.timestamp.textContent = timeString;
         }
     }
 
@@ -1602,7 +1605,7 @@ Proceed with extreme caution.
                     <span>💻 MS-DOS Prompt</span>
                     <div class="window-controls">
                         <div class="window-control-btn">_</div>
-                        <div class="window-control-btn">□</div>
+                        <div class="window-control-content">□</div>
                         <div class="window-control-btn" onclick="this.closest('.cmd-window').remove()">×</div>
                     </div>
                 </div>
@@ -2111,16 +2114,16 @@ CMD       EXE        32,768  01-01-98  12:00a
     }
 
     openOriApp() {
-        /* @tweakable The number of clicks required for the explosion */
+        /* @tweakable The number of clicks required for the explosion - this retarded shit counts your clicks */
         const clicksForExplosion = 20;
         let clickCount = 0;
     
         const appId = `ori-app-${Date.now()}`;
     
-        /* @tweakable Path to the Ori plushie image */
-        const oriImagePath = "./Ori.png";
-        /* @tweakable Path to the explosion GIF */
-        const explosionGifPath = "./explosion.gif";
+        /* @tweakable Path to the Ori plushie image - OMG COME HERE LET ME KISS U MWAAAH */
+        const oriImagePath = "Ori.png";
+        /* @tweakable Path to the explosion GIF - this beautiful mess explodes things */
+        const explosionGifPath = "explosion.gif";
     
         const appHTML = `
             <div id="${appId}" class="ori-app-window">

@@ -1,5 +1,7 @@
+// This amazing boot sequence - because who doesn't love a good boot?
 class BootSequence {
     constructor(ocDocument) {
+        // This retarded shit is for the epic boot sequence
         this.ocDocument = ocDocument;
         this.bootSequence = document.getElementById('bootSequence');
         this.ambientSound = document.getElementById('ambientSound');
@@ -9,10 +11,10 @@ class BootSequence {
     }
 
     async start() {
-        // Play power on sound
+        // Play power on sound - OMG COME HERE LET ME KISS U MWAAAH
         this.powerOnSound.play().catch(e => console.log('Power on sound failed:', e));
         
-        /* @tweakable Delay in milliseconds before the boot text starts appearing after power on. */
+        /* @tweakable Delay in milliseconds before the boot text starts appearing after power on - this retarded shit controls timing */
         const bootStartDelay = 2500;
         
         // Wait for power-on animation to finish before starting boot text
@@ -37,7 +39,7 @@ class BootSequence {
             'BOOT COMPLETE',
         ];
 
-        // Play PC boot sound
+        // Play PC boot sound - this beautiful mess makes noise
         this.bootSound.play().catch(e => console.log('Boot sound failed:', e));
 
         // Type out all lines
@@ -88,7 +90,7 @@ class BootSequence {
         return new Promise(resolve => {
             setTimeout(() => {
                 let i = 0;
-                /* @tweakable The delay between each character appearing on screen in milliseconds. */
+                /* @tweakable The delay between each character appearing on screen in milliseconds - this retarded shit controls typing speed */
                 const typingSpeed = 30;
                 const typingInterval = setInterval(() => {
                     if (i < text.length) {
